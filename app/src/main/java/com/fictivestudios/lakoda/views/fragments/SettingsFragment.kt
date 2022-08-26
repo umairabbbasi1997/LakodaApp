@@ -99,7 +99,7 @@ class SettingsFragment : BaseFragment() {
                         mView.tv_logout.text="Logout"
                     }
 
-                    Log.d("Response", response.message())
+                    Log.d("Response", ""+response?.body()?.message)
                     response.body()?.let { Log.d("Response", it.message) }
                     try {
 

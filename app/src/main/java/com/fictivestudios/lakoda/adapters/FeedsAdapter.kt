@@ -11,6 +11,8 @@ import com.fictivestudios.lakoda.Interface.OnItemClickListener
 import com.fictivestudios.lakoda.R
 import com.fictivestudios.lakoda.apiManager.response.HomePostData
 import com.fictivestudios.ravebae.utils.Constants
+import com.fictivestudios.ravebae.utils.Constants.Companion.LIKED
+import com.fictivestudios.ravebae.utils.Constants.Companion.UNLIKED
 import com.fictivestudios.ravebae.utils.Constants.Companion.VIEW_TYPE_POST
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_home_post.view.*
@@ -98,14 +100,27 @@ class FeedsAdapter(context: Context, post: List<HomePostData>?, onItemClickListe
 
             if (postList?.get(position)?.is_liked == 0)
             {
+                var count = postList?.get(position)?.like_count
+                if (count != null) {
+                    count += 1
+                    holder.itemView.tv_like.text = count.toString()
+
+                }
+
                 holder.itemView.iv_heart.setBackgroundResource(R.drawable.heart_icon)
-                holder.itemView.tv_like.text = postList?.get(position)?.like_count?.minus(1) .toString()
             }
             else
             {
 
+                var count = postList?.get(position)?.like_count
+                if (count != null) {
+                    count -= 1
+                    holder.itemView.tv_like.text = count.toString()
+
+                }
+
                 holder.itemView.iv_heart.setBackgroundResource(R.drawable.heart_white_icon)
-                holder.itemView.tv_like.text = postList?.get(position)?.like_count?.plus(1) .toString()
+
             }
             onItemClickListener.onItemClick(position,it, Constants.LIKES)
 
@@ -113,48 +128,39 @@ class FeedsAdapter(context: Context, post: List<HomePostData>?, onItemClickListe
 
         holder.itemView.iv_heart.setOnClickListener {
 
-            if (postList?.get(position)?.is_liked == 0)
+            if (holder.itemView.iv_heart.tag == UNLIKED)
+                    //(postList?.get(position)?.is_liked == 0)
             {
+                holder.itemView.iv_heart.setTag(LIKED)
+
+/*
+                var count = postList?.get(position)?.like_count
+                if (count != null) {
+                    count += 1
+                    holder.itemView.tv_like.text = count.toString()
+                    holder.itemView.iv_heart.setTag(LIKED)
+
+                }
+*/
+
                 holder.itemView.iv_heart.setBackground(context.getDrawable(R.drawable.heart_icon))
             }
             else
             {
+                holder.itemView.iv_heart.setTag(UNLIKED)
+              /*  var count = postList?.get(position)?.like_count
+                if (count != null) {
+                    count -= 1
+                    holder.itemView.tv_like.text = count.toString()
+                    holder.itemView.iv_heart.setTag(UNLIKED)
+                }
+*/
                 holder.itemView.iv_heart.setBackground(context.getDrawable(R.drawable.heart_white_icon))
             }
             onItemClickListener.onItemClick(position,it, Constants.LIKES)
 
         }
 
-        holder.itemView.tv_like.setOnClickListener {
-
-            if (postList?.get(position)?.is_liked == 0)
-            {
-                holder.itemView.iv_heart.setBackgroundResource(R.drawable.heart_icon)
-                holder.itemView.tv_like.text = postList?.get(position)?.like_count?.minus(1) .toString()
-            }
-            else
-            {
-
-                holder.itemView.iv_heart.setBackgroundResource(R.drawable.heart_white_icon)
-                holder.itemView.tv_like.text = postList?.get(position)?.like_count?.plus(1) .toString()
-            }
-            onItemClickListener.onItemClick(position,it, Constants.LIKES)
-
-        }
-
-        holder.itemView.iv_heart.setOnClickListener {
-
-            if (postList?.get(position)?.is_liked == 0)
-            {
-                holder.itemView.iv_heart.setBackground(context.getDrawable(R.drawable.heart_icon))
-            }
-            else
-            {
-                holder.itemView.iv_heart.setBackground(context.getDrawable(R.drawable.heart_white_icon))
-            }
-            onItemClickListener.onItemClick(position,it, Constants.LIKES)
-
-        }
 
 
 
@@ -194,15 +200,26 @@ class FeedsAdapter(context: Context, post: List<HomePostData>?, onItemClickListe
             itemView.tv_like.setText(post?.like_count.toString())
             itemView.tv_comment.setText(post?.comment_count.toString()+" comment")
 
+            if (Constants.getUser().id.equals(post?.user?.id))
+            {
+                itemView.iv_share.visibility = View.INVISIBLE
+            }
+            else
+            {
+                itemView.iv_share.visibility = View.VISIBLE
+            }
+
 
             if (post?.is_liked == 1)
             {
                 itemView.iv_heart.setBackgroundResource(R.drawable.heart_icon)
+                itemView.iv_heart.setTag(LIKED)
             //    itemView.iv_heart.tint
             }
             else
             {
                 itemView.iv_heart.setBackgroundResource(R.drawable.heart_white_icon)
+                itemView.iv_heart.setTag(UNLIKED)
             }
 
             if (post?.type == "post")
@@ -240,6 +257,15 @@ class FeedsAdapter(context: Context, post: List<HomePostData>?, onItemClickListe
             itemView.tv_like.setText(post?.like_count.toString())
             itemView.tv_comment.setText(post?.comment_count.toString()+" comment")
             itemView.tv_sharer_username.setText(post?.shared_by?.name)
+
+            if (Constants.getUser().id.equals(post?.user?.id))
+            {
+                itemView.iv_share.visibility = View.INVISIBLE
+            }
+            else
+            {
+                itemView.iv_share.visibility = View.VISIBLE
+            }
 
             if (!post?.shared_by?.image.isNullOrBlank())
             {

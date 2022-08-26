@@ -100,7 +100,7 @@ class MessagesFragment : BaseFragment() , OnItemClickListener {
                         mView.main.visibility =View.VISIBLE
                     })
 
-                    Log.d("Response", response.message())
+                    Log.d("Response", ""+response?.body()?.message)
 
                     try {
 
@@ -212,7 +212,7 @@ class MessagesFragment : BaseFragment() , OnItemClickListener {
 
         val bundle = bundleOf(
             Constants.USER_ID to   chatList?.get(position)?.user.id.toString(),
-            Constants.PROFILE to   chatList?.get(position)?.user.image.toString(),
+            Constants.PROFILE to   chatList?.get(position)?.user?.image?.toString(),
             Constants.USER_NAME to   chatList?.get(position)?.user.name.toString()
         )
 

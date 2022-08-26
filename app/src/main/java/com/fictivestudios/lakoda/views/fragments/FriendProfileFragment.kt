@@ -241,7 +241,8 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
                 {
 
 
-                    Log.d("Response", response.message())
+                    Log.d("Response", ""+response?.body()?.message)
+
 
                     try {
 
@@ -448,7 +449,7 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
                         mView.shimmer_friend_profile.visibility = View.GONE
                     })
 
-                    Log.d("Response", response.message())
+                    Log.d("Response", ""+response?.body()?.message)
                     response?.body()?.message?.let { Log.d("Response", it) }
 
                     try {
@@ -815,7 +816,7 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
             val bundle = bundleOf(
                 Constants.USER_ID to   postsArray?.get(position)?.user.id.toString(),
                 Constants.USER_NAME to   postsArray?.get(position)?.user.name.toString(),
-                Constants.PROFILE to   postsArray?.get(position)?.user.image.toString()
+                Constants.PROFILE to   postsArray?.get(position)?.user?.image?.toString()
             )
 
 

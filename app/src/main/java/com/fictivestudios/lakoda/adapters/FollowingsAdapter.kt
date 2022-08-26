@@ -135,7 +135,7 @@ class FollowingsAdapter(followingList: ArrayList<GetFollowingData>,context: Cont
                 {
 
 
-                    Log.d("Response", response.message())
+                    Log.d("Response", ""+response?.body()?.message)
 
                     try {
 

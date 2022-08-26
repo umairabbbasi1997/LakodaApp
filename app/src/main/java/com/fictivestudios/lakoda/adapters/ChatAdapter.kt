@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.fictivestudios.lakoda.R
 import com.fictivestudios.lakoda.model.receivedMessageData
-import com.fictivestudios.ravebae.utils.Constants
 import com.fictivestudios.ravebae.utils.Constants.Companion.IMAGE_BASE_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.TYPE_IMAGE
 import com.fictivestudios.ravebae.utils.Constants.Companion.TYPE_TEXT
@@ -22,8 +21,6 @@ import com.zerobranch.layout.SwipeLayout.SwipeActionsListener
 import kotlinx.android.synthetic.main.item_message_received.view.*
 import kotlinx.android.synthetic.main.item_message_received.view.tv_text_received
 import kotlinx.android.synthetic.main.item_message_sent.view.*
-import kotlinx.android.synthetic.main.my_profile_fragment.view.*
-import java.text.SimpleDateFormat
 
 
 class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: SwipeReply,) : RecyclerView.Adapter<ChatAdapter.ProfileViewHolder>() {
@@ -78,7 +75,8 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
                 holder.itemView,
                 messageList?.get(position),
                 position,
-                mSwipeReply
+                mSwipeReply,
+                messageList
             )
 
         }
@@ -91,7 +89,8 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
                 holder.itemView,
                 messageList?.get(position),
                 position,
-                mSwipeReply
+                mSwipeReply,
+                messageList
             )
         }
 
@@ -104,8 +103,10 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
             itemView: View,
             model: receivedMessageData?,
             position: Int,
-            mSwipeReply: SwipeReply
-        ) {
+            mSwipeReply: SwipeReply,
+            messageList: ArrayList<receivedMessageData>?,
+
+            ) {
 
 
             itemView.swipe_layout_received.setOnActionsListener(object : SwipeActionsListener {
@@ -139,6 +140,7 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
             {
                 itemView.iv_media_received.visibility = View.VISIBLE
                 itemView.tv_text_received.visibility = View.GONE
+                itemView.tv_received_reply.visibility = View.GONE
 
                 Picasso
                     .get()
@@ -146,23 +148,41 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
 
 
             }
-            else
+            else if ( model?.type == TYPE_TEXT)
             {
                 itemView.tv_text_received.text = model?.message.toString()
                 itemView.iv_media_received.visibility = View.GONE
                 itemView.tv_text_received.visibility = View.VISIBLE
+                itemView.tv_received_reply.visibility = View.GONE
+            }
+
+            else if (model?.type?.contains("replyId") == true)
+            {
+
+                var replyId = model?.type.filter { it.isDigit() }
+
+                var data = messageList?.find { it.id == replyId.toInt() }
+
+                itemView.tv_received_reply.setText("Replied To: "+data?.message)
+
+                itemView.iv_media_received.visibility = View.GONE
+                itemView.tv_text_received.visibility = View.VISIBLE
+                itemView.tv_received_reply.visibility = View.VISIBLE
+                itemView.tv_text_received.text = model?.message.toString()
+
             }
 
 
             if (model?.image?.isNullOrBlank() == true)
             {
 
+                itemView.iv_user_rec.setBackgroundResource(R.drawable.user_dp)
             }
             else
             {
                 Picasso
                     .get()
-                    .load(IMAGE_BASE_URL+model?.image)?.into(itemView.iv_user_rec)
+                    .load(IMAGE_BASE_URL+model?.image)?.placeholder(R.drawable.user_dp)?.into(itemView.iv_user_rec)
             }
 
 
@@ -172,7 +192,8 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
             itemView: View,
             model: receivedMessageData?,
             position: Int,
-            mSwipeReply: SwipeReply
+            mSwipeReply: SwipeReply,
+            messageList: ArrayList<receivedMessageData>?
         ) {
             itemView.swipe_layout_sent.setOnActionsListener(object : SwipeActionsListener {
                 override fun onOpen(direction: Int, isContinuous: Boolean) {
@@ -208,6 +229,7 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
                 {
                     itemView.iv_media_sent.visibility = View.VISIBLE
                     itemView.tv_text_sent.visibility = View.GONE
+                    itemView.tv_text_reply.visibility = View.GONE
                     Picasso
                         .get()
                         .load(IMAGE_BASE_URL+model?.message)?.into(itemView.iv_media_sent)
@@ -220,6 +242,23 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
             {
                 itemView.iv_media_sent.visibility = View.GONE
                 itemView.tv_text_sent.visibility = View.VISIBLE
+                itemView.tv_text_reply.visibility = View.GONE
+                itemView.tv_text_sent.text = model?.message.toString()
+
+            }
+
+            else if (model?.type?.contains("replyId") == true)
+            {
+
+                var replyId = model?.type.filter { it.isDigit() }
+
+                var data = messageList?.find { it.id == replyId.toInt() }
+
+                itemView.tv_text_reply.setText("Replied To: "+data?.message)
+
+                itemView.iv_media_sent.visibility = View.GONE
+                itemView.tv_text_sent.visibility = View.VISIBLE
+                itemView.tv_text_reply.visibility = View.VISIBLE
                 itemView.tv_text_sent.text = model?.message.toString()
 
             }
@@ -228,13 +267,13 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
             //set profile
             if (model?.image?.isNullOrBlank() == true)
             {
-
+                itemView.iv_user_sent.setBackgroundResource(R.drawable.user_dp)
             }
             else
             {
                 Picasso
                     .get()
-                    .load(IMAGE_BASE_URL + model?.image)?.into(itemView.iv_user_sent)
+                    .load(IMAGE_BASE_URL + model?.image)?.placeholder(R.drawable.user_dp)?.into(itemView.iv_user_sent)
             }
         }
 

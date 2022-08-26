@@ -130,6 +130,8 @@ class Constants {
         const val ACCEPT ="accept"
         const val REJECT ="reject"
         const val MESSAGE ="message"
+        const val LIKED ="liked"
+        const val UNLIKED ="unliked"
 
         const val TYPE_TEXT = "text"
         const val TYPE_IMAGE = "image"

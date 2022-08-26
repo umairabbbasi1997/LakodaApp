@@ -93,7 +93,7 @@ class NotificationFragment : BaseFragment() ,OnItemClickListener {
                         mView.noti_lay.visibility =View.VISIBLE
                     })
 
-                    Log.d("Response", response.message())
+                    Log.d("Response", ""+response?.body()?.message)
 
                     try {
 

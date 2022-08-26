@@ -12,7 +12,11 @@ import com.fictivestudios.lakoda.Interface.OnItemClickListener
 import com.fictivestudios.lakoda.R
 import com.fictivestudios.lakoda.apiManager.response.HomePostData
 import com.fictivestudios.ravebae.utils.Constants
+import com.fictivestudios.ravebae.utils.Constants.Companion.LIKED
+import com.fictivestudios.ravebae.utils.Constants.Companion.UNLIKED
+import com.fictivestudios.ravebae.utils.Constants.Companion.getUser
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.item_home_post.view.*
 import kotlinx.android.synthetic.main.item_video.view.*
 
 
@@ -65,13 +69,27 @@ class VideosAdapter(
                     holder.itemView.txtTitle.setText(mVideoItems[position].user.name)
                     holder.itemView.txtDesc.setText(mVideoItems[position].description)
 
+                    if (getUser().id.equals(mVideoItems[position].user.id))
+                    {
+                        holder.itemView.btn_follow.visibility = View.INVISIBLE
+                        holder.itemView.btn_share.visibility = View.INVISIBLE
+
+                    }
+                    else
+                    {
+                        holder.itemView.btn_follow.visibility = View.VISIBLE
+                        holder.itemView.btn_share.visibility = View.VISIBLE
+                    }
+
                     if (mVideoItems[position]?.is_liked == 1)
                     {
+                        holder.itemView.btn_heart_like.setTag(LIKED)
                         holder.itemView.btn_heart_like.setBackgroundResource(R.drawable.heart_icon)
                         //    itemView.iv_heart.tint
                     }
                     else
                     {
+                        holder.itemView.btn_heart_like.setTag(UNLIKED)
                         holder.itemView.btn_heart_like.setBackgroundResource(R.drawable.heart_white_icon)
                     }
 
@@ -88,7 +106,7 @@ class VideosAdapter(
 
 
                         holder.itemView.videoView.setVideoURI((Constants.IMAGE_BASE_URL + mVideoItems[position].video_image).toUri())
-                        holder.itemView.btn_play.visibility = View.VISIBLE
+
                         holder.itemView.videoView.setOnPreparedListener { mp ->
                             holder.itemView.progressBar.visibility = View.GONE
                                holder.itemView.videoView.setOnCompletionListener {
@@ -155,7 +173,9 @@ class VideosAdapter(
             }
 
             holder.itemView.btn_follow.setOnClickListener {
-                onItemClickListener.onItemClick(position,it, Constants.FOLLOW)
+             //   onItemClickListener.onItemClick(position,it, Constants.FOLLOW)
+                onItemClickListener.onItemClick(position,it, Constants.PROFILE)
+
             }
 
 
@@ -171,6 +191,34 @@ class VideosAdapter(
             }
 
             holder.itemView.btn_heart_like.setOnClickListener {
+
+                if (holder.itemView.btn_heart_like.tag == Constants.UNLIKED)
+
+                //(mVideoItems?.get(position)?.is_liked == 0)
+                {
+                 /*   var count = mVideoItems?.get(position)?.like_count
+                    if (count != null) {
+                        count += 1
+                        holder.itemView.tv_like_count.text = count.toString()
+
+                    }*/
+                    holder.itemView.btn_heart_like.setTag(LIKED)
+                    holder.itemView.btn_heart_like.setBackground(context.getDrawable(R.drawable.heart_icon))
+                }
+                else
+                {
+                    var count = mVideoItems?.get(position)?.like_count
+                    /*if (count != null) {
+                        count -= 1
+                        holder.itemView.tv_like_count.text = count.toString()
+
+                    }
+*/
+                    holder.itemView.btn_heart_like.setTag(UNLIKED)
+                    holder.itemView.btn_heart_like.setBackground(context.getDrawable(R.drawable.heart_white_icon))
+                }
+
+
                 onItemClickListener.onItemClick(position,it, Constants.LIKES)
             }
 

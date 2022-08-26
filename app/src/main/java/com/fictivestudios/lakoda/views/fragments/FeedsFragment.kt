@@ -99,6 +99,7 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
 
         //mView.pb_pofile.visibility=View.VISIBLE
         mView.shimmer_view_container.startShimmer()
+        mView.feed_post_layout.visibility = View.GONE
         mView.shimmer_view_container.visibility = View.VISIBLE
 
 
@@ -118,7 +119,7 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
                         //mView.pb_pofile.visibility=View.GONE
                         mView.shimmer_view_container.stopShimmer()
                         mView.shimmer_view_container.visibility = View.GONE
-
+                        mView.feed_post_layout.visibility = View.VISIBLE
                     })
 
                     Log.d("Response",""+ response.message())
@@ -173,6 +174,7 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
                             //mView.pb_pofile.visibility=View.GONE
                             mView.shimmer_view_container.stopShimmer()
                             mView.shimmer_view_container.visibility = View.GONE
+                            mView.feed_post_layout.visibility = View.VISIBLE
                             Toast.makeText(requireContext(),""+ e.message, Toast.LENGTH_SHORT).show()
                             Log.d("execption",""+e.localizedMessage)
                         })
@@ -186,7 +188,8 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
                         //mView.pb_pofile.visibility=View.GONE
                         mView.shimmer_view_container.stopShimmer()
                         mView.shimmer_view_container.visibility = View.GONE
-                        mView.feed_post_layout.visibility =View.VISIBLE
+
+                        mView.feed_post_layout.visibility = View.VISIBLE
                         Toast.makeText(requireContext(),""+ t.message, Toast.LENGTH_SHORT).show()
                     })
                 }
@@ -212,7 +215,7 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
                 )
                 {
 
-                    Log.d("Response", response.message())
+                    Log.d("Response", ""+response?.body()?.message)
 
                     try {
                             if (response?.message() == "Unauthorized" || response?.message() == "Unauthenticated."||
@@ -503,7 +506,7 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
             val bundle = bundleOf(
                 USER_ID to   arrayPostList?.get(position)?.user.id.toString(),
                 USER_NAME to   arrayPostList?.get(position)?.user.name.toString(),
-                PROFILE to   arrayPostList?.get(position)?.user.image.toString()
+                PROFILE to   arrayPostList?.get(position)?.user?.image?.toString()
                 )
 
 
@@ -553,7 +556,7 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
             val bundle = bundleOf(
                 IMAGE to   arrayStoryList?.get(position-1)?.image.toString(),
             USER_NAME to   arrayStoryList?.get(position-1)?.user.name .toString(),
-            USER_IMAGE to   arrayStoryList?.get(position-1)?.user.image.toString(),
+            USER_IMAGE to   arrayStoryList?.get(position-1)?.user?.image?.toString(),
             USER_ID to   arrayStoryList?.get(position-1)?.user.id.toString())
 
             Log.d(IMAGE, arrayStoryList?.get(position-1)?.image.toString())

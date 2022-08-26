@@ -319,7 +319,7 @@ class VideoViewFragment : BaseFragment() ,OnItemClickListener{
                 {
 
 
-                    Log.d("Response", response.message())
+                    Log.d("Response", ""+response?.body()?.message)
 
                     try {
 
@@ -492,11 +492,26 @@ class VideoViewFragment : BaseFragment() ,OnItemClickListener{
         }
         else if (value == Constants.PROFILE)
         {
-            val bundle = bundleOf(Constants.USER_ID to   videoList?.get(position)?.user.id.toString())
-            Log.d(Constants.POST_ID,  videoList?.get(position)?.user.id.toString())
+            val bundle = bundleOf(
+                Constants.USER_ID to   videoList?.get(position)?.user.id.toString(),
+                Constants.USER_NAME to   videoList?.get(position)?.user.name.toString(),
+                Constants.PROFILE to   videoList?.get(position)?.user?.image?.toString()
+            )
 
-            MainActivity.getMainActivity
-                ?.navControllerMain?.navigate(R.id.friendProfileFragment,bundle)
+
+            if (!Constants.getUser().id.equals(videoList?.get(position)?.user?.id))
+            {
+                MainActivity.getMainActivity
+                    ?.navControllerMain?.navigate(R.id.friendProfileFragment,bundle)
+
+            }
+            else
+            {
+
+                MainActivity.getMainActivity
+                    ?.navControllerMain?.navigate(R.id.myProfileFragment)
+
+            }
         }
 
         else if (value == Constants.FOLLOW)

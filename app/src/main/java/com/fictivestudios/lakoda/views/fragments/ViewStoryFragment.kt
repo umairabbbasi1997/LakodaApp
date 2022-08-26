@@ -80,7 +80,7 @@ class ViewStoryFragment : BaseFragment() {
             Picasso
                 .get()
                 .load(Constants.IMAGE_BASE_URL +userImage)
-                //.placeholder(R.drawable.loading_spinner)
+                .placeholder(R.drawable.user_dp)
                 .into(mView.iv_profile);
 
         }
@@ -93,7 +93,11 @@ class ViewStoryFragment : BaseFragment() {
 
             if (userId != null )
             {
-                val bundle = bundleOf(Constants.USER_ID to userId.toString())
+                val bundle = bundleOf(
+                    Constants.USER_ID to userId.toString(),
+                    Constants.USER_NAME to  userName.toString(),
+                    Constants.PROFILE to   imageUrl?.toString()
+                    )
                 MainActivity?.getMainActivity?.navControllerMain
                     ?.navigate(R.id.friendProfileFragment,bundle)
             }

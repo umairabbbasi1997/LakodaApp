@@ -183,7 +183,7 @@ class MyProfileFragment : BaseFragment() ,OnItemClickListener {
                         mView.shimmer_view_container.visibility = View.GONE
                     })
 
-                    Log.d("Response", response.message())
+                    Log.d("Response", ""+response?.body()?.message)
 
                     try {
 
@@ -377,7 +377,7 @@ class MyProfileFragment : BaseFragment() ,OnItemClickListener {
             val bundle = bundleOf(
                 Constants.USER_ID to   postsArray?.get(position)?.user.id.toString(),
                 Constants.USER_NAME to   postsArray?.get(position)?.user.name.toString(),
-                Constants.PROFILE to   postsArray?.get(position)?.user.image.toString()
+                Constants.PROFILE to   postsArray?.get(position)?.user?.image?.toString()
             )
 
 

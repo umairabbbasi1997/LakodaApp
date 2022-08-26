@@ -45,12 +45,12 @@
             app:layout_constraintTop_toTopOf="parent"
             >
             <TextView
-
+                android:id="@+id/tv_reply"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:padding="5dp"
-                android:text="Lorem ipsum dolor sit amet elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+                android:text=""
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/btn_close"
                 app:layout_constraintLeft_toLeftOf="parent"

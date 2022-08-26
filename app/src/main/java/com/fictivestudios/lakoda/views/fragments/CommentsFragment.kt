@@ -159,7 +159,7 @@ class CommentsFragment : BaseFragment() ,OnItemClickListener{
                             mView.commment_lay.visibility =View.VISIBLE
                         })
 
-                        Log.d("Response", response.message())
+                        Log.d("Response", ""+response?.body()?.message)
                         Log.d("Response", ""+response?.body()?.message)
                         try {
 

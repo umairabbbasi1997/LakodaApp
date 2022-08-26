@@ -47,6 +47,7 @@ import io.socket.client.Ack
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
 import kotlinx.android.synthetic.main.edit_profile_fragment.view.*
+import kotlinx.android.synthetic.main.fragment_chat.*
 import kotlinx.android.synthetic.main.fragment_chat.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -73,6 +74,7 @@ class ChatFragment : BaseFragment(),SwipeReply {
     private var message: String? = null
     private var messageType: String? = null
 
+    private var replyId:String? = null
     private val PICKFILE_RESULT_CODE: Int =88
     private val SELECT_VIDEO: Int = 29
     var isAttachment = false
@@ -170,7 +172,20 @@ class ChatFragment : BaseFragment(),SwipeReply {
 
 
         mView.tv_send.setOnClickListener {
-            sendMessage(mView.et_write_msg.text.toString(), TYPE_TEXT)
+
+            if (!mView.et_write_msg.text.isNullOrBlank())
+            {
+                if (mView.ll_message_reply.visibility == View.VISIBLE)
+                {
+                    sendMessage(mView.et_write_msg.text.toString(), "replyId:$replyId")
+                }
+                else{
+                    sendMessage(mView.et_write_msg.text.toString(), TYPE_TEXT)
+                }
+            }
+
+
+
         }
 
 
@@ -241,25 +256,30 @@ class ChatFragment : BaseFragment(),SwipeReply {
                 data.getString("data"),
                 object : TypeToken<ArrayList<receivedMessageData?>?>() {}.type
             )
+
+            messageList = ArrayList()
+            messageList =   listFromGson
+            if (!messageList.isNullOrEmpty())
+            {
+                chatAdapter =  ChatAdapter( messageList!!,this)
+                mView.rv_chat_message?.adapter = chatAdapter
+                mView.rv_chat_message?.adapter?.notifyDataSetChanged()
+                mView.rv_chat_message?.smoothScrollToPosition(messageList?.size - 1);
+            }
+
+            Log.e("receiveMessage", listFromGson.toString())
+
+/*
             if (listFromGson.size != 1)
             {
-                messageList = ArrayList()
-                messageList =   listFromGson
-                if (!messageList.isNullOrEmpty())
-                {
-                    chatAdapter =  ChatAdapter( messageList!!,this)
-                   mView.rv_chat_message?.adapter = chatAdapter
-                    mView.rv_chat_message?.adapter?.notifyDataSetChanged()
-                    mView.rv_chat_message?.smoothScrollToPosition(messageList?.size - 1);
-                }
 
-                Log.e("receiveMessage", listFromGson.toString())
             }
             else{
                 messageList?.add(listFromGson.get(0))
                 chatAdapter?.notifyItemChanged(messageList!!.size - 1)
                 mView.rv_chat_message?.smoothScrollToPosition(messageList!!.size - 1);
             }
+*/
 
         }
     }
@@ -452,13 +472,7 @@ class ChatFragment : BaseFragment(),SwipeReply {
             }
 
     }
-    override fun onSwipe(position: Int) {
 
-        mView.ll_message_reply.visibility = View.VISIBLE
-        mView.et_write_msg.requestFocus()
-
-        mView.et_write_msg.showKeyboard()
-    }
     fun View.showKeyboard() = ViewCompat.getWindowInsetsController(this)
         ?.show(WindowInsetsCompat.Type.ime())
 
@@ -497,6 +511,15 @@ class ChatFragment : BaseFragment(),SwipeReply {
         super.onDestroy()
         offSocket()
     }
+    override fun onSwipe(position: Int) {
 
+        mView.ll_message_reply.visibility = View.VISIBLE
+
+        mView.tv_reply.setText( messageList[position].message)
+        mView.et_write_msg.requestFocus()
+        mView.et_write_msg.showKeyboard()
+
+        replyId = messageList[position].id.toString()
+    }
 
 }

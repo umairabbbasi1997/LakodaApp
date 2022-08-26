@@ -207,7 +207,7 @@ class FollowersFragment : BaseFragment() ,OnItemClickListener{
                         mView.rv_followers.visibility =View.VISIBLE
                     })*/
 
-                    Log.d("Response", response.message())
+                    Log.d("Response", ""+response?.body()?.message)
 
                     try {
 
@@ -311,9 +311,14 @@ class FollowersFragment : BaseFragment() ,OnItemClickListener{
         else if (value == Constants.PROFILE)
         {
             val bundle = bundleOf(
+
+
+
+
+
                 Constants.USER_ID to   followersList?.get(position)?.id.toString(),
                 Constants.USER_NAME to   followersList?.get(position)?.name.toString(),
-                Constants.PROFILE to   followersList?.get(position)?.image.toString()
+                Constants.PROFILE to   followersList?.get(position)?.image?.toString()
             )
 
 

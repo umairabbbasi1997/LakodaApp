@@ -16,6 +16,6 @@ class FirebaseMessaging : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
-        Log.d("onMessageReceived",message.toString())
+        Log.d("onMessageReceived",message.data.toString())
     }
 }

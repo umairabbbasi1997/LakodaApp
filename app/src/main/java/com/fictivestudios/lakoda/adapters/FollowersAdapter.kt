@@ -158,7 +158,7 @@ class FollowersAdapter(
                 {
 
 
-                    Log.d("Response", response.message())
+                    Log.d("Response", ""+response?.body()?.message)
 
                     try {
 

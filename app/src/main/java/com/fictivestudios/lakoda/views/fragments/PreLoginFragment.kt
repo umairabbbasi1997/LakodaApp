@@ -9,6 +9,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Button
 import android.widget.CheckBox
+import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.Navigation.findNavController
 import com.fictivestudios.imdfitness.activities.fragments.BaseFragment
@@ -57,18 +58,21 @@ class PreLoginFragment : BaseFragment() {
     private fun showAgreementDialog() {
 
         var dialog = Dialog(context as Activity)
-        dialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog!!.setCancelable(true)
-        dialog!!.setContentView(R.layout.fragment_agreement)
+        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog?.setCancelable(true)
+        dialog?.setContentView(R.layout.fragment_agreement)
 
-        resizeDialogView(dialog!!,70)
-        dialog!!.show()
+        resizeDialogView(dialog,70)
+        dialog?.show()
 
-        var btnAccept:Button= dialog!!.findViewById<Button>(R.id.btn_accept)
-        var btnDecline:Button= dialog!!.findViewById<Button>(R.id.btn_reject)
+        var btnAccept:Button= dialog?.findViewById<Button>(R.id.btn_accept)
+        var btnDecline:Button= dialog?.findViewById<Button>(R.id.btn_reject)
 
-        var btnTerms:CheckBox= dialog!!.findViewById<CheckBox>(R.id.tv_terms)
-        var btnPrivacy:CheckBox= dialog!!.findViewById<CheckBox>(R.id.tv_privacy)
+        var btnTerms:CheckBox= dialog?.findViewById<CheckBox>(R.id.tv_terms)
+        var btnPrivacy:CheckBox= dialog?.findViewById<CheckBox>(R.id.tv_privacy)
+
+        var tvTerms:TextView= dialog?.findViewById<TextView>(R.id.text_term)
+        var tvPrivacy:TextView= dialog?.findViewById<TextView>(R.id.text_privacy)
 
         btnAccept.setOnClickListener {
 
@@ -87,7 +91,7 @@ class PreLoginFragment : BaseFragment() {
             }
             else
             {
-                dialog!!.dismiss()
+                dialog?.dismiss()
                 RegisterationActivity?.getRegActivity
                     ?.navControllerReg?.navigate(R.id.loginFragment)
             }
@@ -95,9 +99,20 @@ class PreLoginFragment : BaseFragment() {
         }
 
         btnDecline.setOnClickListener {
-            dialog!!.dismiss()
+            dialog?.dismiss()
         }
 
+        tvTerms.setOnClickListener {
+            dialog?.dismiss()
+            RegisterationActivity?.getRegActivity
+                ?.navControllerReg?.navigate(R.id.termsAndConditionFragment)
+        }
+
+        tvPrivacy.setOnClickListener {
+            dialog?.dismiss()
+            RegisterationActivity?.getRegActivity
+                ?.navControllerReg?.navigate(R.id.privacyAndPolicyFragment)
+        }
 
 
 

@@ -88,6 +88,7 @@ class MyProfileFeedsAdapter(context: Context, post: List<Post>?, onItemClickList
 
         }
 
+/*
         holder.itemView.tv_comments.setOnClickListener {
 
             onItemClickListener.onItemClick(position,it,COMMENTS)
@@ -95,6 +96,7 @@ class MyProfileFeedsAdapter(context: Context, post: List<Post>?, onItemClickList
 
         }
 
+*/
 
         if ( postList?.get(position)?.is_post == Constants.VIEW_TYPE_POST)
         {
@@ -142,6 +144,7 @@ class MyProfileFeedsAdapter(context: Context, post: List<Post>?, onItemClickList
             itemView.tv_like.setText(post?.like_count.toString())
             itemView.tv_comment.setText(post?.comment_count.toString()+" comment")
             itemView.tv_sharer_username.setText(post?.shared_by?.name)
+
 
             if (!post?.shared_by?.image.isNullOrBlank())
             {

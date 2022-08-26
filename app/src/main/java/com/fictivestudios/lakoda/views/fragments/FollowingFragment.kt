@@ -99,7 +99,7 @@ class FollowingFragment : BaseFragment() ,OnItemClickListener{
                         mView.rv_followers.visibility =View.VISIBLE
                     })*/
 
-                    Log.d("Response", response.message())
+                    Log.d("Response", ""+response?.body()?.message)
 
                     try {
 
@@ -306,7 +306,7 @@ class FollowingFragment : BaseFragment() ,OnItemClickListener{
             val bundle = bundleOf(
                 Constants.USER_ID to   followingList?.get(position)?.id.toString(),
                 Constants.USER_NAME to   followingList?.get(position)?.name.toString(),
-                Constants.PROFILE to   followingList?.get(position)?.image.toString()
+                Constants.PROFILE to   followingList?.get(position)?.image?.toString()
             )
 
 
