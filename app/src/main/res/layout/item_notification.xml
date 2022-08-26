@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipe_layout"
+    android:background="@color/black_color"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    app:draggedItem="@id/drag_item"
+    app:rightItem="@id/right_view"
+    app:swipeDirection="left">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/date_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+
+        app:layout_constraintTop_toTopOf="parent"
+        >
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/gray_text"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+
+        </View>
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Today"
+            android:layout_marginTop="15dp"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:layout_marginLeft="7dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view"
+            >
+        </TextView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+    <com.zerobranch.layout.SwipeLayout
+
+        android:id="@+id/swipe_layout_"
+        android:background="@color/black_color"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
+        app:draggedItem="@id/drag_item"
+        app:rightItem="@id/right_view"
+        app:swipeDirection="left"
+        app:layout_constraintTop_toBottomOf="@id/date_ll"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+
+
+        <ImageView
+            android:id="@+id/right_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+
+            android:layout_gravity="center_vertical|right"
+            android:gravity="center"
+            android:src="@drawable/delete_icon"/>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/drag_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            >
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_post"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="10dp"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+
+                >
+                <ImageView
+                    android:id="@+id/iv_post"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/user_dp"
+                    android:scaleType="centerCrop"
+
+                    >
+
+                </ImageView>
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Harry"
+                android:layout_marginTop="5dp"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_marginLeft="7dp"
+                app:layout_constraintLeft_toRightOf="@id/card_post"
+                app:layout_constraintTop_toTopOf="@id/card_post"
+                >
+            </TextView>
+
+            <TextView
+                android:id="@+id/tv_notification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Like your post"
+                android:textSize="14sp"
+
+                android:textColor="@color/dark_gray_text"
+                android:layout_marginLeft="7dp"
+                app:layout_constraintLeft_toRightOf="@id/card_post"
+                app:layout_constraintTop_toBottomOf="@id/tv_name"
+                >
+            </TextView>
+
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2hrs ago"
+                android:layout_marginRight="10dp"
+                android:textSize="14sp"
+                android:textColor="@color/dark_gray_text"
+                android:layout_marginLeft="7dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_name"
+                >
+            </TextView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+    </com.zerobranch.layout.SwipeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+<!--
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/black_color"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="12dp"
+        >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            >
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_post"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+
+                >
+                <ImageView
+                    android:id="@+id/iv_post"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/user_dp"
+                    android:scaleType="centerCrop"
+
+                    >
+
+                </ImageView>
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Harry"
+                android:layout_marginTop="5dp"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_marginLeft="7dp"
+                app:layout_constraintLeft_toRightOf="@id/card_post"
+                app:layout_constraintTop_toTopOf="@id/card_post"
+                >
+            </TextView>
+
+            <TextView
+                android:id="@+id/tv_notification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Like your post"
+                android:textSize="14sp"
+
+                android:textColor="@color/dark_gray_text"
+                android:layout_marginLeft="7dp"
+                app:layout_constraintLeft_toRightOf="@id/card_post"
+                app:layout_constraintTop_toBottomOf="@id/tv_name"
+                >
+            </TextView>
+
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2hrs ago"
+                android:layout_marginRight="10dp"
+                android:textSize="14sp"
+                android:textColor="@color/dark_gray_text"
+                android:layout_marginLeft="7dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_name"
+                >
+            </TextView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>-->

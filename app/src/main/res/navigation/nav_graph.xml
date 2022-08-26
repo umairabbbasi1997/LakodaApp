@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/preLoginFragment">
+    <fragment
+        android:id="@+id/preLoginFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.PreLoginFragment"
+        android:label="pre_login_fragment"
+        tools:layout="@layout/pre_login_fragment" >
+        <action
+            android:id="@+id/action_preLoginFragment_to_agreementFragment"
+            app:destination="@id/agreementFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.LoginFragment"
+        android:label="LoginFragment" />
+    <fragment
+        android:id="@+id/signupFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.SignupFragment"
+        android:label="SignupFragment" />
+    <fragment
+        android:id="@+id/forgetPasswordFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.ForgetPasswordFragment"
+        android:label="forget_password_fragment"
+        tools:layout="@layout/forget_password_fragment" />
+    <fragment
+        android:id="@+id/otpFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.OtpFragment"
+        android:label="otp_fragment"
+        tools:layout="@layout/otp_fragment" />
+    <fragment
+        android:id="@+id/changePassowrdFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.ChangePassowrdFragment"
+        android:label="change_passowrd_fragment"
+        tools:layout="@layout/change_passowrd_fragment"
+
+        />
+    <fragment
+        android:id="@+id/homeFragment2"
+        android:name="com.fictivestudios.lakoda.views.fragments.HomeFragment"
+        android:label="HomeFragment" />
+    <fragment
+        android:id="@+id/feedsFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.FeedsFragment"
+        android:label="feeds_fragment"
+        tools:layout="@layout/feeds_fragment" />
+    <fragment
+        android:id="@+id/createPostFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.CreatePostFragment"
+        android:label="create_post_fragment"
+        tools:layout="@layout/create_post_fragment" />
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.NotificationFragment"
+        android:label="notification_fragment"
+        tools:layout="@layout/notification_fragment" />
+    <fragment
+        android:id="@+id/myProfileFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.MyProfileFragment"
+        android:label="my_profile_fragment"
+        tools:layout="@layout/my_profile_fragment" />
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.UserProfileFragment"
+        android:label="user_profile_fragment"
+        tools:layout="@layout/user_profile_fragment" />
+    <fragment
+        android:id="@+id/friendProfileFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.FriendProfileFragment"
+        android:label="friend_profile_fragment"
+        tools:layout="@layout/friend_profile_fragment" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.SettingsFragment"
+        android:label="settings_fragment"
+        tools:layout="@layout/settings_fragment" />
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.EditProfileFragment"
+        android:label="EditProfileFragment" />
+    <fragment
+        android:id="@+id/messagesFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.MessagesFragment"
+        android:label="fragment_messages"
+        tools:layout="@layout/fragment_messages" />
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.ChatFragment"
+        android:label="fragment_inbox"
+        tools:layout="@layout/fragment_chat" />
+    <fragment
+        android:id="@+id/termsAndConditionFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.TermsAndConditionFragment"
+        android:label="fragment_terms_and_condition"
+        tools:layout="@layout/fragment_terms_and_condition" />
+    <fragment
+        android:id="@+id/privacyAndPolicyFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.PrivacyAndPolicyFragment"
+        android:label="fragment_privacy_and_policy"
+        tools:layout="@layout/fragment_privacy_and_policy" />
+    <fragment
+        android:id="@+id/createStoryFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.CreateStoryFragment"
+        android:label="create_story_fragment"
+        tools:layout="@layout/create_story_fragment">
+
+    </fragment>
+    <fragment
+        android:id="@+id/viewStoryFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.ViewStoryFragment"
+        android:label="view_story_fragment"
+        tools:layout="@layout/view_story_fragment" />
+    <fragment
+        android:id="@+id/followRequestFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.FollowRequestFragment"
+        android:label="follow_request_fragment"
+        tools:layout="@layout/follow_request_fragment" />
+    <fragment
+        android:id="@+id/followersFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.FollowersFragment"
+        android:label="followers_fragment"
+        tools:layout="@layout/followers_fragment" />
+    <fragment
+        android:id="@+id/commentsFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.CommentsFragment"
+        android:label="comments_fragment"
+        tools:layout="@layout/comments_fragment" />
+    <dialog
+        android:id="@+id/agreementFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.AgreementFragment"
+        android:label="AgreementFragment" >
+        <action
+            android:id="@+id/action_agreementFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_agreementFragment_to_tutorialFragment"
+            app:destination="@id/tutorialFragment" />
+    </dialog>
+    <fragment
+        android:id="@+id/uploadIdFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.UploadIdFragment"
+        android:label="UploadIdFragment" />
+    <fragment
+        android:id="@+id/followingFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.FollowingFragment"
+        android:label="FollowingFragment" />
+    <fragment
+        android:id="@+id/videoViewFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.VideoViewFragment"
+        android:label="video_view_fragment"
+        tools:layout="@layout/video_view_fragment" />
+    <fragment
+        android:id="@+id/tutorialFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.TutorialFragment"
+        android:label="TutorialFragment" >
+        <action
+            android:id="@+id/action_tutorialFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.MapFragment"
+        android:label="map_fragment"
+        tools:layout="@layout/map_fragment" />
+</navigation>

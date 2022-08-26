@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/black_color"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <View
+        android:id="@+id/v_vertical"
+        android:layout_width="2dp"
+        android:layout_height="30dp"
+
+        android:background="@color/dark_gray_text"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+
+        >
+
+    </View>
+    
+    <View
+        android:id="@+id/v_horizontal"
+        android:layout_width="45dp"
+        android:layout_height="2dp"
+        android:layout_marginLeft="-5dp"
+        android:background="@color/dark_gray_text"
+        app:layout_constraintTop_toBottomOf="@id/v_vertical"
+        app:layout_constraintLeft_toRightOf="@id/v_vertical"
+        >
+
+    </View>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_user"
+        android:layout_width="23dp"
+        android:layout_height="23dp"
+
+        android:layout_marginTop="14dp"
+        android:src="@drawable/user_dp"
+        app:layout_constraintLeft_toRightOf="@id/v_horizontal"
+        app:layout_constraintTop_toTopOf="@id/v_horizontal"
+        app:layout_constraintBottom_toBottomOf="@id/v_vertical"
+        >
+    </de.hdodenhof.circleimageview.CircleImageView>
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Johny"
+        android:textSize="14sp"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/white"
+        android:drawablePadding="5dp"
+        app:layout_constraintTop_toTopOf="@id/iv_user"
+        app:layout_constraintLeft_toRightOf="@id/iv_user"
+        >
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/tv_comment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
+        android:elevation="10dp"
+
+        android:text="Lorem ipsum dolor sit amet elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+        android:gravity="center_vertical"
+        android:textColor="@color/white"
+        android:textSize="13dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="10dp"
+        app:layout_constraintLeft_toRightOf="@id/iv_user"
+        app:layout_constraintTop_toBottomOf="@id/tv_name"
+        app:layout_constraintRight_toRightOf="parent"
+        >
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="59m"
+        android:textSize="14sp"
+        android:layout_marginRight="20dp"
+        android:textColor="@color/white"
+        android:drawablePadding="5dp"
+        app:layout_constraintBottom_toTopOf="@id/tv_comment"
+        app:layout_constraintRight_toRightOf="parent"
+        >
+
+    </TextView>
+
+
+    <TextView
+        android:id="@+id/tv_like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Like"
+        android:textSize="14sp"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/white"
+        android:drawablePadding="5dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_comment"
+        app:layout_constraintLeft_toRightOf="@id/iv_user"
+        >
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/tv_reply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reply"
+
+        android:textSize="14sp"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/white"
+        android:drawablePadding="5dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_comment"
+        app:layout_constraintLeft_toRightOf="@id/tv_like"
+        >
+
+    </TextView>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_like"
+        >
+        <View
+            android:id="@+id/v_horizontal2"
+            android:layout_width="45dp"
+            android:layout_height="2dp"
+            android:layout_marginLeft="-5dp"
+            android:background="@color/dark_gray_text"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/iv_user_write"
+            app:layout_constraintBottom_toBottomOf="@id/iv_user_write"
+            >
+
+        </View>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_user_write"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+
+
+            android:src="@drawable/user_dp"
+            app:layout_constraintLeft_toRightOf="@id/v_horizontal2"
+            app:layout_constraintTop_toTopOf="@id/ll_write"
+            app:layout_constraintBottom_toBottomOf="@id/ll_write"
+
+            >
+        </de.hdodenhof.circleimageview.CircleImageView>
+        
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ll_write"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_round_border_btn"
+            app:layout_constraintLeft_toRightOf="@id/iv_user_write"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+            <ImageView
+                android:id="@+id/iv_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/camera_icon"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+
+                >
+
+            </ImageView>
+
+            <TextView
+                android:id="@+id/tv_write_comment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+
+                android:elevation="10dp"
+                android:text="Write a reply"
+                android:gravity="center_vertical"
+                android:textColor="@color/white"
+                android:textSize="13dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginLeft="10dp"
+                app:layout_constraintLeft_toRightOf="@id/iv_camera"
+                >
+
+            </TextView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

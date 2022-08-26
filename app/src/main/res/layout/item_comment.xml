@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/black_color"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_user"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="14dp"
+        android:src="@drawable/user_dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+    </de.hdodenhof.circleimageview.CircleImageView>
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="14sp"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/white"
+        android:drawablePadding="5dp"
+        app:layout_constraintTop_toTopOf="@id/iv_user"
+        app:layout_constraintLeft_toRightOf="@id/iv_user"
+        >
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/tv_comment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
+        android:elevation="10dp"
+
+          android:gravity="center_vertical"
+        android:textColor="@color/white"
+        android:textSize="13dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="10dp"
+        app:layout_constraintLeft_toRightOf="@id/iv_user"
+        app:layout_constraintTop_toBottomOf="@id/tv_name"
+        app:layout_constraintRight_toRightOf="parent"
+        >
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="14sp"
+        android:layout_marginRight="20dp"
+        android:textColor="@color/white"
+        android:drawablePadding="5dp"
+        app:layout_constraintBottom_toTopOf="@id/tv_comment"
+        app:layout_constraintRight_toRightOf="parent"
+        >
+
+    </TextView>
+
+
+    <TextView
+        android:id="@+id/tv_view_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View More"
+        android:textSize="14sp"
+        android:visibility="gone"
+        android:layout_marginRight="20dp"
+        android:textColor="@color/white"
+        android:drawablePadding="5dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_comment"
+        app:layout_constraintRight_toRightOf="parent"
+        >
+
+    </TextView>
+
+<!--    <TextView
+        android:id="@+id/tv_reply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reply"
+
+        android:textSize="14sp"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/white"
+        android:drawablePadding="5dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_comment"
+        app:layout_constraintLeft_toRightOf="@id/tv_like"
+        >
+
+    </TextView>-->
+
+<!--
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_reply"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        tools:listitem="@layout/item_reply"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_like"
+        >
+
+    </androidx.recyclerview.widget.RecyclerView>-->
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="14dp"
+        android:background="@color/dark_gray_text"
+        app:layout_constraintTop_toBottomOf="@id/tv_view_more"
+        >
+
+    </View>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

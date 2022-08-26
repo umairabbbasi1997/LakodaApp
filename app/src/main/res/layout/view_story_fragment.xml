@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/story_view"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".views.fragments.ViewStoryFragment">
+
+
+    <ImageView
+        android:id="@+id/story"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:scaleType="fitXY"
+        android:src="@drawable/story_background"
+        >
+
+    </ImageView>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_profile"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/user_dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        >
+
+    </de.hdodenhof.circleimageview.CircleImageView>
+
+
+    <TextView
+        android:id="@+id/tv_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:text="John"
+        android:layout_marginLeft="20dp"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toRightOf="@id/iv_profile"
+        app:layout_constraintTop_toTopOf="@id/iv_profile"
+        app:layout_constraintBottom_toBottomOf="@id/iv_profile"
+        >
+
+    </TextView>
+
+    <ImageView
+        android:id="@+id/btn_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/cross_icom"
+        android:layout_marginRight="15dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/iv_profile"
+        app:layout_constraintBottom_toBottomOf="@id/iv_profile"
+        >
+
+    </ImageView>
+    <LinearLayout
+        android:id="@+id/lay_attachment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+
+        android:background="@color/grey"
+        app:layout_constraintBottom_toTopOf="@id/msg_ll"
+        >
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/white"
+            >
+
+        </View>
+        <TextView
+            android:id="@+id/btn_photos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Photo"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            >
+
+        </TextView>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/white"
+            >
+
+        </View>
+        <TextView
+            android:id="@+id/btn_video"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Video"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            >
+
+        </TextView>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/white"
+            >
+
+        </View>
+        <TextView
+            android:id="@+id/btn_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Location"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            >
+
+        </TextView>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/white"
+            >
+
+        </View>
+        <TextView
+            android:id="@+id/btn_document"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Document"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            >
+
+        </TextView>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/white"
+            >
+
+        </View>
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/msg_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="18dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/black_color"
+        >
+
+        <ImageButton
+            android:id="@+id/btn_attach"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/attachment_icon"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
+
+        </ImageButton>
+
+        <EditText
+            android:id="@+id/et_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/type_message_here"
+            android:paddingHorizontal="10dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/dark_gray_text"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/btn_attach"
+            app:layout_constraintRight_toLeftOf="@id/tv_send"
+            >
+
+        </EditText>
+
+        <TextView
+            android:id="@+id/tv_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/send"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
+
+        </TextView>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

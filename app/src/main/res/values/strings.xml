@@ -1,0 +1,94 @@
+<resources>
+    <string name="app_name">Lakoda</string>
+
+    <string name="signin_with_email">Sign In With Email</string>
+    <string name="signin_with_fb">Sign In With Facebook</string>
+    <string name="signin_with_gmail">Sign In With Google</string>
+
+
+    <string name="pre_login">PRE LOGIN</string>
+    <string name="login">LOGIN</string>
+    <string name="email_address">Email Address</string>
+    <string name="password">Password</string>
+    <string name="otp_verification">OTP VERIFICATION</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="forgot_password_">FORGOT PASSWORD</string>
+    <string name="dont_have_account">Don\'t have an account? Sign Up</string>
+    <string name="alread_have_acc">Already have account? Login</string>
+    <string name="username">User Name</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="confirm_pass">Confirm Password</string>
+    <string name="sign_up">SIGN UP</string>
+
+    <string name="get_code">get Code</string>
+
+    <string name="new_password">New Password</string>
+
+    <string name="update_password">Update Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
+    <string name="verify">Verify</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="push_notification">Push Notifications</string>
+    <string name="Didnt_received_code">Didn\'t receive code? Resend</string>
+
+    <string name="terms_and_con">Terms &amp; Conditions</string>
+    <string name="privacy_policy">Privacy Policy</string>
+
+    <string name="terms_and_con_">TERMS &amp; CONDITIONS</string>
+    <string name="privacy_policy_">PRIVACY POLICY</string>
+
+    <string name="logout">Logout</string>
+    <string name="please_accept_terms">Please accept both Terms &amp; Conditions &amp; Privacy Policy first</string>
+    <string name="accept">Accept</string>
+    <string name="decline">Decline</string>
+    <string name="followers">Followers</string>
+    <string name="following">Following</string>
+    <string name="follow">follow</string>
+    <string name="cancel_request">cancel request</string>
+    <string name="posts">Posts</string>
+
+    <string name="delete">Delete</string>
+    <string name="confirm">Confirm</string>
+    <string name="unfollow">unfollow</string>
+    <string name="remove">remove</string>
+
+    <string name="block">Block</string>
+    <string name="search">Search</string>
+    <string name="create_story">Create Story</string>
+
+
+    <string name="upload_video">Upload Video</string>
+    <string name="upload_image">Upload Picture</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="create">Create</string>
+
+    <string name="type_message_here">Type message here</string>
+    <string name="send">SEND</string>
+
+    <string name="add_to_story">Add To Story</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="i_have_read..">I have read and agree with</string>
+    <string name="agreement">AGREEMENT</string>
+    <string name="are_you_over_18">Are you over 18?</string>
+    <string name="age_verification">AGE VERIFICATION</string>
+    <string name="upload_your_id_card">Upload Your ID Card</string>
+
+    <string name="fields_cant_be_empty">Field can\'t be empty</string>
+    <string name="invalid_email_format">Invalid email format</string>
+    <string name="password_must_be">Password must be of 8 characters long (should contain uppercase, lowercase, number and special character)</string>
+    <string name="confirm_pass_doesnt_match">Confirm password doesn\'t match</string>
+    <string name="new_and_old_pass_must">new and old password shouldn\'t be same</string>
+
+    <string name="password_doesnt_match">Password doesn\'t match</string>
+    <string name="old_pass_and_new_pass_cant_be_same">Old password and new password can\'t be same</string>
+
+    <string name="change_pass">Change Password</string>
+    <string name="old_pass">Old Password</string>
+    <string name="new_pass">New Password</string>
+    <string name="re_enter_pass">Re Enter Password</string>
+    <string name="save">Save</string>
+
+    <string name="map_api_key">AIzaSyCKPRw5TmUz8jzTFTQqttw54Mm4ZazucUA</string>
+</resources>

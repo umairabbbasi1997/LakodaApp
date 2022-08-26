@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/black_color"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:paddingHorizontal="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+
+            >
+            <ImageView
+                android:id="@+id/iv_post"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/user_dp"
+                android:scaleType="centerCrop"
+
+                >
+
+            </ImageView>
+
+        </androidx.cardview.widget.CardView>
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="user"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:layout_marginLeft="10dp"
+            app:layout_constraintBottom_toTopOf="@id/tv_message"
+            app:layout_constraintLeft_toRightOf="@id/card_post"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+
+        </TextView>
+        <TextView
+            android:id="@+id/tv_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="message"
+            android:textColor="@color/dark_gray_text"
+            android:textSize="14sp"
+            android:layout_marginLeft="10dp"
+            app:layout_constraintLeft_toRightOf="@id/card_post"
+            app:layout_constraintTop_toBottomOf="@id/tv_name"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2hrs ago"
+            android:textColor="@color/dark_gray_text"
+            android:textSize="10sp"
+            android:layout_marginLeft="10dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_name"
+            >
+
+        </TextView>
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="13dp"
+            android:background="@color/dark_gray_text"
+            app:layout_constraintTop_toBottomOf="@id/card_post"
+            >
+
+        </View>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

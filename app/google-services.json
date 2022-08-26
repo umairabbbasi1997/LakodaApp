@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "832334397993",
+    "project_id": "lakoda-ff4a9",
+    "storage_bucket": "lakoda-ff4a9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:832334397993:android:63e0622353b5daa02d5238",
+        "android_client_info": {
+          "package_name": "com.fictivestudios.lakoda"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "832334397993-amp41iejkj7dh038fnl9abn1jl9octub.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtJ22C6MnhzFOSDgPqh0yC2Qzk_x9QMdY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "832334397993-amp41iejkj7dh038fnl9abn1jl9octub.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "832334397993-fbsprg3pi9u5tqg4q6h1iumql01fkmcq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.fictivestudios.lakoda"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

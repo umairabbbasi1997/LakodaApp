@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/black_color"
+    android:paddingTop="20dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_profile"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/user_dp"
+        android:layout_marginLeft="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        >
+
+    </de.hdodenhof.circleimageview.CircleImageView>
+
+    <TextView
+        android:id="@+id/tv_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_marginLeft="6dp"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toRightOf="@id/iv_profile"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+    </TextView>
+
+
+    <TextView
+        android:id="@+id/tv_active"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" "
+        android:layout_marginLeft="6dp"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toRightOf="@id/iv_profile"
+        app:layout_constraintTop_toBottomOf="@id/tv_username"
+        >
+
+    </TextView>
+
+
+    <ImageView
+        android:id="@+id/iv_share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+
+        android:background="@drawable/share_icon"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/iv_profile"
+        app:layout_constraintBottom_toBottomOf="@id/iv_profile"
+        >
+
+    </ImageView>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/iv_profile"
+        >
+
+    </View>
+
+    <TextView
+        android:id="@+id/tv_post_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_marginLeft="6dp"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view"
+        >
+
+    </TextView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/black"
+        app:cardCornerRadius="15dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_post_description"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        >
+        <ImageView
+            android:id="@+id/iv_post"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="200dp"
+            android:scaleType="centerCrop"
+
+            >
+
+        </ImageView>
+    </androidx.cardview.widget.CardView>
+
+    <ImageView
+        android:id="@+id/iv_heart"
+        android:layout_width="22dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:tag="unliked"
+        android:background="@drawable/heart_white_icon"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/card_post"
+        >
+
+    </ImageView>
+
+    <TextView
+        android:id="@+id/tv_like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_marginLeft="6dp"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toRightOf="@id/iv_heart"
+        app:layout_constraintTop_toBottomOf="@id/card_post"
+        >
+
+    </TextView>
+
+    <ImageView
+        android:id="@+id/iv_Comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="40dp"
+        android:background="@drawable/comment_icon"
+        app:layout_constraintLeft_toRightOf="@id/tv_like"
+        app:layout_constraintTop_toBottomOf="@id/card_post"
+        >
+
+    </ImageView>
+
+    <TextView
+        android:id="@+id/tv_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" comments"
+        android:layout_marginLeft="6dp"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toRightOf="@id/iv_Comment"
+        app:layout_constraintTop_toBottomOf="@id/card_post"
+        >
+
+    </TextView>
+
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/iv_heart"
+        >
+
+    </View>
+</androidx.constraintlayout.widget.ConstraintLayout>

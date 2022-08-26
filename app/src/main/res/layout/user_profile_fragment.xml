@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_color"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".views.fragments.UserProfileFragment">
+
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_user_profile"
+        android:layout_width="165dp"
+        android:layout_height="165dp"
+        android:src="@drawable/user_dp"
+        app:civ_border_width="6dp"
+        app:civ_border_color="@color/white"
+        android:layout_marginTop="70dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        >
+
+    </de.hdodenhof.circleimageview.CircleImageView>
+
+
+
+    <TextView
+        android:id="@+id/tv_username_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintRight_toRightOf="parent"
+            android:text="Adam Palmer"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_user_profile"
+        >
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/tv_city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/grey"
+        android:textSize="14sp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="California"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_username_name"
+
+        >
+
+    </TextView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lay_follow_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_city"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lay_followers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/v_follower"
+            >
+            <TextView
+                android:id="@+id/tv_followers_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:text="140"
+                app:layout_constraintLeft_toLeftOf="@id/tv_followers"
+                app:layout_constraintRight_toRightOf="@id/tv_followers"
+                app:layout_constraintTop_toTopOf="parent"
+                >
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/tv_followers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grey"
+                android:textSize="14sp"
+                app:layout_constraintRight_toRightOf="parent"
+                android:text="@string/followers"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_followers_count"
+
+                >
+
+            </TextView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/v_follower"
+            android:layout_width="2dp"
+            android:layout_height="50dp"
+            android:background="@color/white"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/lay_followers"
+            app:layout_constraintRight_toLeftOf="@id/lay_posts"
+            >
+
+        </View>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lay_posts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toRightOf="@id/v_follower"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/v_following"
+            >
+            <TextView
+                android:id="@+id/tv_posts_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:text="16"
+                app:layout_constraintLeft_toLeftOf="@id/tv_posts"
+                app:layout_constraintRight_toRightOf="@id/tv_posts"
+                app:layout_constraintTop_toTopOf="parent"
+                >
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/tv_posts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grey"
+                android:textSize="14sp"
+                app:layout_constraintRight_toRightOf="parent"
+                android:text="@string/posts"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_posts_count"
+
+                >
+
+            </TextView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/v_following"
+            android:layout_width="2dp"
+            android:layout_height="50dp"
+            android:background="@color/white"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/lay_posts"
+            app:layout_constraintRight_toLeftOf="@id/lay_following"
+            >
+
+        </View>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lay_following"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toRightOf="@id/v_following"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            >
+            <TextView
+                android:id="@+id/tv_following_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:text="24k"
+                app:layout_constraintLeft_toLeftOf="@id/tv_following"
+                app:layout_constraintRight_toRightOf="@id/tv_following"
+                app:layout_constraintTop_toTopOf="parent"
+                >
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/tv_following"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grey"
+                android:textSize="14sp"
+                app:layout_constraintRight_toRightOf="parent"
+                android:text="@string/following"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_following_count"
+
+                >
+
+            </TextView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_follow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="37dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="40dp"
+        android:text="@string/follow"
+        android:background="@drawable/bg_main_btn"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+
+    </androidx.appcompat.widget.AppCompatButton>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
