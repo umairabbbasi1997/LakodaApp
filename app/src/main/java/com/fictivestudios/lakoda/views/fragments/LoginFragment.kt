@@ -118,7 +118,7 @@ class LoginFragment : BaseFragment() {
             mView.et_pass.text.toString().isNullOrBlank()
         )
         {
-            Toast.makeText(context, getString(R.string.fields_cant_be_empty), Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.fields_cant_be_empty), Toast.LENGTH_SHORT).show()
             return
         }
 */
@@ -277,7 +277,7 @@ class LoginFragment : BaseFragment() {
                            loginBinding.pb_login.visibility=View.GONE
                           loginBinding.btn_login.isEnabled=true
                           loginBinding.btn_login.text="LOGIN"
-                            Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
                         })
                     }
                 })

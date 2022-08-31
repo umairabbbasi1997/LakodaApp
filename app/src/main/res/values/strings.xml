@@ -91,4 +91,6 @@
     <string name="save">Save</string>
 
     <string name="map_api_key">AIzaSyCKPRw5TmUz8jzTFTQqttw54Mm4ZazucUA</string>
+    <string name="app_id">593751142411666</string>
+    <string name="facebook_client_token">86d0357b5e7f79caa4e77e0db5f741b3</string>
 </resources>

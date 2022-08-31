@@ -39,7 +39,7 @@ class Constants {
         val SOCKET_URL: String = "https://server.appsstaging.com:3059/"
 
 
-
+        const val SOCIAL_LOGIN_URL = "social_login"
         const val LOGIN_URL = "login"
         const val SIGNUP_URL = "sign-up"
         const val VERIFY_OTP_URL = "verification"
@@ -53,6 +53,7 @@ class Constants {
         const val PROFILE_URL = "complete-profile"
         const val OTHER_USER_PROFILE_URL = "user-profile"
         const val BLOCK_USER_URL = "user/block"
+
 
         const val CREATE_POST_URL = "post/create"
         const val SHARE_POST_URL = "post/share/{id}"
@@ -95,6 +96,7 @@ class Constants {
         const val EMAIL = "email"
         const val PHONE ="phone"
 
+        const val STORY_DURATION="storyDuration"
         const val USER_ID="userId"
         const val IS_REMOVE="isRemove"
         const val POST_ID="postId"
@@ -137,6 +139,7 @@ class Constants {
         const val TYPE_IMAGE = "image"
         const val TYPE_LOCATION = "location"
         const val TYPE_DOCUMENT = "document"
+        const val TYPE_VIDEO = "video"
         const val MESSAGE_TYPE ="messageType"
 
         const val BLOCK ="block"
@@ -145,7 +148,7 @@ class Constants {
         const val STATUS_FOLLOWED ="followed"
         const val STATUS_UNFOLLOWED ="unfollowed"
         const val STATUS_REQUEST_SENT ="sent"
-
+        const val RECEIVER_USER_ID = "receiverUserId"
 
         fun isValidEmail(str: String): Boolean{
             return android.util.Patterns.EMAIL_ADDRESS.matcher(str).matches()

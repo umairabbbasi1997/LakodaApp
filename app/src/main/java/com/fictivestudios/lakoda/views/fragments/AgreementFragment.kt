@@ -55,13 +55,13 @@ class AgreementFragment : DialogFragment() {
 
             if (!mView.tv_terms.isChecked )
             {
-                Toast.makeText(context, getString(R.string.please_accept_terms), Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.please_accept_terms), Toast.LENGTH_SHORT).show()
 
                 return@setOnClickListener
             }
             if (!mView.tv_privacy.isChecked)
             {
-                Toast.makeText(context, getString(R.string.please_accept_terms), Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.please_accept_terms), Toast.LENGTH_SHORT).show()
 
                 return@setOnClickListener
             }

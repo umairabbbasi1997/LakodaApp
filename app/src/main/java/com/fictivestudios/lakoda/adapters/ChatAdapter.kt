@@ -5,12 +5,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.fictivestudios.lakoda.R
 import com.fictivestudios.lakoda.model.receivedMessageData
+import com.fictivestudios.ravebae.utils.Constants
 import com.fictivestudios.ravebae.utils.Constants.Companion.IMAGE_BASE_URL
+import com.fictivestudios.ravebae.utils.Constants.Companion.TYPE_DOCUMENT
 import com.fictivestudios.ravebae.utils.Constants.Companion.TYPE_IMAGE
+import com.fictivestudios.ravebae.utils.Constants.Companion.TYPE_LOCATION
 import com.fictivestudios.ravebae.utils.Constants.Companion.TYPE_TEXT
+import com.fictivestudios.ravebae.utils.Constants.Companion.TYPE_VIDEO
 import com.fictivestudios.ravebae.utils.Constants.Companion.VIEW_TYPE_MESSAGE_RECEIVED
 import com.fictivestudios.ravebae.utils.Constants.Companion.VIEW_TYPE_MESSAGE_SENT
 import com.fictivestudios.ravebae.utils.Constants.Companion.getTime
@@ -18,9 +23,11 @@ import com.fictivestudios.ravebae.utils.Constants.Companion.getUser
 import com.squareup.picasso.Picasso
 import com.zerobranch.layout.SwipeLayout
 import com.zerobranch.layout.SwipeLayout.SwipeActionsListener
+import io.github.ponnamkarthik.richlinkpreview.ViewListener
 import kotlinx.android.synthetic.main.item_message_received.view.*
 import kotlinx.android.synthetic.main.item_message_received.view.tv_text_received
 import kotlinx.android.synthetic.main.item_message_sent.view.*
+import java.lang.Exception
 
 
 class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: SwipeReply,) : RecyclerView.Adapter<ChatAdapter.ProfileViewHolder>() {
@@ -141,10 +148,55 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
                 itemView.iv_media_received.visibility = View.VISIBLE
                 itemView.tv_text_received.visibility = View.GONE
                 itemView.tv_received_reply.visibility = View.GONE
+                itemView.iv_video_received.visibility = View.GONE
 
                 Picasso
                     .get()
                     .load(IMAGE_BASE_URL+model?.message)?.into(itemView.iv_media_received)
+
+
+            }
+            else if ( model?.type == TYPE_VIDEO)
+            {
+
+
+                if (!model?.message.isNullOrBlank())
+                {
+                    itemView.iv_media_received.visibility = View.GONE
+                    itemView.tv_text_received.visibility = View.GONE
+                    itemView.tv_received_reply.visibility = View.GONE
+
+
+                    itemView.iv_video_received.visibility = View.VISIBLE
+
+                    itemView.iv_video_received.setVideoURI((IMAGE_BASE_URL + model.message).toUri())
+
+                    Log.d("videofile",IMAGE_BASE_URL + model.message)
+                    itemView.iv_video_received.setOnPreparedListener { mp ->
+
+
+                        itemView.iv_video_received.setOnCompletionListener {
+                            itemView.iv_video_received.start()
+                            // itemView.btn_play_sen.visibility = View.VISIBLE
+                        }
+
+
+                        /*       val videoRatio = mp.videoWidth / mp.videoHeight.toFloat()
+                               val screenRatio =
+                                   itemView.iv_video_received.width / itemView.iv_video_received.height.toFloat()
+                               val scale = videoRatio / screenRatio
+                               if (scale >= 1f) {
+                                   itemView.iv_video_received.scaleX = scale
+                               } else {
+                                   itemView.iv_video_received.scaleY = 1f / scale
+                               }
+       */
+                        itemView.iv_video_received.start()
+                        /*mp.s*/
+                    }
+                }
+
+
 
 
             }
@@ -154,6 +206,19 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
                 itemView.iv_media_received.visibility = View.GONE
                 itemView.tv_text_received.visibility = View.VISIBLE
                 itemView.tv_received_reply.visibility = View.GONE
+                itemView.iv_video_received.visibility = View.GONE
+            }
+            else if ( model?.type == TYPE_LOCATION)
+            {
+                itemView.iv_media_received.visibility = View.GONE
+                itemView.tv_text_received.visibility = View.VISIBLE
+                itemView.tv_received_reply.visibility = View.GONE
+                itemView.iv_video_received.visibility = View.GONE
+
+
+
+                itemView.tv_text_received.setText(model?.message)
+
             }
 
             else if (model?.type?.contains("replyId") == true)
@@ -168,6 +233,7 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
                 itemView.iv_media_received.visibility = View.GONE
                 itemView.tv_text_received.visibility = View.VISIBLE
                 itemView.tv_received_reply.visibility = View.VISIBLE
+                itemView.iv_video_received.visibility = View.GONE
                 itemView.tv_text_received.text = model?.message.toString()
 
             }
@@ -230,10 +296,55 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
                     itemView.iv_media_sent.visibility = View.VISIBLE
                     itemView.tv_text_sent.visibility = View.GONE
                     itemView.tv_text_reply.visibility = View.GONE
+                    itemView.iv_video_sent.visibility = View.GONE
                     Picasso
                         .get()
                         .load(IMAGE_BASE_URL+model?.message)?.into(itemView.iv_media_sent)
                 }
+
+
+            }
+            else if ( model?.type == TYPE_VIDEO)
+            {
+
+
+                if (!model?.message.isNullOrBlank())
+                {
+                    itemView.iv_media_sent.visibility = View.GONE
+                    itemView.tv_text_sent.visibility = View.GONE
+                    itemView.tv_text_reply.visibility = View.GONE
+
+
+                    itemView.iv_video_sent.visibility = View.VISIBLE
+
+                    itemView.iv_video_sent.setVideoURI((IMAGE_BASE_URL + model.message).toUri())
+
+                    Log.d("videofile",IMAGE_BASE_URL + model.message)
+                    itemView.iv_video_sent.setOnPreparedListener { mp ->
+
+
+                        itemView.iv_video_sent.setOnCompletionListener {
+                            itemView.iv_video_sent.start()
+                            // itemView.btn_play_sen.visibility = View.VISIBLE
+                        }
+
+
+                 /*       val videoRatio = mp.videoWidth / mp.videoHeight.toFloat()
+                        val screenRatio =
+                            itemView.iv_video_sent.width / itemView.iv_video_sent.height.toFloat()
+                        val scale = videoRatio / screenRatio
+                        if (scale >= 1f) {
+                            itemView.iv_video_sent.scaleX = scale
+                        } else {
+                            itemView.iv_video_sent.scaleY = 1f / scale
+                        }
+*/
+                        itemView.iv_video_sent.start()
+                        /*mp.s*/
+                    }
+                }
+
+
 
 
             }
@@ -243,7 +354,33 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
                 itemView.iv_media_sent.visibility = View.GONE
                 itemView.tv_text_sent.visibility = View.VISIBLE
                 itemView.tv_text_reply.visibility = View.GONE
+                itemView.iv_video_sent.visibility = View.GONE
+
                 itemView.tv_text_sent.text = model?.message.toString()
+
+            }
+
+            else if ( model?.type == TYPE_LOCATION)
+            {
+                itemView.iv_media_sent.visibility = View.GONE
+                itemView.tv_text_sent.visibility = View.VISIBLE
+                itemView.tv_text_reply.visibility = View.GONE
+                itemView.iv_video_sent.visibility = View.GONE
+
+              //  itemView.richLinkView.visibility = View.GONE
+                itemView.tv_text_sent.setText(model?.message)
+
+            }
+
+            else if ( model?.type == TYPE_DOCUMENT)
+            {
+                itemView.iv_media_sent.visibility = View.GONE
+                itemView.tv_text_sent.visibility = View.VISIBLE
+                itemView.tv_text_reply.visibility = View.GONE
+                itemView.iv_video_sent.visibility = View.GONE
+
+                //itemView.richLinkView.visibility = View.GONE
+                itemView.tv_text_sent.setText(model?.message)
 
             }
 
@@ -259,6 +396,8 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
                 itemView.iv_media_sent.visibility = View.GONE
                 itemView.tv_text_sent.visibility = View.VISIBLE
                 itemView.tv_text_reply.visibility = View.VISIBLE
+                itemView.iv_video_sent.visibility = View.GONE
+
                 itemView.tv_text_sent.text = model?.message.toString()
 
             }

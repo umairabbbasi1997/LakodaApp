@@ -101,12 +101,12 @@ class TermsAndConditionFragment : BaseFragment() {
                             }
                             else
                             {
-                                Toast.makeText(context, response.body()?.message, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), response.body()?.message, Toast.LENGTH_SHORT).show()
                             }
 
                         }
                         else {
-                            Toast.makeText(context, response.body()?.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), response.body()?.message, Toast.LENGTH_SHORT).show()
                         }
                     }
                     catch (e:Exception)
@@ -122,7 +122,7 @@ class TermsAndConditionFragment : BaseFragment() {
 
                 override fun onFailure(call: Call<ContentResponse>, t: Throwable)
                 {
-                    Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
                      activity?.runOnUiThread(java.lang.Runnable {
                          mView.pb_t_and_c.visibility=View.GONE
 

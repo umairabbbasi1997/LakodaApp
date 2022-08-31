@@ -2,6 +2,7 @@ package com.fictivestudios.lakoda.views.base
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.facebook.FacebookSdk
 import com.fictivestudios.imdfitness.activities.fragments.BaseFragment
 import com.fictivestudios.lakoda.utils.PreferenceUtils
 
@@ -25,6 +26,7 @@ abstract class BaseActivity : AppCompatActivity() {
             addDataToList()
         }*/
 
+        FacebookSdk.sdkInitialize(getApplicationContext());
 
         PreferenceUtils.init(this)
 

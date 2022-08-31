@@ -98,12 +98,15 @@ class FeedsAdapter(context: Context, post: List<HomePostData>?, onItemClickListe
         }
         holder.itemView.tv_like.setOnClickListener {
 
-            if (postList?.get(position)?.is_liked == 0)
+            if (holder.itemView.iv_heart.tag == UNLIKED)
             {
+                holder.itemView.iv_heart.setTag(LIKED)
+
                 var count = postList?.get(position)?.like_count
                 if (count != null) {
                     count += 1
                     holder.itemView.tv_like.text = count.toString()
+                    postList?.get(position)?.like_count = count
 
                 }
 
@@ -111,12 +114,16 @@ class FeedsAdapter(context: Context, post: List<HomePostData>?, onItemClickListe
             }
             else
             {
+                holder.itemView.iv_heart.setTag(UNLIKED)
+                var count = 0
+                 count = postList?.get(position)?.like_count!!
 
-                var count = postList?.get(position)?.like_count
+
+
                 if (count != null) {
                     count -= 1
                     holder.itemView.tv_like.text = count.toString()
-
+                    postList?.get(position)?.like_count = count
                 }
 
                 holder.itemView.iv_heart.setBackgroundResource(R.drawable.heart_white_icon)
@@ -133,28 +140,30 @@ class FeedsAdapter(context: Context, post: List<HomePostData>?, onItemClickListe
             {
                 holder.itemView.iv_heart.setTag(LIKED)
 
-/*
-                var count = postList?.get(position)?.like_count
+
+                var count = 0
+                count = postList?.get(position)?.like_count!!
                 if (count != null) {
                     count += 1
                     holder.itemView.tv_like.text = count.toString()
                     holder.itemView.iv_heart.setTag(LIKED)
+                    postList?.get(position)?.like_count = count
 
                 }
-*/
 
                 holder.itemView.iv_heart.setBackground(context.getDrawable(R.drawable.heart_icon))
             }
             else
             {
                 holder.itemView.iv_heart.setTag(UNLIKED)
-              /*  var count = postList?.get(position)?.like_count
+                var count = 0
+                count = postList?.get(position)?.like_count!!
                 if (count != null) {
                     count -= 1
                     holder.itemView.tv_like.text = count.toString()
                     holder.itemView.iv_heart.setTag(UNLIKED)
+                    postList?.get(position)?.like_count = count
                 }
-*/
                 holder.itemView.iv_heart.setBackground(context.getDrawable(R.drawable.heart_white_icon))
             }
             onItemClickListener.onItemClick(position,it, Constants.LIKES)

@@ -239,7 +239,7 @@ class EditProfileFragment : BaseFragment() {
                             val gson = Gson()
                             val json:String = gson.toJson(response.data.user)
                             PreferenceUtils.saveString(USER_OBJECT,json)
-                            Toast.makeText(context, " Profile Updated SuccessFully", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), " Profile Updated SuccessFully", Toast.LENGTH_SHORT).show()
 
                             MainActivity.getMainActivity?.onBackPressed()
                         }
@@ -247,7 +247,7 @@ class EditProfileFragment : BaseFragment() {
 
 
                             activity?.runOnUiThread(java.lang.Runnable {
-                                Toast.makeText(context, "msd: "+response?.message, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), "msd: "+response?.message, Toast.LENGTH_SHORT).show()
                                 response?.message?.let { Log.d("response", it) }
 
                             })
@@ -258,7 +258,7 @@ class EditProfileFragment : BaseFragment() {
 
                         Log.d("response", "msg "+ e.localizedMessage)
                         activity?.runOnUiThread(java.lang.Runnable {
-                            Toast.makeText(context, "msg "+ e.localizedMessage, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), "msg "+ e.localizedMessage, Toast.LENGTH_SHORT).show()
                         })
                     }
                 }
@@ -267,7 +267,7 @@ class EditProfileFragment : BaseFragment() {
                 {
 
                     activity?.runOnUiThread(java.lang.Runnable {
-                        Toast.makeText(context, "msg "+  t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "msg "+  t.localizedMessage, Toast.LENGTH_SHORT).show()
                         Log.d("response", "msg "+  t.localizedMessage)
 
                         mView.pb_edit_profile.visibility=View.GONE

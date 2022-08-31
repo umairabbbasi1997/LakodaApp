@@ -17,15 +17,18 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.fictivestudios.docsvisor.apiManager.client.ApiClient
 import com.fictivestudios.imdfitness.activities.fragments.BaseFragment
+import com.fictivestudios.lakoda.Interface.OnItemClickListener
 import com.fictivestudios.lakoda.R
 import com.fictivestudios.lakoda.adapters.ChatAdapter
 import com.fictivestudios.lakoda.adapters.SwipeReply
 import com.fictivestudios.lakoda.apiManager.response.ChatAttachmentResponse
 import com.fictivestudios.lakoda.apiManager.response.CommonResponse
 import com.fictivestudios.lakoda.apiManager.response.UpdateProfileResponse
+import com.fictivestudios.lakoda.liveData.LiveData
 import com.fictivestudios.lakoda.model.*
 import com.fictivestudios.lakoda.utils.PreferenceUtils
 import com.fictivestudios.lakoda.utils.Titlebar
@@ -36,8 +39,13 @@ import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.fictivestudios.ravebae.utils.Constants
 import com.fictivestudios.ravebae.utils.Constants.Companion.MESSAGE
 import com.fictivestudios.ravebae.utils.Constants.Companion.MESSAGE_TYPE
+import com.fictivestudios.ravebae.utils.Constants.Companion.OTHER_USER_PROFILE_URL
+import com.fictivestudios.ravebae.utils.Constants.Companion.RECEIVER_USER_ID
+import com.fictivestudios.ravebae.utils.Constants.Companion.TYPE_DOCUMENT
 import com.fictivestudios.ravebae.utils.Constants.Companion.TYPE_IMAGE
+import com.fictivestudios.ravebae.utils.Constants.Companion.TYPE_LOCATION
 import com.fictivestudios.ravebae.utils.Constants.Companion.TYPE_TEXT
+import com.fictivestudios.ravebae.utils.Constants.Companion.TYPE_VIDEO
 import com.fictivestudios.ravebae.utils.Constants.Companion.getUser
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.gson.Gson
@@ -116,14 +124,39 @@ class ChatFragment : BaseFragment(),SwipeReply {
         savedInstanceState: Bundle?
     ): View? {
 
-
+       // MapFragment().initOnclickListener(this)
         receiverUserId = arguments?.getString(Constants.USER_ID).toString()
         userName = arguments?.getString(Constants.USER_NAME).toString()
         profileImage = arguments?.getString(Constants.PROFILE).toString()
 
+/*        if (!receiverUserId.equals(null) || !receiverUserId.equals("null"))
+        {
+            PreferenceUtils.saveString(RECEIVER_USER_ID, receiverUserId!!)
+        }
+        else{
+            receiverUserId = PreferenceUtils.getString(RECEIVER_USER_ID)
+        }*/
 
 
         mView = inflater.inflate(R.layout.fragment_chat, container, false)
+
+
+        val nameObserver = Observer<String> { mapLink ->
+            // Update the UI, in this case, a TextView.
+            Log.e("Message", mapLink)
+
+            var mapLink = mapLink
+//            sendMessage(mapLink, TYPE_LOCATION)
+
+            mView.et_write_msg.setText(mapLink)
+
+          //  getMessage()
+            //getSocket()
+        }
+
+// Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
+        LiveData.getGetMapLink().observe(requireActivity(), nameObserver)
+
 
         mView.btn_close.setOnClickListener {
 
@@ -153,6 +186,10 @@ class ChatFragment : BaseFragment(),SwipeReply {
 
         mView.btn_location.setOnClickListener {
 
+//            val bundle = bundleOf(Constants.TYPE_LOCATION to this )
+
+
+
             MainActivity?.getMainActivity?.navControllerMain
                 ?.navigate(R.id.mapFragment)
         }
@@ -173,11 +210,15 @@ class ChatFragment : BaseFragment(),SwipeReply {
 
         mView.tv_send.setOnClickListener {
 
+            mView.lay_attachment.visibility = View.GONE
+
             if (!mView.et_write_msg.text.isNullOrBlank())
             {
                 if (mView.ll_message_reply.visibility == View.VISIBLE)
                 {
+
                     sendMessage(mView.et_write_msg.text.toString(), "replyId:$replyId")
+
                 }
                 else{
                     sendMessage(mView.et_write_msg.text.toString(), TYPE_TEXT)
@@ -261,25 +302,30 @@ class ChatFragment : BaseFragment(),SwipeReply {
             messageList =   listFromGson
             if (!messageList.isNullOrEmpty())
             {
+
+
                 chatAdapter =  ChatAdapter( messageList!!,this)
                 mView.rv_chat_message?.adapter = chatAdapter
                 mView.rv_chat_message?.adapter?.notifyDataSetChanged()
                 mView.rv_chat_message?.smoothScrollToPosition(messageList?.size - 1);
+
+          /*      if (listFromGson.size != 1)
+                {
+                    chatAdapter =  ChatAdapter( messageList!!,this)
+                    mView.rv_chat_message?.adapter = chatAdapter
+                    mView.rv_chat_message?.adapter?.notifyDataSetChanged()
+                    mView.rv_chat_message?.smoothScrollToPosition(messageList?.size - 1);
+                }
+                else{
+                    messageList?.add(listFromGson.get(0))
+                    chatAdapter?.notifyItemChanged(messageList!!.size - 1)
+                    mView.rv_chat_message?.smoothScrollToPosition(messageList!!.size - 1);
+                }*/
             }
 
             Log.e("receiveMessage", listFromGson.toString())
 
-/*
-            if (listFromGson.size != 1)
-            {
 
-            }
-            else{
-                messageList?.add(listFromGson.get(0))
-                chatAdapter?.notifyItemChanged(messageList!!.size - 1)
-                mView.rv_chat_message?.smoothScrollToPosition(messageList!!.size - 1);
-            }
-*/
 
         }
     }
@@ -343,8 +389,10 @@ class ChatFragment : BaseFragment(),SwipeReply {
             });
             Log.e("send_message", "jsonObject" + jsonObject.toString())
         } else {
-            Toast.makeText(activity, "Not Connect ,Please reload this screen", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireActivity(), "Not Connect ,Please reload this screen", Toast.LENGTH_LONG).show()
         }
+        mView.ll_message_reply.visibility = View.GONE
+        mView.tv_reply.setText("")
     }
 
 
@@ -382,14 +430,14 @@ class ChatFragment : BaseFragment(),SwipeReply {
 
                                 Log.d("response", response.message)
 
-                                sendMessage(response.data.attachment.attachment, TYPE_IMAGE)
+                                sendMessage(response.data.attachment.attachment, type)
 
 
                             } else {
 
 
                                 activity?.runOnUiThread(java.lang.Runnable {
-                                    Toast.makeText(context, "msd: "+response?.message, Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(requireContext(), "msd: "+response?.message, Toast.LENGTH_SHORT).show()
                                     response?.message?.let { Log.d("response", it) }
 
                                 })
@@ -398,7 +446,7 @@ class ChatFragment : BaseFragment(),SwipeReply {
 
                             Log.d("response", "msg "+ e.localizedMessage)
                             activity?.runOnUiThread(java.lang.Runnable {
-                                Toast.makeText(context, "msg "+ e.localizedMessage, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), "msg "+ e.localizedMessage, Toast.LENGTH_SHORT).show()
                             })
                         }
                     }
@@ -406,7 +454,7 @@ class ChatFragment : BaseFragment(),SwipeReply {
                     override fun onFailure(call: Call<ChatAttachmentResponse>, t: Throwable) {
 
                         activity?.runOnUiThread(java.lang.Runnable {
-                            Toast.makeText(context, "msg "+  t.localizedMessage, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), "msg "+  t.localizedMessage, Toast.LENGTH_SHORT).show()
                             Log.d("response", "msg "+  t.localizedMessage)
 
 
@@ -481,19 +529,35 @@ class ChatFragment : BaseFragment(),SwipeReply {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == SELECT_VIDEO)
             {
+                val uri: Uri = data?.data!!
+                fileTemporary =  File(uri?.let {
+                    Constants.getMediaFilePathFor(
+                        it,
+                        requireContext()
+                    )
+                })
+                mView.lay_attachment.visibility = View.GONE
+                chatAttachment(TYPE_VIDEO)
 
             }
             else if (requestCode == PICKFILE_RESULT_CODE)
             {
-
-/*                val uri: Uri = attr.data.getData()
-                val src = uri.path*/
+                val uri: Uri = data?.data!!
+                fileTemporary =  File(uri?.let {
+                    Constants.getMediaFilePathFor(
+                        it,
+                        requireContext()
+                    )
+                })
+                mView.lay_attachment.visibility = View.GONE
+                chatAttachment(TYPE_DOCUMENT)
             }
             else
             {
                 val uri: Uri = data?.data!!
                 fileTemporary = File(uri.path)
-                chatAttachment("file")
+                mView.lay_attachment.visibility = View.GONE
+                chatAttachment(TYPE_IMAGE)
 
                 // Use Uri object instead of File to avoid storage permissions
                 /*  mView.btn_picture_video.setImageURI(uri)*/
@@ -521,5 +585,8 @@ class ChatFragment : BaseFragment(),SwipeReply {
 
         replyId = messageList[position].id.toString()
     }
+
+
+
 
 }

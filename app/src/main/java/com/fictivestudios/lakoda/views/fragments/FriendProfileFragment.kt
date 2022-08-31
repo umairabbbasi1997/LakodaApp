@@ -22,27 +22,21 @@ import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.fictivestudios.lakoda.views.activities.RegisterationActivity
 import com.fictivestudios.ravebae.utils.Constants
 import com.fictivestudios.ravebae.utils.Constants.Companion.BLOCK
-import com.fictivestudios.ravebae.utils.Constants.Companion.BLOCK_USER_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.STATUS_REQUEST_SENT
 import com.fictivestudios.ravebae.utils.Constants.Companion.STATUS_UNFOLLOWED
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.change_passowrd_fragment.view.*
 import kotlinx.android.synthetic.main.friend_profile_fragment.*
 import kotlinx.android.synthetic.main.friend_profile_fragment.view.*
 import kotlinx.android.synthetic.main.friend_profile_fragment.view.iv_user_profile
-import kotlinx.android.synthetic.main.friend_profile_fragment.view.lay_followers
 import kotlinx.android.synthetic.main.friend_profile_fragment.view.lay_following
 import kotlinx.android.synthetic.main.friend_profile_fragment.view.tv_city
 import kotlinx.android.synthetic.main.friend_profile_fragment.view.tv_followers_count
 import kotlinx.android.synthetic.main.friend_profile_fragment.view.tv_following_count
 import kotlinx.android.synthetic.main.friend_profile_fragment.view.tv_posts_count
 import kotlinx.android.synthetic.main.friend_profile_fragment.view.tv_username_name
-import kotlinx.android.synthetic.main.my_profile_fragment.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Response
 
@@ -52,7 +46,7 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
         fun newInstance() = FriendProfileFragment()
     }
 
-    private var postsArray = ArrayList<Post>()
+    private var postsArray = ArrayList<HomePostData>()
     private  var userID: String? = null
     private  var userName: String? = null
     private  var profileImage: String? = null
@@ -256,14 +250,14 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
                                 MainActivity.getMainActivity=null
                                 startActivity(Intent(requireContext(), RegisterationActivity::class.java))
                                 activity?.runOnUiThread(java.lang.Runnable {
-                                    Toast.makeText(context, "Login expired please login again", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(requireContext(), "Login expired please login again", Toast.LENGTH_SHORT).show()
                                 })
                             }
 
                             if (response.body()?.status==1)
                             {
                                     activity?.runOnUiThread(java.lang.Runnable {
-                                        Toast.makeText(context, "" + response?.body()?.message, Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(requireContext(), "" + response?.body()?.message, Toast.LENGTH_SHORT).show()
                                         mView.btn_unfollow.setText("unfollow")
                                         mView.btn_unfollow.isEnabled = true
 
@@ -280,7 +274,7 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
                             else
                             {
                                 activity?.runOnUiThread(java.lang.Runnable {
-                                    Toast.makeText(context, ""+response.body()?.message, Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
                                     mView.btn_unfollow.setText("follow")
                                     mView.btn_unfollow.isEnabled = true
                                 })
@@ -354,14 +348,14 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
                             MainActivity.getMainActivity=null
                             startActivity(Intent(requireContext(), RegisterationActivity::class.java))
                             activity?.runOnUiThread(java.lang.Runnable {
-                                Toast.makeText(context, "Login expired please login again", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), "Login expired please login again", Toast.LENGTH_SHORT).show()
                             })
                         }
 
                         if (response.body()?.status==1)
                         {
                                 activity?.runOnUiThread(java.lang.Runnable {
-                                    Toast.makeText(context, "" + response?.body()?.message, Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(requireContext(), "" + response?.body()?.message, Toast.LENGTH_SHORT).show()
                                     mView.btn_unfollow.setText("follow")
                                     mView.btn_unfollow.isEnabled = true
 
@@ -378,7 +372,7 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
                         else
                         {
                             activity?.runOnUiThread(java.lang.Runnable {
-                                Toast.makeText(context, ""+response.body()?.message, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
                                 mView.btn_unfollow.setText("unfollow")
                                 mView.btn_unfollow.isEnabled = true
                             })
@@ -463,22 +457,22 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
                                 {
 
                                     var Apiresponse = response.body()?.data
-                                    // Toast.makeText(context, " "+response?.body()?.message, Toast.LENGTH_SHORT).show()
+                                    // Toast.makeText(requireContext(), " "+response?.body()?.message, Toast.LENGTH_SHORT).show()
                                     Log.d("profileData",Apiresponse.toString())
-                                    postsArray = Apiresponse?.user?.posts as ArrayList<Post>
-                                    setProfile(Apiresponse)
+
+                                    Apiresponse?.let { setProfile(it) }
                                 }
 
 
                             }
                             else
                             {
-                                Toast.makeText(context, "msg: "+response.body()?.message, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), "msg: "+response.body()?.message, Toast.LENGTH_SHORT).show()
                             }
 
                         }
                         else {
-                            Toast.makeText(context, "msg: "+response.body()?.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), "msg: "+response.body()?.message, Toast.LENGTH_SHORT).show()
                         }
                     }
                     catch (e:Exception)
@@ -499,7 +493,7 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
 
                 override fun onFailure(call: Call<GetMyProfileResponse>, t: Throwable)
                 {
-                    Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
                     activity?.runOnUiThread(java.lang.Runnable {
                         //mView.pb_pofile.visibility=View.GONE
                         mView.shimmer_friend_profile.stopShimmer()
@@ -528,6 +522,16 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
         mView.tv_posts_count.setText(response?.user?.post_count.toString())
         mView.tv_city.setText(response?.user?.city)
 
+
+        for (item in response?.user?.posts)
+        {
+            if (item.type.equals("post"))
+            {
+                postsArray.add(item)
+            }
+        }
+
+
         if (response.user.follow_status == STATUS_UNFOLLOWED)
         {
             mView.btn_unfollow.setText("Follow")
@@ -543,7 +547,7 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
             mView.btn_unfollow.setText("UnFollow")
             mView.btn_block.visibility = View.VISIBLE
 
-            var adapter = MyProfileFeedsAdapter(requireContext(),response?.user?.posts,this)
+            var adapter = MyProfileFeedsAdapter(requireContext(),postsArray,this)
             mView.rv_friend_post.adapter = adapter
             adapter.notifyDataSetChanged()
 
@@ -561,6 +565,11 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
             mView.btn_block.visibility =View.VISIBLE
         }
 
+
+    /*    if (response.user.is_blocked == 1)
+        {
+
+        }*/
 
         mView.shimmer_friend_profile.stopShimmer()
         mView.shimmer_friend_profile.visibility = View.GONE
@@ -584,7 +593,7 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
             mView.btn_block.isEnabled = false
         }
 
-        Toast.makeText(context, "Blocking", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "Blocking", Toast.LENGTH_SHORT).show()
 
         val apiClient = ApiClient.RetrofitInstance.getApiService(requireContext())
         GlobalScope.launch(Dispatchers.IO)
@@ -614,14 +623,14 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
                             MainActivity.getMainActivity=null
                             startActivity(Intent(requireContext(), RegisterationActivity::class.java))
                             activity?.runOnUiThread(java.lang.Runnable {
-                                Toast.makeText(context, "Login expired please login again", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), "Login expired please login again", Toast.LENGTH_SHORT).show()
                             })
                         }
 
                         if (response.body()?.status==1)
                         {
                             activity?.runOnUiThread(java.lang.Runnable {
-                                Toast.makeText(context, "" + response?.body()?.message, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), "" + response?.body()?.message, Toast.LENGTH_SHORT).show()
                                 if (type == BLOCK)
                                 {
                                     mView.btn_block.setText("unblock")
@@ -646,7 +655,7 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
                         else
                         {
                             activity?.runOnUiThread(java.lang.Runnable {
-                                Toast.makeText(context, ""+response.body()?.message, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
                                 if (type == BLOCK)
                                 {
                                     mView.btn_block.setText("unblock")
@@ -772,7 +781,7 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
                     activity?.runOnUiThread(java.lang.Runnable {
                         // mView.pb_createPos.visibility=View.GONE
 
-                        Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
                         Log.d("response", t.localizedMessage)
                     })
 

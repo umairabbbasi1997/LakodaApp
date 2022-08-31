@@ -12,7 +12,10 @@ import com.fictivestudios.docsvisor.apiManager.client.ApiClient
 import com.fictivestudios.imdfitness.activities.fragments.BaseFragment
 import com.fictivestudios.lakoda.Interface.OnItemClickListener
 import com.fictivestudios.lakoda.R
+import com.fictivestudios.lakoda.adapters.FollowRequestAdapter
 import com.fictivestudios.lakoda.adapters.NotificationAdapter
+import com.fictivestudios.lakoda.apiManager.response.GetFollowRequest
+import com.fictivestudios.lakoda.apiManager.response.GetFollowRequestData
 import com.fictivestudios.lakoda.apiManager.response.GetNotificationData
 import com.fictivestudios.lakoda.apiManager.response.GetNotificationsResponse
 import com.fictivestudios.lakoda.utils.PreferenceUtils
@@ -22,6 +25,7 @@ import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.fictivestudios.lakoda.views.activities.RegisterationActivity
 import com.fictivestudios.ravebae.utils.Constants
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.follow_request_fragment.view.*
 import kotlinx.android.synthetic.main.notification_fragment.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -111,7 +115,7 @@ class NotificationFragment : BaseFragment() ,OnItemClickListener {
                                 MainActivity.getMainActivity=null
                                 startActivity(Intent(requireContext(), RegisterationActivity::class.java))
                                 activity?.runOnUiThread(java.lang.Runnable {
-                                    Toast.makeText(context, "Login expired please login again", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(requireContext(), "Login expired please login again", Toast.LENGTH_SHORT).show()
                                 })
                             }
 
@@ -131,14 +135,14 @@ class NotificationFragment : BaseFragment() ,OnItemClickListener {
                             else
                             {
                                 activity?.runOnUiThread(java.lang.Runnable {
-                                    Toast.makeText(context, ""+response.body()?.message, Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
                                 })
                             }
 
                         }
                         else {
                             activity?.runOnUiThread(java.lang.Runnable {
-                                Toast.makeText(context, ""+response.body()?.message, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
                             })
 
                         }
@@ -149,6 +153,7 @@ class NotificationFragment : BaseFragment() ,OnItemClickListener {
                             mView.shimmer_noti.stopShimmer()
                             mView.shimmer_noti.visibility = View.GONE
                             mView.noti_lay.visibility =View.GONE
+                            mView.card_request.visibility = View.GONE
                             Toast.makeText(requireContext(), "msg: "+e.message, Toast.LENGTH_SHORT).show()
                             Log.d("execption","msg: "+e.localizedMessage)
                         })
@@ -162,6 +167,7 @@ class NotificationFragment : BaseFragment() ,OnItemClickListener {
                         mView.shimmer_noti.stopShimmer()
                         mView.shimmer_noti.visibility = View.GONE
                         mView.noti_lay.visibility =View.GONE
+                        mView.card_request.visibility = View.GONE
                         Toast.makeText(requireContext(), ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
                     })
                 }
@@ -171,6 +177,111 @@ class NotificationFragment : BaseFragment() ,OnItemClickListener {
 
 
     }
+
+    private fun getFollowRequest()
+    {
+
+        val apiClient = ApiClient.RetrofitInstance.getApiService(requireContext())
+
+
+        GlobalScope.launch(Dispatchers.IO)
+        {
+
+            apiClient.getFollowRequest().enqueue(object: retrofit2.Callback<GetFollowRequest> {
+                override fun onResponse(
+                    call: Call<GetFollowRequest>,
+                    response: Response<GetFollowRequest>
+                )
+                {
+                    activity?.runOnUiThread(java.lang.Runnable {
+
+
+                    })
+
+                    response?.body()?.message?.let { Log.d("Response", it) }
+
+                    try {
+
+
+                        if (response.isSuccessful) {
+
+
+                            if (response?.message() == "Unauthorized"||
+                                response?.body()?.message == "Unauthorized"
+                                || response?.message() == "Unauthenticated.")
+                            {
+                                PreferenceUtils.remove(Constants.USER_OBJECT)
+                                PreferenceUtils.remove(Constants.ACCESS_TOKEN)
+                                MainActivity.getMainActivity?.finish()
+                                MainActivity.getMainActivity=null
+                                startActivity(Intent(requireContext(), RegisterationActivity::class.java))
+                                activity?.runOnUiThread(java.lang.Runnable {
+                                    Toast.makeText(requireContext(), "Login expired please login again", Toast.LENGTH_SHORT).show()
+                                })
+                            }
+
+                            if (response.body()?.status==1)
+                            {
+
+                                if (response.body()?.data != null)
+                                {  response?.body()?.data?.let { Log.d("Response", it.toString()) }
+
+                                    var response = response.body()?.data
+
+                                    setFollowerData(response)
+
+                                }
+
+                            }
+                            else
+                            {
+                                activity?.runOnUiThread(java.lang.Runnable {
+
+                                })
+                            }
+
+                        }
+                        else {
+                            activity?.runOnUiThread(java.lang.Runnable {
+                                Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
+                            })
+
+                        }
+                    }
+                    catch (e:Exception)
+                    {
+                        //Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT).show()
+                        activity?.runOnUiThread(java.lang.Runnable {
+                            //mView.pb_pofile.visibility=View.GONE
+
+                            Toast.makeText(requireContext(), "msg: "+e.message, Toast.LENGTH_SHORT).show()
+                            Log.d("execption","msg: "+e.localizedMessage)
+                        })
+                    }
+                }
+
+                override fun onFailure(call: Call<GetFollowRequest>, t: Throwable)
+                {
+
+                    activity?.runOnUiThread(java.lang.Runnable {
+                        //mView.pb_pofile.visibility=View.GONE
+                        mView.shimmer_follow_req.stopShimmer()
+                        mView.shimmer_follow_req.visibility = View.GONE
+                        mView.rv_follow_request.visibility =View.VISIBLE
+                        Toast.makeText(requireContext(), ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
+                    })
+                }
+            })
+
+        }
+
+
+    }
+
+    private fun setFollowerData(response: List<GetFollowRequestData>?) {
+
+    }
+
 
     private fun setData(response: List<GetNotificationData>?)
     {
@@ -189,7 +300,7 @@ class NotificationFragment : BaseFragment() ,OnItemClickListener {
             if (item?.type == "follow-request")
             {   count += 1
 
-                mView.follow_request.visibility = View.VISIBLE
+                mView.card_request.visibility = View.VISIBLE
 
                 if (count > 3)
                 {
@@ -232,6 +343,9 @@ class NotificationFragment : BaseFragment() ,OnItemClickListener {
                         mView.iv_post.visibility = View.VISIBLE
                     }
                 }
+            }
+            else{
+                mView.card_request.visibility = View.GONE
             }
         }
 

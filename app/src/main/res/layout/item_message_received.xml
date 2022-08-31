@@ -109,7 +109,31 @@
                 >
 
             </ImageView>
+            <VideoView
+                android:id="@+id/iv_video_received"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                >
 
+            </VideoView>
+<!--            <ImageButton
+                android:id="@+id/btn_play_rec"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/play"
+                android:backgroundTint="@color/transparent_white"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                >
+
+            </ImageButton>-->
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

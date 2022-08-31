@@ -14,25 +14,15 @@ import com.fictivestudios.imdfitness.activities.fragments.BaseFragment
 import com.fictivestudios.lakoda.Interface.OnItemClickListener
 import com.fictivestudios.lakoda.R
 import com.fictivestudios.lakoda.adapters.MyProfileFeedsAdapter
-import com.fictivestudios.lakoda.apiManager.response.CommonResponse
-import com.fictivestudios.lakoda.apiManager.response.GetMyProfileResponse
-import com.fictivestudios.lakoda.apiManager.response.MyProfileData
-import com.fictivestudios.lakoda.apiManager.response.Post
+import com.fictivestudios.lakoda.apiManager.response.*
 import com.fictivestudios.lakoda.utils.Titlebar
 import com.fictivestudios.lakoda.viewModel.MyProfileViewModel
 import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.fictivestudios.ravebae.utils.Constants
-import com.fictivestudios.ravebae.utils.Constants.Companion.COMMENTS
-import com.fictivestudios.ravebae.utils.Constants.Companion.LIKES
-import com.fictivestudios.ravebae.utils.Constants.Companion.POST_ID
 import com.fictivestudios.ravebae.utils.Constants.Companion.getUser
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.feeds_fragment.view.*
-import kotlinx.android.synthetic.main.friend_profile_fragment.view.*
 import kotlinx.android.synthetic.main.my_profile_fragment.view.*
 import kotlinx.android.synthetic.main.my_profile_fragment.view.iv_user_profile
-import kotlinx.android.synthetic.main.my_profile_fragment.view.lay_followers
-import kotlinx.android.synthetic.main.my_profile_fragment.view.lay_following
 import kotlinx.android.synthetic.main.my_profile_fragment.view.shimmer_view_container
 import kotlinx.android.synthetic.main.my_profile_fragment.view.tv_city
 import kotlinx.android.synthetic.main.my_profile_fragment.view.tv_followers_count
@@ -57,7 +47,7 @@ class MyProfileFragment : BaseFragment() ,OnItemClickListener {
 
     private lateinit var viewModel: MyProfileViewModel
 
-    private var postsArray = ArrayList<Post>()
+    private var postsArray = ArrayList<HomePostData>()
 
     override fun setTitlebar(titlebar: Titlebar) {
 
@@ -196,22 +186,24 @@ class MyProfileFragment : BaseFragment() ,OnItemClickListener {
                                 {
 
                                     var Apiresponse = response.body()?.data
-                                   // Toast.makeText(context, " "+response?.body()?.message, Toast.LENGTH_SHORT).show()
+                                   // Toast.makeText(requireContext(), " "+response?.body()?.message, Toast.LENGTH_SHORT).show()
                                     Log.d("profileData",Apiresponse.toString())
-                                    postsArray = Apiresponse?.user?.posts as ArrayList<Post>
-                                    setProfile(Apiresponse)
+
+                                    if (Apiresponse != null) {
+                                        setProfile(Apiresponse)
+                                    }
                                 }
 
 
                             }
                             else
                             {
-                                Toast.makeText(context, "msg: "+response.body()?.message, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), "msg: "+response.body()?.message, Toast.LENGTH_SHORT).show()
                             }
 
                         }
                         else {
-                            Toast.makeText(context, "msg: "+response.body()?.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), "msg: "+response.body()?.message, Toast.LENGTH_SHORT).show()
                         }
                     }
                     catch (e:Exception)
@@ -229,7 +221,7 @@ class MyProfileFragment : BaseFragment() ,OnItemClickListener {
 
                 override fun onFailure(call: Call<GetMyProfileResponse>, t: Throwable)
                 {
-                    Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
                     activity?.runOnUiThread(java.lang.Runnable {
                         //mView.pb_pofile.visibility=View.GONE
                         mView.shimmer_view_container.stopShimmer()
@@ -250,8 +242,15 @@ class MyProfileFragment : BaseFragment() ,OnItemClickListener {
 
     private fun setProfile(response: MyProfileData) {
 
+        for (item in response?.user?.posts)
+        {
+            if (item.type.equals("post"))
+            {
+                postsArray.add(item)
+            }
+        }
 
-        var adapter = MyProfileFeedsAdapter(requireContext(),response?.user?.posts,this)
+        var adapter = MyProfileFeedsAdapter(requireContext(),postsArray,this)
         mView.rv_my_post.adapter = adapter
         adapter.notifyDataSetChanged()
 
@@ -337,7 +336,7 @@ class MyProfileFragment : BaseFragment() ,OnItemClickListener {
                     activity?.runOnUiThread(java.lang.Runnable {
                         // mView.pb_createPos.visibility=View.GONE
 
-                        Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
                         Log.d("response", t.localizedMessage)
                     })
 

@@ -118,7 +118,7 @@ class MessagesFragment : BaseFragment() , OnItemClickListener {
                                 MainActivity.getMainActivity=null
                                 startActivity(Intent(requireContext(), RegisterationActivity::class.java))
                                 activity?.runOnUiThread(java.lang.Runnable {
-                                    Toast.makeText(context, "Login expired please login again", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(requireContext(), "Login expired please login again", Toast.LENGTH_SHORT).show()
                                 })
                             }
 
@@ -138,14 +138,14 @@ class MessagesFragment : BaseFragment() , OnItemClickListener {
                             else
                             {
                                 activity?.runOnUiThread(java.lang.Runnable {
-                                    Toast.makeText(context, ""+response.body()?.message, Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
                                 })
                             }
 
                         }
                         else {
                             activity?.runOnUiThread(java.lang.Runnable {
-                                Toast.makeText(context, ""+response.body()?.message, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
                             })
 
                         }

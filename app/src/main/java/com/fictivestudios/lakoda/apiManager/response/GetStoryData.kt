@@ -7,5 +7,6 @@ data class GetStoryData(
     val image: String,
     val updated_at: String,
     val user_id: Int,
-    val user: StoryUser
+    val user: StoryUser,
+    val duration: Int
 )

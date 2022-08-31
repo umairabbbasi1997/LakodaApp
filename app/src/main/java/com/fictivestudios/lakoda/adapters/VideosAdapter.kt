@@ -196,24 +196,24 @@ class VideosAdapter(
 
                 //(mVideoItems?.get(position)?.is_liked == 0)
                 {
-                 /*   var count = mVideoItems?.get(position)?.like_count
+                    var count = mVideoItems?.get(position)?.like_count
                     if (count != null) {
                         count += 1
                         holder.itemView.tv_like_count.text = count.toString()
+                        mVideoItems?.get(position)?.like_count = count
+                    }
 
-                    }*/
                     holder.itemView.btn_heart_like.setTag(LIKED)
                     holder.itemView.btn_heart_like.setBackground(context.getDrawable(R.drawable.heart_icon))
                 }
                 else
                 {
                     var count = mVideoItems?.get(position)?.like_count
-                    /*if (count != null) {
+                    if (count != null) {
                         count -= 1
                         holder.itemView.tv_like_count.text = count.toString()
-
+                        mVideoItems?.get(position)?.like_count = count
                     }
-*/
                     holder.itemView.btn_heart_like.setTag(UNLIKED)
                     holder.itemView.btn_heart_like.setBackground(context.getDrawable(R.drawable.heart_white_icon))
                 }

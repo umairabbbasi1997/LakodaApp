@@ -12,6 +12,7 @@ import com.fictivestudios.lakoda.apiManager.response.GetFollowingData
 import com.fictivestudios.lakoda.apiManager.response.GetNotificationData
 import com.fictivestudios.lakoda.views.fragments.NotificationFragment
 import com.fictivestudios.ravebae.utils.Constants
+import com.fictivestudios.ravebae.utils.Constants.Companion.getTime
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_followers.view.*
 import kotlinx.android.synthetic.main.item_notification.view.*
@@ -51,7 +52,7 @@ class NotificationAdapter(
 
         holder.bindViews(notificationList[position],holder.itemView,context)
 
-        if (position == 0)
+        /*if (position == 0)
         {
 
             holder.itemView.date_ll.visibility=View.VISIBLE
@@ -62,7 +63,7 @@ class NotificationAdapter(
 
             holder.itemView.date_ll.visibility=View.VISIBLE
             holder.itemView.tv_date.text = "this week"
-        }
+        }*/
     }
 
 
@@ -72,6 +73,7 @@ class NotificationAdapter(
 
             itemView.tv_name.setText(model.sender.name)
             itemView.tv_notification.setText(model.message)
+            itemView.tv_time.setText(model.created_at.getTime("yyyy-MM-dd'T'HH:ss:SSS","HH:ss"))
 
             if (model.sender.image.isNullOrEmpty())
             {

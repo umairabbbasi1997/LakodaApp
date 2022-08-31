@@ -72,6 +72,7 @@ class MessagesAdapter(
 
             itemView.tv_name.setText(model.user.name)
             itemView.tv_message.setText(model.last_message)
+            //itemView.tv_date.setText(model.)
 
             if (model.user.image.isNullOrEmpty())
             {

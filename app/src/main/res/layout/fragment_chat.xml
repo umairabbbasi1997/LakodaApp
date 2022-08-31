@@ -201,6 +201,7 @@
                 android:layout_height="wrap_content"
                 android:text="Document"
                 android:padding="10dp"
+                android:visibility="gone"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 >

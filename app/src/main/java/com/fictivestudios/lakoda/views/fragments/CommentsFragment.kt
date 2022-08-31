@@ -176,7 +176,7 @@ class CommentsFragment : BaseFragment() ,OnItemClickListener{
                                     MainActivity.getMainActivity=null
                                     startActivity(Intent(requireContext(), RegisterationActivity::class.java))
                                     activity?.runOnUiThread(java.lang.Runnable {
-                                        Toast.makeText(context, "Login expired please login again", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(requireContext(), "Login expired please login again", Toast.LENGTH_SHORT).show()
                                     })
                                 }
 
@@ -192,13 +192,13 @@ class CommentsFragment : BaseFragment() ,OnItemClickListener{
 
                                 } else {
                                     activity?.runOnUiThread(java.lang.Runnable {
-                                        Toast.makeText(context,""+ response.body()?.message, Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(requireContext(),""+ response.body()?.message, Toast.LENGTH_SHORT).show()
                                     })
                                 }
 
                             } else {
                                 activity?.runOnUiThread(java.lang.Runnable {
-                                    Toast.makeText(context, ""+response.body()?.message, Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
                                 })
 
                             }
@@ -313,7 +313,7 @@ class CommentsFragment : BaseFragment() ,OnItemClickListener{
                     activity?.runOnUiThread(java.lang.Runnable {
                        // mView.pb_createPos.visibility=View.GONE
                         mView.tv_send.isEnabled = true
-                        Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
                         Log.d("response", t.localizedMessage)
                     })
 

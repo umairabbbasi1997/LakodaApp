@@ -123,7 +123,7 @@ class SettingsFragment : BaseFragment() {
 
                                 PreferenceUtils.remove(USER_OBJECT)
                                 PreferenceUtils.remove(ACCESS_TOKEN)
-                                Toast.makeText(context, response.body()?.message , Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), response.body()?.message , Toast.LENGTH_SHORT).show()
                                 startActivity(Intent(requireContext(), RegisterationActivity::class.java))
                                 MainActivity.getMainActivity?.finish()
                                 MainActivity.getMainActivity=null
@@ -136,7 +136,7 @@ class SettingsFragment : BaseFragment() {
                             {
 
                                 activity?.runOnUiThread(java.lang.Runnable {
-                                    Toast.makeText(context, "msg "+response.body()?.message ?: "something went wrong", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(requireContext(), "msg "+response.body()?.message ?: "something went wrong", Toast.LENGTH_SHORT).show()
                                     response.body()?.let { Log.d("Response", "msg "+it.message) }
                                 })
                             }
@@ -146,7 +146,7 @@ class SettingsFragment : BaseFragment() {
                     {
                         //Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT).show()
                         activity?.runOnUiThread(java.lang.Runnable {
-                            Toast.makeText(context,"msg "+ e.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(),"msg "+ e.message, Toast.LENGTH_SHORT).show()
                             response.body()?.let { Log.d("msg "+"Response", it.message) }
                         })
                     }
@@ -160,7 +160,7 @@ class SettingsFragment : BaseFragment() {
                         mView?.iv_switch?.visibility = View.VISIBLE
                         mView.btn_logout.isEnabled=true
                         mView.tv_logout.text="Logout"
-                        Toast.makeText(context, t.message, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), t.message, Toast.LENGTH_SHORT).show()
                     }
                 }
             })

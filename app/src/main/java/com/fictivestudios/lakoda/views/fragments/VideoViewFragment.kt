@@ -117,7 +117,7 @@ class VideoViewFragment : BaseFragment() ,OnItemClickListener{
                             MainActivity.getMainActivity=null
                             startActivity(Intent(requireContext(), RegisterationActivity::class.java))
                             activity?.runOnUiThread(java.lang.Runnable {
-                                Toast.makeText(context, "Login expired please login again", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), "Login expired please login again", Toast.LENGTH_SHORT).show()
                             })
                         }
 
@@ -137,7 +137,7 @@ class VideoViewFragment : BaseFragment() ,OnItemClickListener{
                         else
                         {
                             activity?.runOnUiThread(java.lang.Runnable {
-                                Toast.makeText(context, ""+response.body()?.message, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
                             })
                         }
 
@@ -158,7 +158,7 @@ class VideoViewFragment : BaseFragment() ,OnItemClickListener{
 
                 override fun onFailure(call: Call<HomePostResponse>, t: Throwable)
                 {
-                    Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
                     activity?.runOnUiThread(java.lang.Runnable {
                         //mView.pb_pofile.visibility=View.GONE
                      /*   mView.shimmer_view_container.stopShimmer()
@@ -290,7 +290,7 @@ class VideoViewFragment : BaseFragment() ,OnItemClickListener{
                     activity?.runOnUiThread(java.lang.Runnable {
                         // mView.pb_createPos.visibility=View.GONE
 
-                        Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
                         Log.d("response", t.localizedMessage)
                     })
 
@@ -333,14 +333,14 @@ class VideoViewFragment : BaseFragment() ,OnItemClickListener{
                             MainActivity.getMainActivity=null
                             startActivity(Intent(requireContext(), RegisterationActivity::class.java))
                             activity?.runOnUiThread(java.lang.Runnable {
-                                Toast.makeText(context, "Login expired please login again", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), "Login expired please login again", Toast.LENGTH_SHORT).show()
                             })
                         }
 
                         if (response.body()?.status==1)
                         {
                             activity?.runOnUiThread(java.lang.Runnable {
-                                Toast.makeText(context, "" + response?.body()?.message, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), "" + response?.body()?.message, Toast.LENGTH_SHORT).show()
                                 // mView.btn_unfollow.setText("unfollow")
                                 // mView.btn_unfollow.isEnabled = true
 
@@ -352,7 +352,7 @@ class VideoViewFragment : BaseFragment() ,OnItemClickListener{
                         else
                         {
                             activity?.runOnUiThread(java.lang.Runnable {
-                                Toast.makeText(context, ""+response.body()?.message, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
                                 // mView.btn_unfollow.setText("follow")
                                 // mView.btn_unfollow.isEnabled = true
                             })
@@ -454,7 +454,7 @@ class VideoViewFragment : BaseFragment() ,OnItemClickListener{
                     activity?.runOnUiThread(java.lang.Runnable {
                         // mView.pb_createPos.visibility=View.GONE
 
-                        Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
                         Log.d("response", t.localizedMessage)
                     })
 

@@ -168,7 +168,7 @@ class CreatePostFragment : BaseFragment() {
                     activity?.runOnUiThread(java.lang.Runnable {
                         mView.pb_createPos.visibility=View.GONE
 
-                                               Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
+                                               Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
                         Log.d("response", t.localizedMessage)
                     })
 
@@ -266,7 +266,7 @@ class CreatePostFragment : BaseFragment() {
 
 
 
-    private fun compressVideo(uri: String, path: String)
+/*    private fun compressVideo(uri: String, path: String)
     {
 
 
@@ -283,19 +283,19 @@ class CreatePostFragment : BaseFragment() {
 
             try {
                 // Initialize uri
-/*                val uri = Uri.parse(path)
+*//*                val uri = Uri.parse(path)
 
 
                 val filePath = File(path)
                 filePath.mkdir()
-               var pathDest= filePath.path*/
-/*
+               var pathDest= filePath.path*//*
+*//*
                 val folder_main = "Temporary_Compressed_Videos"
 
                 val fileDest = File(Environment.getExternalStorageDirectory(), folder_main)
                 if (!fileDest.exists()) {
                     fileDest.mkdirs()
-                }*/
+                }*//*
 
                 // Compress video
                 videoPath = SiliCompressor.with(requireContext())
@@ -313,9 +313,9 @@ class CreatePostFragment : BaseFragment() {
                 Toast.makeText(requireContext(), "Video compressed", Toast.LENGTH_LONG).show()
             dialog?.dismiss()
         })
-    }
+    }*/
 
-    fun <R> CoroutineScope.executeAsyncTask(
+/*    fun <R> CoroutineScope.executeAsyncTask(
         onPreExecute: () -> Unit,
         doInBackground: () -> R,
         onPostExecute: (R) -> Unit
@@ -325,7 +325,7 @@ class CreatePostFragment : BaseFragment() {
             doInBackground()
         }
         onPostExecute(result)
-    }
+    }*/
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

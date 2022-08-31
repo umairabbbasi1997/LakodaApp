@@ -32,6 +32,7 @@ import com.fictivestudios.ravebae.utils.Constants.Companion.LIKES
 import com.fictivestudios.ravebae.utils.Constants.Companion.POST_ID
 import com.fictivestudios.ravebae.utils.Constants.Companion.PROFILE
 import com.fictivestudios.ravebae.utils.Constants.Companion.SHARER_PROFILE
+import com.fictivestudios.ravebae.utils.Constants.Companion.STORY_DURATION
 import com.fictivestudios.ravebae.utils.Constants.Companion.TYPE_POST
 import com.fictivestudios.ravebae.utils.Constants.Companion.TYPE_SHARE
 import com.fictivestudios.ravebae.utils.Constants.Companion.USER_ID
@@ -141,7 +142,7 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
                                 MainActivity.getMainActivity=null
                                 startActivity(Intent(requireContext(), RegisterationActivity::class.java))
                                 activity?.runOnUiThread(java.lang.Runnable {
-                                    Toast.makeText(context, "Login expired please login again", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(requireContext(), "Login expired please login again", Toast.LENGTH_SHORT).show()
                                 })
                             }
 
@@ -161,7 +162,7 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
                             else
                             {
                                 activity?.runOnUiThread(java.lang.Runnable {
-                                    Toast.makeText(context, ""+response.body()?.message, Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
                                 })
                             }
 
@@ -183,7 +184,7 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
 
                 override fun onFailure(call: Call<HomePostResponse>, t: Throwable)
                 {
-                    Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
                     activity?.runOnUiThread(java.lang.Runnable {
                         //mView.pb_pofile.visibility=View.GONE
                         mView.shimmer_view_container.stopShimmer()
@@ -228,7 +229,7 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
                                 MainActivity.getMainActivity=null
                                 startActivity(Intent(requireContext(), RegisterationActivity::class.java))
                                 activity?.runOnUiThread(java.lang.Runnable {
-                                    Toast.makeText(context, "Login expired please login again", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(requireContext(), "Login expired please login again", Toast.LENGTH_SHORT).show()
                                 })
                             }
 
@@ -252,7 +253,7 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
                             else
                             {
                                 activity?.runOnUiThread(java.lang.Runnable {
-                                    Toast.makeText(context, response.body()?.message, Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(requireContext(), response.body()?.message, Toast.LENGTH_SHORT).show()
                                     mView.rv_stories.adapter= StoriesAdapter(requireContext(),null,this@FeedsFragment)
                                 })
                             }
@@ -268,20 +269,25 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
                             mView.shimmer_view_container.visibility = View.GONE*/
                             Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
                             Log.d("execption",e.localizedMessage)
+                            activity?.runOnUiThread(java.lang.Runnable {
+                                mView.rv_stories.adapter= StoriesAdapter(requireContext(),null,this@FeedsFragment)
+                            })
                         })
                     }
                 }
 
                 override fun onFailure(call: Call<GetStoryResponse>, t: Throwable)
                 {
-                    Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
                     activity?.runOnUiThread(java.lang.Runnable {
                         //mView.pb_pofile.visibility=View.GONE
 /*
                         mView.shimmer_view_container.stopShimmer()
                         mView.shimmer_view_container.visibility = View.GONE
                         mView.feed_post_layout.visibility =View.VISIBLE
-*/
+*/                                activity?.runOnUiThread(java.lang.Runnable {
+                        mView.rv_stories.adapter= StoriesAdapter(requireContext(),null,this@FeedsFragment)
+                    })
                         Toast.makeText(requireContext(), t.message, Toast.LENGTH_SHORT).show()
                     })
                 }
@@ -365,7 +371,7 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
                     activity?.runOnUiThread(java.lang.Runnable {
                         // mView.pb_createPos.visibility=View.GONE
 
-                        Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
                         Log.d("response", t.localizedMessage)
                     })
 
@@ -437,7 +443,7 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
                     activity?.runOnUiThread(java.lang.Runnable {
                         // mView.pb_createPos.visibility=View.GONE
 
-                        Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
                         Log.d("response", t.localizedMessage)
                     })
 
@@ -557,7 +563,12 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
                 IMAGE to   arrayStoryList?.get(position-1)?.image.toString(),
             USER_NAME to   arrayStoryList?.get(position-1)?.user.name .toString(),
             USER_IMAGE to   arrayStoryList?.get(position-1)?.user?.image?.toString(),
-            USER_ID to   arrayStoryList?.get(position-1)?.user.id.toString())
+            USER_ID to   arrayStoryList?.get(position-1)?.user.id.toString(),
+            STORY_DURATION to   arrayStoryList?.get(position-1)?.duration
+
+            )
+
+            Log.d(STORY_DURATION, arrayStoryList?.get(position-1)?.duration.toString())
 
             Log.d(IMAGE, arrayStoryList?.get(position-1)?.image.toString())
 

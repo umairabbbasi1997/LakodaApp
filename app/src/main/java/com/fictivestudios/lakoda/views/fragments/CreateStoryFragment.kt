@@ -2,18 +2,26 @@ package com.fictivestudios.lakoda.views.fragments
 
 //import com.sarthakdoshi.textonimage.TextOnImage
 
+import android.Manifest.permission.MANAGE_EXTERNAL_STORAGE
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.Activity
 import android.content.Intent
 import android.graphics.*
 import android.net.Uri
+import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnTouchListener
 import android.view.ViewGroup
+import android.widget.AbsListView.OnScrollListener.SCROLL_STATE_IDLE
+import android.widget.NumberPicker
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -21,29 +29,24 @@ import androidx.lifecycle.ViewModelProvider
 import com.fictivestudios.docsvisor.apiManager.client.ApiClient
 import com.fictivestudios.imdfitness.activities.fragments.BaseFragment
 import com.fictivestudios.lakoda.R
-import com.fictivestudios.lakoda.apiManager.response.CommentResponse
 import com.fictivestudios.lakoda.apiManager.response.CommonResponse
-import com.fictivestudios.lakoda.apiManager.response.CreatePostResponse
 import com.fictivestudios.lakoda.utils.Titlebar
-import com.fictivestudios.lakoda.utils.getFormDataBody
 import com.fictivestudios.lakoda.utils.getPartMap
 import com.fictivestudios.lakoda.viewModel.CreateStoryViewModel
 import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.github.dhaval2404.imagepicker.ImagePicker
-import kotlinx.android.synthetic.main.create_post_fragment.view.*
+import com.permissionx.guolindev.PermissionX
 import kotlinx.android.synthetic.main.create_story_fragment.*
 import kotlinx.android.synthetic.main.create_story_fragment.view.*
-import kotlinx.android.synthetic.main.edit_profile_fragment.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Response
 import java.io.File
+import java.io.FileOutputStream
 import java.io.InputStream
-import java.util.HashMap
 
 
 class CreateStoryFragment : BaseFragment() {
@@ -53,6 +56,9 @@ class CreateStoryFragment : BaseFragment() {
     private var pressed_x = 0
     private var pressed_y = 0
     private lateinit var mView: View
+
+    private var timer = 3
+
     companion object {
         fun newInstance() = CreateStoryFragment()
     }
@@ -66,6 +72,7 @@ class CreateStoryFragment : BaseFragment() {
         //titlebar.makeTitleTransparent()
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -79,15 +86,30 @@ class CreateStoryFragment : BaseFragment() {
 
            // MainActivity.getMainActivity?.onBackPressed()
 
-            if (fileTemporaryFile != null)
-            {
-                createStory()
-            }
+            number_picker.visibility = View.GONE
+            PermissionX.init(activity)
+                .permissions(WRITE_EXTERNAL_STORAGE)
+                .request { allGranted, grantedList, deniedList ->
+                    if (allGranted) {
+                        if (fileTemporaryFile != null)
+                        {
+
+                            createStory(saveTextOnImage())
+                        }
+
+
+
+                    } else {
+                        Toast.makeText(requireContext(), "These permissions are denied: $deniedList", Toast.LENGTH_LONG).show()
+                    }
+                }
+
 
         }
 
         mView.btn_add_text.setOnClickListener {
 
+           number_picker.visibility = View.GONE
             showWriteText(true)
 
 
@@ -95,12 +117,14 @@ class CreateStoryFragment : BaseFragment() {
         }
         mView.btn_done.setOnClickListener {
             showWriteText(false)
+            number_picker.visibility = View.GONE
 
            // addTextOnImage(et_text.text.toString())
 
             mView.et_text.hideKeyboard()
             mView.tv1.visibility=View.VISIBLE
             mView.tv1.setText(et_text.text)
+
         }
 
         mView.tv1.setOnTouchListener(mOnTouchListenerTv1)
@@ -116,6 +140,59 @@ class CreateStoryFragment : BaseFragment() {
                 return true
             }
         })*/
+
+/*        mView.iv_story_image.setOnClickListener {
+
+          var  pvTime = TimePickerBuilder(requireContext(),
+                OnTimeSelectListener { date, v -> //Callback
+                  //  tvTime.setText(jdk.nashorn.internal.objects.NativeDate.getTime(date))
+                    timer = jdk.nashorn.internal.objects.NativeDate.getTime(date)
+                })
+                .build()
+            pvTime.show()
+        }*/
+
+        mView.btn_add_timer.setOnClickListener {
+
+            mView.  et_text.visibility = View.GONE
+            mView.number_picker.visibility = View.VISIBLE
+            mView.btn_done.visibility = View.GONE
+         //   mView.btn_done.visibility = View.VISIBLE
+        }
+
+
+        mView.number_picker.setOnValueChangedListener(object: NumberPicker.OnValueChangeListener,
+            com.shawnlin.numberpicker.NumberPicker.OnValueChangeListener {
+            override fun onValueChange(p0: NumberPicker?, p1: Int, p2: Int) {
+              //  Log.d("selected value1",p2.toString() )
+            }
+
+            override fun onValueChange(
+                picker: com.shawnlin.numberpicker.NumberPicker?,
+                oldVal: Int,
+                newVal: Int
+            ) {
+               // Log.d("selected value",newVal.toString() )
+            }
+        })
+
+
+        mView.number_picker.setOnScrollListener(object :NumberPicker.OnScrollListener,
+            com.shawnlin.numberpicker.NumberPicker.OnScrollListener {
+            override fun onScrollStateChange(p0: NumberPicker?, p1: Int) {
+
+            }
+
+            override fun onScrollStateChange(
+                view: com.shawnlin.numberpicker.NumberPicker?,
+                scrollState: Int
+            ) {
+                if (scrollState == SCROLL_STATE_IDLE) {
+                    Log.d("selected value",view?.value.toString() )
+                    timer = view?.value!!
+                }
+            }
+        })
 
         return mView
     }
@@ -153,7 +230,7 @@ class CreateStoryFragment : BaseFragment() {
         }
         true
     }
-    private fun addTextOnImage(text:String?)
+   /* private fun addTextOnImage(text:String?)
     {
         val ims: InputStream? = imageURI?.let { context?.getContentResolver()?.openInputStream(it) }
         val bm = BitmapFactory.decodeStream( ims)
@@ -174,7 +251,7 @@ class CreateStoryFragment : BaseFragment() {
         c.drawText(text.toString(), 0f, 25f, paint)
 
         mView.iv_story_image.setImageBitmap(newImage)
-    }
+    }*/
 
     private fun showWriteText(isShow: Boolean) {
 
@@ -269,7 +346,7 @@ class CreateStoryFragment : BaseFragment() {
 
 
 
-    private fun createStory()
+    private fun createStory(storyFile: File?)
     {
         mView.pb_createStory.visibility=View.VISIBLE
 
@@ -284,14 +361,18 @@ class CreateStoryFragment : BaseFragment() {
 
         var filePart: MultipartBody.Part? = null
 
-        if (fileTemporaryFile != null){
+        /*if (fileTemporaryFile != null){
             filePart = fileTemporaryFile?.getPartMap("image")
+        }*/
+
+        if (storyFile != null){
+            filePart = storyFile?.getPartMap("image")
         }
 
         GlobalScope.launch(Dispatchers.IO)
         {
 
-            apiClient.createStory(filePart).enqueue(object: retrofit2.Callback<CommonResponse> {
+            apiClient.createStory(filePart,timer).enqueue(object: retrofit2.Callback<CommonResponse> {
                 override fun onResponse(
                     call: Call<CommonResponse>,
                     response: Response<CommonResponse>
@@ -342,7 +423,7 @@ class CreateStoryFragment : BaseFragment() {
                     activity?.runOnUiThread(java.lang.Runnable {
                         mView.pb_createStory.visibility=View.GONE
 
-                        Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
                         Log.d("response", t.localizedMessage)
                     })
 
@@ -352,6 +433,92 @@ class CreateStoryFragment : BaseFragment() {
         }
 
 
+    }
+
+    private fun saveTextOnImage(): File? {
+
+
+        var content = mView.story_layout
+        val bitmap = Bitmap.createBitmap(content!!.width, content!!.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        content!!.draw(canvas)
+
+        var file = File(commonDocumentDirPath("temp").toString()+"/image.png")
+       // var filename = File("image.png")
+
+        try {
+
+            var ostream =  FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 3, ostream);
+            ostream.flush()
+            ostream.close();
+
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+
+
+
+
+        //   var file:File? = null
+     //   var f:File? = null
+
+
+
+
+        //  content.setDrawingCacheEnabled(true);
+
+     //   var bitmap = content.getDrawingCache();
+
+
+/*
+        if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
+        {
+            file = File(android.os.Environment.getExternalStorageDirectory(),"TTImages_cache");
+            if(!file.exists())
+            {
+                file.mkdirs();
+
+            }
+            f =  File(file.getAbsolutePath()+file.invariantSeparatorsPath+ "filename"+".png");
+
+        }*/
+        /*    val root = Environment.getExternalStorageDirectory().toString()
+            val myDir = File("$root/saved_images")
+            myDir.mkdirs()
+           val fname: String = "temp_story.png"
+           val file = File(myDir, fname)
+            if (file.exists())
+                file.delete()
+            file.createNewFile()*/
+
+
+
+        return file
+
+}
+
+    fun commonDocumentDirPath(FolderName: String): File? {
+        var dir: File? = null
+        dir = if (SDK_INT >= Build.VERSION_CODES.R) {
+            File(
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+                    .toString() + "/" + FolderName
+            )
+        } else {
+            File(Environment.getExternalStorageDirectory().toString() + "/" + FolderName)
+        }
+
+        // Make sure the path directory exists.
+        if (!dir.exists()) {
+            // Make it, if it doesn't exit
+//            val success = dir.mkdirs()
+            val success = dir.mkdir()
+            if (!success) {
+                dir = null
+            }
+        }
+        return dir
     }
 
 

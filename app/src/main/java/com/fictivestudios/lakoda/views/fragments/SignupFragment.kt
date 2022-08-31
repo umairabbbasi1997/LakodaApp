@@ -308,7 +308,7 @@ class SignupFragment : BaseFragment() {
                         signupBinding.pb_signup.visibility=View.GONE
                         signupBinding.btn_signup.isEnabled=true
                         signupBinding.btn_signup.text="SIGNUP"
-                        Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
                         Log.d("response", t.localizedMessage)
                     })
 

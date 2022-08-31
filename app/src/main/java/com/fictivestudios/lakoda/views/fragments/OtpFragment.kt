@@ -161,7 +161,7 @@ class OtpFragment : BaseFragment() {
 
                         }
                         else {
-                            Toast.makeText(context, response?.body()?.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), response?.body()?.message, Toast.LENGTH_SHORT).show()
                         }
                     }
                     catch (e:Exception)
@@ -180,7 +180,7 @@ class OtpFragment : BaseFragment() {
                         mView?.pb_otp?.visibility=View.GONE
                       mView.btn_verify.isEnabled=true
                       mView.btn_verify.text="VERIFY"
-                        Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
                         Log.d("response", t.localizedMessage)
                     })
                 }
@@ -236,12 +236,12 @@ class OtpFragment : BaseFragment() {
                         if (statuscode==1) {
 
                             Log.d("response", resendOTPResponse.message)
-                            Toast.makeText(context, resendOTPResponse.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), resendOTPResponse.message, Toast.LENGTH_SHORT).show()
 
 
                         }
                         else {
-                            Toast.makeText(context, "msg: " +resendOTPResponse.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), "msg: " +resendOTPResponse.message, Toast.LENGTH_SHORT).show()
                         }
                     }
                     catch (e:Exception)

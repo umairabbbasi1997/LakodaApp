@@ -72,6 +72,7 @@
             android:text="2hrs ago"
             android:textColor="@color/dark_gray_text"
             android:textSize="10sp"
+            android:visibility="gone"
             android:layout_marginLeft="10dp"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_name"

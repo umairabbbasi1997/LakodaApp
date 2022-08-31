@@ -27,6 +27,7 @@ import com.fictivestudios.ravebae.utils.Constants.Companion.RESEND_OTP_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.RESET_PASSWORD_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.SHARE_POST_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.SIGNUP_URL
+import com.fictivestudios.ravebae.utils.Constants.Companion.SOCIAL_LOGIN_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.UNFOLLOW_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.UPDATE_PROFILE_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.VERIFY_OTP_URL
@@ -42,6 +43,9 @@ interface ApiInterface {
 
     @POST(LOGIN_URL)
     fun login(@Body info: RequestBody): retrofit2.Call<LoginResponse>
+
+    @POST(SOCIAL_LOGIN_URL)
+    fun socialLogin(@Body info: RequestBody): retrofit2.Call<SocialLoginResponse>
 
     @Multipart
     @POST(SIGNUP_URL)
@@ -137,7 +141,7 @@ interface ApiInterface {
     /*********************************** STORY ******************************************/
     @Multipart
     @POST(CREATE_STORY_URL)
-    fun createStory(@Part image: MultipartBody.Part?): retrofit2.Call<CommonResponse>
+    fun createStory(@Part image: MultipartBody.Part?,@Query("duration")duration:Int): retrofit2.Call<CommonResponse>
 
     @GET(GET_STORY_URL)
     fun getStories(): retrofit2.Call<GetStoryResponse>

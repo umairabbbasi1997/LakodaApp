@@ -169,13 +169,13 @@ class ChangePassowrdFragment : BaseFragment() {
 
                         if (statuscode==1) {
 
-                            Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), response.message, Toast.LENGTH_SHORT).show()
                             RegisterationActivity.getRegActivity
                                 ?.navControllerReg?.navigate(R.id.loginFragment)
 
                         }
                         else {
-                            Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), response.message, Toast.LENGTH_SHORT).show()
                         }
                     }
                     catch (e:Exception)
@@ -194,7 +194,7 @@ class ChangePassowrdFragment : BaseFragment() {
                         mView?.pb_change_pass?.visibility=View.GONE
                         mView.btn_update.isEnabled=true
                         mView.btn_update.text="Update password"
-                        Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
                         Log.d("response", t.localizedMessage)
                     })
                 }

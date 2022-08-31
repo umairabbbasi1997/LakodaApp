@@ -10,17 +10,56 @@
 
 
 
-
-    <ImageView
-        android:id="@+id/iv_story_image"
+    <FrameLayout
+        android:id="@+id/story_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black"
-        android:scaleType="fitXY"
-        android:src="@drawable/story_background"
         >
+        <ImageView
+            android:id="@+id/iv_story_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black"
+            android:scaleType="fitXY"
+            android:src="@drawable/story_background"
+            >
 
-    </ImageView>
+        </ImageView>
+        <EditText
+            android:id="@+id/et_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:background="@color/transparent"
+            android:visibility="gone"
+            android:layout_marginTop="40dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
+
+        </EditText>
+
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="done"
+            android:layout_marginTop="40dp"
+            android:visibility="gone"
+            android:layout_gravity="center|right"
+            android:background="@drawable/bg_main_btn"
+            app:layout_constraintTop_toTopOf="@id/et_text"
+            app:layout_constraintBottom_toBottomOf="@id/et_text"
+            app:layout_constraintRight_toRightOf="@id/et_text"
+            >
+
+        </androidx.appcompat.widget.AppCompatButton>
+    </FrameLayout>
+
 
 
     <TextView
@@ -55,33 +94,30 @@
 
     </ImageView>
 
-    <EditText
-        android:id="@+id/et_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:background="@color/transparent"
-        android:visibility="gone"
-        android:gravity="center"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        >
 
-    </EditText>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_done"
+    <com.shawnlin.numberpicker.NumberPicker
+        android:id="@+id/number_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="done"
+        android:layout_centerInParent="true"
+        app:np_width="180dp"
+        app:np_height="64dp"
+        app:np_dividerColor="@color/sky_blue"
+        app:np_max="10"
+        app:np_min="0"
         android:visibility="gone"
-        android:background="@drawable/bg_main_btn"
-        app:layout_constraintTop_toTopOf="@id/et_text"
-        app:layout_constraintBottom_toBottomOf="@id/et_text"
-        app:layout_constraintRight_toRightOf="@id/et_text"
-        >
+        app:np_orientation="horizontal"
+        app:np_selectedTextColor="@color/sky_blue"
+        app:np_selectedTextSize="20sp"
+        app:np_textColor="@color/sky_blue"
+        app:np_textSize="20sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
 
-    </androidx.appcompat.widget.AppCompatButton>
+        app:np_value="3" />
+
 
     <ImageView
         android:id="@+id/btn_add_timer"

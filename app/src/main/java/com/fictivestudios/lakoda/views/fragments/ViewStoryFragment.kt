@@ -6,6 +6,8 @@ import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.os.CountDownTimer
+import android.os.Handler
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,6 +20,7 @@ import com.fictivestudios.lakoda.R
 import com.fictivestudios.lakoda.utils.Titlebar
 import com.fictivestudios.lakoda.viewModel.ViewStoryViewModel
 import com.fictivestudios.lakoda.views.activities.MainActivity
+import com.fictivestudios.lakoda.views.activities.RegisterationActivity
 import com.fictivestudios.ravebae.utils.Constants
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.permissionx.guolindev.PermissionX
@@ -39,6 +42,7 @@ class ViewStoryFragment : BaseFragment() {
         fun newInstance() = ViewStoryFragment()
     }
 
+    private var storyDuration: Int? = null
     private var userId: String ? = null
     private var userImage: String?=null
     private var userName: String?=null
@@ -64,6 +68,7 @@ class ViewStoryFragment : BaseFragment() {
         userName = arguments?.getString(Constants.USER_NAME).toString()
         userImage = arguments?.getString(Constants.USER_IMAGE).toString()
         userId = arguments?.getString(Constants.USER_ID)
+        storyDuration = arguments?.getInt(Constants.STORY_DURATION)
 
         if (!imageUrl.isNullOrEmpty() || imageUrl != "null" || !userImage.isNullOrEmpty() || !userName.isNullOrEmpty())
         {
@@ -82,6 +87,27 @@ class ViewStoryFragment : BaseFragment() {
                 .load(Constants.IMAGE_BASE_URL +userImage)
                 .placeholder(R.drawable.user_dp)
                 .into(mView.iv_profile);
+
+            if (storyDuration !=null )
+            {
+                Log.d("durataion",storyDuration.toString())
+
+
+                val timer = object: CountDownTimer(storyDuration?.times(1000)?.toLong()!!, 1000) {
+                    override fun onTick(millisUntilFinished: Long) {
+                        mView.tv_timer.setText((millisUntilFinished/ 1000L).toString())
+                    }
+
+                    override fun onFinish() {
+
+                        activity?.onBackPressed()
+                    }
+                }
+                timer.start()
+
+
+
+            }
 
         }
 
@@ -103,6 +129,8 @@ class ViewStoryFragment : BaseFragment() {
             }
 
         }
+
+
 
 
 /*
@@ -164,6 +192,7 @@ class ViewStoryFragment : BaseFragment() {
 
 
         }
+
 
         return mView
     }

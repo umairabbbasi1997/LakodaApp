@@ -119,7 +119,7 @@ class ForgetPasswordFragment : BaseFragment() {
                         if (statuscode==1) {
 
                             Log.d("response",response.message)
-                            Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), response.message, Toast.LENGTH_SHORT).show()
                             PreferenceUtils.saveString(EMAIL,mView?.et_email?.text.toString())
                             PreferenceUtils.saveString(CURRENT_USER_ID,response.data.id.toString())
                             Constants.isAccountLogin = false
@@ -128,7 +128,7 @@ class ForgetPasswordFragment : BaseFragment() {
 
                         }
                         else {
-                            Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), response.message, Toast.LENGTH_SHORT).show()
                         }
                     }
                     catch (e:Exception)
@@ -147,7 +147,7 @@ class ForgetPasswordFragment : BaseFragment() {
                         mView?.pb_forget_pass?.visibility=View.GONE
                         mView.btn_forget_pass.isEnabled=true
                         mView.btn_forget_pass.text="get Code"
-                        Toast.makeText(context, t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
                         Log.d("response", t.localizedMessage)
                     })
                 }

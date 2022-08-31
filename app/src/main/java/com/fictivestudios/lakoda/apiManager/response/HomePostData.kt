@@ -6,7 +6,7 @@ data class HomePostData(
     val description: String,
     val id: Int,
     val is_post: Int,
-    val like_count: Int,
+    var like_count: Int,
     val share_count: Int,
     val shared_by: SharedBy,
     val title: String,
