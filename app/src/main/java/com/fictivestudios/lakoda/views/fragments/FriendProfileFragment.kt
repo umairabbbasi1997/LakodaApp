@@ -493,9 +493,10 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
 
                 override fun onFailure(call: Call<GetMyProfileResponse>, t: Throwable)
                 {
-                    Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
+
                     activity?.runOnUiThread(java.lang.Runnable {
                         //mView.pb_pofile.visibility=View.GONE
+                        Toast.makeText(requireActivity(), t.localizedMessage, Toast.LENGTH_SHORT).show()
                         mView.shimmer_friend_profile.stopShimmer()
                         mView.shimmer_friend_profile.visibility = View.GONE
                         mView.main_scroll_ll.visibility =View.VISIBLE

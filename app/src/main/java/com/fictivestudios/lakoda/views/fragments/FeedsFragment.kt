@@ -241,6 +241,7 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
 
                                     var response = response.body()?.data
                                     Log.d("Response", response.toString())
+
                                     setStories(response)
                                 }
                                 else

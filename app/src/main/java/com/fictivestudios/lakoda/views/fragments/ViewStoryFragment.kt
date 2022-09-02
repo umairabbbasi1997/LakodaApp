@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
 import com.fictivestudios.imdfitness.activities.fragments.BaseFragment
 import com.fictivestudios.lakoda.R
 import com.fictivestudios.lakoda.utils.Titlebar
@@ -100,7 +101,11 @@ class ViewStoryFragment : BaseFragment() {
 
                     override fun onFinish() {
 
-                        activity?.onBackPressed()
+                        if (MainActivity.getMainActivity?.navControllerMain?.currentDestination?.id == R.id.viewStoryFragment)
+                        {
+                            activity?.onBackPressed()
+                        }
+
                     }
                 }
                 timer.start()
@@ -179,15 +184,19 @@ class ViewStoryFragment : BaseFragment() {
 
         mView.tv_send.setOnClickListener {
 
-            val bundle = bundleOf(
-                Constants.USER_ID to  userId.toString(),
-                Constants.PROFILE to  userImage.toString(),
-                Constants.USER_NAME to userName.toString(),
-                Constants.MESSAGE to mView.et_text.text.toString(),
-                Constants.MESSAGE_TYPE to Constants.TYPE_TEXT
-            )
+            if (!mView.et_text.text.toString().isNullOrEmpty())
+            {
 
-            MainActivity.getMainActivity?.navControllerMain?.navigate(R.id.chatFragment,bundle)
+                val bundle = bundleOf(
+                    Constants.USER_ID to  userId.toString(),
+                    Constants.PROFILE to  userImage?.toString(),
+                    Constants.USER_NAME to userName.toString(),
+                    Constants.MESSAGE to mView.et_text.text.toString(),
+                    Constants.MESSAGE_TYPE to Constants.TYPE_TEXT
+                )
+
+                MainActivity.getMainActivity?.navControllerMain?.navigate(R.id.chatFragment,bundle)
+            }
 
 
 

@@ -221,7 +221,7 @@ class MyProfileFragment : BaseFragment() ,OnItemClickListener {
 
                 override fun onFailure(call: Call<GetMyProfileResponse>, t: Throwable)
                 {
-                    Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireActivity(), t.localizedMessage, Toast.LENGTH_SHORT).show()
                     activity?.runOnUiThread(java.lang.Runnable {
                         //mView.pb_pofile.visibility=View.GONE
                         mView.shimmer_view_container.stopShimmer()
@@ -259,7 +259,7 @@ class MyProfileFragment : BaseFragment() ,OnItemClickListener {
         mView.tv_username_name.setText(response?.user?.name)
         mView.tv_followers_count.setText(response?.user?.follower_count.toString())
         mView.tv_following_count.setText(response?.user?.following_count.toString())
-        mView.tv_posts_count.setText(response?.user?.post_count.toString())
+        mView.tv_posts_count.setText((response?.user?.post_count + response?.user?.share_count) .toString())
         mView.tv_city.setText(response?.user?.city)
 
         if (!response?.user?.image.isNullOrBlank())

@@ -84,6 +84,7 @@
             android:id="@+id/iv_profile"
             android:layout_width="35dp"
             android:layout_height="35dp"
+            android:visibility="gone"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="20dp"
             android:src="@drawable/user_dp"
@@ -98,6 +99,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
+            android:visibility="gone"
             android:layout_marginLeft="6dp"
             android:textColor="@color/white"
             android:textSize="16sp"
@@ -164,10 +166,11 @@
             >
             <ImageView
                 android:id="@+id/iv_post"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="400dp"
+                android:layout_height="200dp"
                 android:minHeight="200dp"
-                android:scaleType="centerCrop"
+                android:scaleType="fitXY"
+
 
                 >
 

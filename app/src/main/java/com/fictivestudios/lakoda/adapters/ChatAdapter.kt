@@ -1,15 +1,21 @@
 package com.fictivestudios.lakoda.adapters
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.graphics.Color
+import android.net.Uri
+import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.fictivestudios.lakoda.R
 import com.fictivestudios.lakoda.model.receivedMessageData
-import com.fictivestudios.ravebae.utils.Constants
 import com.fictivestudios.ravebae.utils.Constants.Companion.IMAGE_BASE_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.TYPE_DOCUMENT
 import com.fictivestudios.ravebae.utils.Constants.Companion.TYPE_IMAGE
@@ -23,17 +29,14 @@ import com.fictivestudios.ravebae.utils.Constants.Companion.getUser
 import com.squareup.picasso.Picasso
 import com.zerobranch.layout.SwipeLayout
 import com.zerobranch.layout.SwipeLayout.SwipeActionsListener
-import io.github.ponnamkarthik.richlinkpreview.ViewListener
 import kotlinx.android.synthetic.main.item_message_received.view.*
-import kotlinx.android.synthetic.main.item_message_received.view.tv_text_received
 import kotlinx.android.synthetic.main.item_message_sent.view.*
-import java.lang.Exception
 
 
-class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: SwipeReply,) : RecyclerView.Adapter<ChatAdapter.ProfileViewHolder>() {
+class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: SwipeReply,context: Context) : RecyclerView.Adapter<ChatAdapter.ProfileViewHolder>() {
 
     private var messageList: ArrayList<receivedMessageData>? = messageList
-
+    private var context = context
     private var mSwipeReply:SwipeReply = swipeReply
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):ProfileViewHolder{
 
@@ -71,6 +74,7 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
 
     override fun getItemCount() = messageList?.size ?: 0
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onBindViewHolder(holder: ProfileViewHolder, @SuppressLint("RecyclerView") position: Int) {
 
 
@@ -83,7 +87,8 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
                 messageList?.get(position),
                 position,
                 mSwipeReply,
-                messageList
+                messageList,
+                context
             )
 
         }
@@ -97,7 +102,8 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
                 messageList?.get(position),
                 position,
                 mSwipeReply,
-                messageList
+                messageList,
+                context
             )
         }
 
@@ -106,14 +112,20 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
 
      class ProfileViewHolder(itemView:View):RecyclerView.ViewHolder(itemView)
     {
+        @RequiresApi(Build.VERSION_CODES.M)
         fun bindReceivedMessage(
             itemView: View,
             model: receivedMessageData?,
             position: Int,
             mSwipeReply: SwipeReply,
             messageList: ArrayList<receivedMessageData>?,
+            context: Context,
 
             ) {
+
+
+
+
 
 
             itemView.swipe_layout_received.setOnActionsListener(object : SwipeActionsListener {
@@ -208,18 +220,28 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
                 itemView.tv_received_reply.visibility = View.GONE
                 itemView.iv_video_received.visibility = View.GONE
             }
-            else if ( model?.type == TYPE_LOCATION)
-            {
+            else if ( model?.type == TYPE_LOCATION) {
                 itemView.iv_media_received.visibility = View.GONE
                 itemView.tv_text_received.visibility = View.VISIBLE
                 itemView.tv_received_reply.visibility = View.GONE
                 itemView.iv_video_received.visibility = View.GONE
 
 
+                itemView.tv_text_received.setTextColor(context.resources.getColor(R.color.fb_color))
+                itemView.tv_text_received.setOnClickListener {
+
+                    val gmmIntentUri: Uri = Uri.parse(model.message)
+                    val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                    mapIntent.setPackage("com.google.android.apps.maps")
+                    if (mapIntent.resolveActivity(context.packageManager) != null) {
+                        context.startActivity(mapIntent)
+                    }
+                }
 
                 itemView.tv_text_received.setText(model?.message)
 
             }
+
 
             else if (model?.type?.contains("replyId") == true)
             {
@@ -254,12 +276,14 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
 
         }
 
+        @RequiresApi(Build.VERSION_CODES.M)
         fun bindSentMessage(
             itemView: View,
             model: receivedMessageData?,
             position: Int,
             mSwipeReply: SwipeReply,
-            messageList: ArrayList<receivedMessageData>?
+            messageList: ArrayList<receivedMessageData>?,
+            context: Context
         ) {
             itemView.swipe_layout_sent.setOnActionsListener(object : SwipeActionsListener {
                 override fun onOpen(direction: Int, isContinuous: Boolean) {
@@ -356,7 +380,7 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
                 itemView.tv_text_reply.visibility = View.GONE
                 itemView.iv_video_sent.visibility = View.GONE
 
-                itemView.tv_text_sent.text = model?.message.toString()
+                itemView.tv_text_sent.text = model?.message?.toString()
 
             }
 
@@ -368,7 +392,19 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
                 itemView.iv_video_sent.visibility = View.GONE
 
               //  itemView.richLinkView.visibility = View.GONE
-                itemView.tv_text_sent.setText(model?.message)
+                itemView.tv_text_sent.setText(model?.message?.toString())
+
+
+                itemView.tv_text_sent.setTextColor(context.resources.getColor(R.color.fb_color))
+                itemView.tv_text_sent.setOnClickListener {
+
+                    val gmmIntentUri: Uri = Uri.parse(model.message)
+                    val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                    mapIntent.setPackage("com.google.android.apps.maps")
+                    if (mapIntent.resolveActivity(context.packageManager) != null) {
+                        context.startActivity(mapIntent)
+                    }
+                }
 
             }
 

@@ -92,6 +92,7 @@ class ChatFragment : BaseFragment(),SwipeReply {
 
     companion object {
         fun newInstance() = ChatFragment()
+        var isLocation = false
     }
 
     private lateinit var viewModel: ChatViewModel
@@ -146,9 +147,15 @@ class ChatFragment : BaseFragment(),SwipeReply {
             Log.e("Message", mapLink)
 
             var mapLink = mapLink
-//            sendMessage(mapLink, TYPE_LOCATION)
 
-            mView.et_write_msg.setText(mapLink)
+            if (isLocation)
+            {
+                isLocation = false
+                sendMessage(mapLink, TYPE_LOCATION)
+            }
+
+
+//            mView.et_write_msg.setText(mapLink)
 
           //  getMessage()
             //getSocket()
@@ -232,12 +239,7 @@ class ChatFragment : BaseFragment(),SwipeReply {
 
 
 
-        if (!arguments?.getString(MESSAGE).isNullOrBlank() || arguments?.getString(MESSAGE)?.equals("null") == true)
-        {
-            message = arguments?.getString(MESSAGE)
-            messageType =arguments?.getString(MESSAGE_TYPE)
-            message?.let { messageType?.let { it1 -> sendMessage(it, it1) } }
-        }
+
 
         return mView
     }
@@ -265,6 +267,12 @@ class ChatFragment : BaseFragment(),SwipeReply {
             //   toast = Toast.makeText(this, "Connected", Toast.LENGTH_SHORT)
             //    toast.show()
             try {
+                if (!arguments?.getString(MESSAGE).isNullOrBlank() || arguments?.getString(MESSAGE)?.equals("null") == true)
+                {
+                    message = arguments?.getString(MESSAGE)
+                    messageType =arguments?.getString(MESSAGE_TYPE)
+                    message?.let { messageType?.let { it1 -> sendMessage(it, it1) } }
+                }
                 getMessage()
 
             }
@@ -304,7 +312,7 @@ class ChatFragment : BaseFragment(),SwipeReply {
             {
 
 
-                chatAdapter =  ChatAdapter( messageList!!,this)
+                chatAdapter =  ChatAdapter( messageList!!,this,requireContext())
                 mView.rv_chat_message?.adapter = chatAdapter
                 mView.rv_chat_message?.adapter?.notifyDataSetChanged()
                 mView.rv_chat_message?.smoothScrollToPosition(messageList?.size - 1);
@@ -389,7 +397,7 @@ class ChatFragment : BaseFragment(),SwipeReply {
             });
             Log.e("send_message", "jsonObject" + jsonObject.toString())
         } else {
-            Toast.makeText(requireActivity(), "Not Connect ,Please reload this screen", Toast.LENGTH_LONG).show()
+//            Toast.makeText(requireActivity(), "Not Connect ,Please reload this screen", Toast.LENGTH_LONG).show()
         }
         mView.ll_message_reply.visibility = View.GONE
         mView.tv_reply.setText("")

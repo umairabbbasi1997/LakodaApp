@@ -19,6 +19,7 @@ data class MyProfileUser(
     val name: String,
     val phone_number: String,
     val post_count: Int,
+    val share_count: Int,
     val posts: List<HomePostData>,
     val profile_complete: String,
     val social_token: String,

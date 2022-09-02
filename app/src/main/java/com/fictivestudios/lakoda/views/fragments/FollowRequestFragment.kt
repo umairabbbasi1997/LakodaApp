@@ -121,6 +121,9 @@ class FollowRequestFragment : BaseFragment(),OnItemClickListener {
 
                                     setData(response)
                                 }
+                                else{
+                                    activity?.onBackPressed()
+                                }
 
                             }
                             else
@@ -132,6 +135,7 @@ class FollowRequestFragment : BaseFragment(),OnItemClickListener {
                                     var adapter = FollowRequestAdapter(followReqList,requireContext(),this@FollowRequestFragment)
                                     mView.rv_follow_request.adapter =adapter
                                     adapter.notifyDataSetChanged()
+                                    activity?.onBackPressed()
                                 })
                             }
 

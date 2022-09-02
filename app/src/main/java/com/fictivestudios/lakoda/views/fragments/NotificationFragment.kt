@@ -68,6 +68,7 @@ class NotificationFragment : BaseFragment() ,OnItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getFollowRequest()
         getNotifications()
     }
 
@@ -128,7 +129,7 @@ class NotificationFragment : BaseFragment() ,OnItemClickListener {
                                     var response = response.body()?.data
 
 
-                                    setData(response)
+                                   setData(response)
                                 }
 
                             }
@@ -228,8 +229,11 @@ class NotificationFragment : BaseFragment() ,OnItemClickListener {
 
                                     var response = response.body()?.data
 
+
                                     setFollowerData(response)
 
+                                }
+                                else{            mView.tv_name.setText("No Following Request")
                                 }
 
                             }
@@ -280,6 +284,66 @@ class NotificationFragment : BaseFragment() ,OnItemClickListener {
 
     private fun setFollowerData(response: List<GetFollowRequestData>?) {
 
+
+        mView.card_request.visibility = View.VISIBLE
+
+
+
+        if (response != null) {
+
+            var isFound = false
+            var count = 0
+            var followerName: String? = null
+
+            for (item in response) {
+                count += 1
+                if (count == 1) {
+                    mView.tv_name.setText("Following Request")
+                    followerName = item?.follower?.name
+                    if (!item.follower?.image.isNullOrEmpty()) {
+                    Picasso
+                        .get().load(Constants.IMAGE_BASE_URL + item.follower?.image).into(mView.iv_post_1)
+
+                    mView.iv_post_2.visibility = View.INVISIBLE
+                    mView.iv_post.visibility = View.INVISIBLE
+                    mView.iv_post_1.visibility = View.VISIBLE
+
+                }
+
+                } else if (count == 2) {
+                            if (!item.follower?.image.isNullOrEmpty()) {
+                    Picasso
+                        .get().load(Constants.IMAGE_BASE_URL + item.follower?.image).into(mView.iv_post_2)
+
+                    mView.iv_post.visibility = View.INVISIBLE
+                    mView.iv_post_2.visibility = View.VISIBLE
+                }
+                } else if (count == 3) {
+                       if (!item.follower?.image.isNullOrEmpty()) {
+                    Picasso
+                        .get().load(Constants.IMAGE_BASE_URL + item.follower?.image).into(mView.iv_post)
+
+                    mView.iv_post.visibility = View.VISIBLE
+                }
+            }
+                }
+
+            if (count == 1)
+            {
+                mView.tv_notification.setText(followerName)
+            }
+            else
+            {
+                var userCount = count-1
+                mView.tv_notification.setText(followerName+" +$userCount others")
+            }
+
+        }
+        else{
+
+            mView.card_request.visibility = View.GONE
+            mView.tv_name.setText("No Following Request")
+        }
     }
 
 
@@ -291,7 +355,7 @@ class NotificationFragment : BaseFragment() ,OnItemClickListener {
         mView.rv_notification.adapter =adapter
         adapter.notifyDataSetChanged()
 
-        var isFound = false
+/*        var isFound = false
         var count = 0
        var followerName: String? =null
         for (item in response)
@@ -345,7 +409,7 @@ class NotificationFragment : BaseFragment() ,OnItemClickListener {
                 }
             }
             else{
-                mView.card_request.visibility = View.GONE
+                mView.card_request.visibility = View.INVISIBLE
             }
         }
 
@@ -357,7 +421,7 @@ class NotificationFragment : BaseFragment() ,OnItemClickListener {
         {
             var userCount = count-1
             mView.tv_notification.setText(followerName+" +$userCount others")
-        }
+        }*/
 
 
 

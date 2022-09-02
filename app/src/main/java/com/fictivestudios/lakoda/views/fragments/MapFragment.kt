@@ -19,6 +19,7 @@ import com.fictivestudios.imdfitness.activities.fragments.BaseFragment
 import com.fictivestudios.lakoda.R
 import com.fictivestudios.lakoda.utils.Titlebar
 import com.fictivestudios.lakoda.views.activities.MainActivity
+import com.fictivestudios.lakoda.views.fragments.ChatFragment.Companion.isLocation
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -119,6 +120,7 @@ class MapFragment : BaseFragment() ,OnMapReadyCallback {
                 var mapLink ="https://www.google.com/maps/search/?api=1&query="+ center?.latitude+","+ center?.longitude
 
 
+                isLocation = true
                 com.fictivestudios.lakoda.liveData.LiveData.setGetMapLink(mapLink)
 
 

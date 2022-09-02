@@ -115,7 +115,7 @@ class FirebaseMessaging : FirebaseMessagingService() {
         val alarmSound: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(applicationContext, packageName)
             .setSmallIcon(R.drawable.notify_icon)
-            .setContentTitle(title ?: "title")
+            .setContentTitle("Lakoda" ?: "title")
             .setContentText(body ?: "body")
             .setAutoCancel(true)
             .setSound(alarmSound)

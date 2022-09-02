@@ -31,7 +31,6 @@ import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.edit_profile_fragment.view.*
 import kotlinx.android.synthetic.main.edit_profile_fragment.view.ccp
-import kotlinx.android.synthetic.main.edit_profile_fragment.view.et_email
 import kotlinx.android.synthetic.main.edit_profile_fragment.view.et_phone
 import kotlinx.android.synthetic.main.edit_profile_fragment.view.et_username
 import kotlinx.android.synthetic.main.edit_profile_fragment.view.iv_upload
@@ -337,7 +336,7 @@ class EditProfileFragment : BaseFragment() {
         if (userObj!=null)
         {
             mView.et_username.setText(userObj?.name)
-            mView.et_email.setText(userObj?.email)
+
             mView.et_phone.setText(userObj?.phone_number)
             mView.et_city.setText(userObj?.city)
             userObj?.country_code?.let { mView.ccp.setCountryForPhoneCode(it.toInt()) }

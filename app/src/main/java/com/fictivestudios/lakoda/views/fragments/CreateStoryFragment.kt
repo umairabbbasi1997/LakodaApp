@@ -2,11 +2,11 @@ package com.fictivestudios.lakoda.views.fragments
 
 //import com.sarthakdoshi.textonimage.TextOnImage
 
-import android.Manifest.permission.MANAGE_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.Activity
 import android.content.Intent
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.net.Uri
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
@@ -16,15 +16,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.MeasureSpec
 import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.widget.AbsListView.OnScrollListener.SCROLL_STATE_IDLE
+import android.widget.FrameLayout
 import android.widget.NumberPicker
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.drawToBitmap
 import androidx.lifecycle.ViewModelProvider
 import com.fictivestudios.docsvisor.apiManager.client.ApiClient
 import com.fictivestudios.imdfitness.activities.fragments.BaseFragment
@@ -46,7 +49,6 @@ import retrofit2.Call
 import retrofit2.Response
 import java.io.File
 import java.io.FileOutputStream
-import java.io.InputStream
 
 
 class CreateStoryFragment : BaseFragment() {
@@ -199,7 +201,7 @@ class CreateStoryFragment : BaseFragment() {
 
 
     val mOnTouchListenerTv1 = OnTouchListener { v, event ->
-        val constraintLayoutParams = mView.tv1.getLayoutParams() as ConstraintLayout .LayoutParams
+        val constraintLayoutParams = mView.tv1.getLayoutParams() as FrameLayout.LayoutParams
         when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
                 Log.d("TAG", "@@@@ TV1 ACTION_UP")
@@ -439,9 +441,15 @@ class CreateStoryFragment : BaseFragment() {
 
 
         var content = mView.story_layout
-        val bitmap = Bitmap.createBitmap(content!!.width, content!!.height, Bitmap.Config.ARGB_8888)
+
+
+       /* val bitmap = Bitmap.createBitmap(content!!.width, content!!.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
-        content!!.draw(canvas)
+        content!!.draw(canvas)*/
+        val bitmap =  content.drawToBitmap()
+            //getBitmapFromView(content)
+
+
 
         var file = File(commonDocumentDirPath("temp").toString()+"/image.png")
        // var filename = File("image.png")
@@ -449,7 +457,7 @@ class CreateStoryFragment : BaseFragment() {
         try {
 
             var ostream =  FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 3, ostream);
+            bitmap?.compress(Bitmap.CompressFormat.PNG, 3, ostream);
             ostream.flush()
             ostream.close();
 
@@ -521,5 +529,15 @@ class CreateStoryFragment : BaseFragment() {
         return dir
     }
 
-
+    fun getBitmapFromView(view: View): Bitmap? {
+        view.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED)
+        val bitmap = Bitmap.createBitmap(
+            view.measuredWidth, view.measuredHeight,
+            Bitmap.Config.ARGB_8888
+        )
+        val canvas = Canvas(bitmap)
+        view.layout(0, 0, view.measuredWidth, view.measuredHeight)
+        view.draw(canvas)
+        return bitmap
+    }
 }

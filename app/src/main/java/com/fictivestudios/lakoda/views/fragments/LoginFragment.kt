@@ -68,15 +68,19 @@ class LoginFragment : BaseFragment() {
         sessionManager = SessionManager(requireContext())
 
 
-        if (!PreferenceUtils.getBoolean(Constants.IS_FIRST_TIME,false))
-        {
-            PreferenceUtils.saveBoolean(Constants.IS_FIRST_TIME,true)
-            showTutorialDialog()
-        }
+
 
         loginBinding.btn_login.setOnClickListener {
+            if (!PreferenceUtils.getBoolean(Constants.IS_FIRST_TIME,false))
+            {
+                PreferenceUtils.saveBoolean(Constants.IS_FIRST_TIME,true)
+                showTutorialDialog()
+            }
+            else{
+                validateFields()
+            }
 
-            validateFields()
+
 
         }
         loginBinding.tv_dont_have_acc.setOnClickListener {
