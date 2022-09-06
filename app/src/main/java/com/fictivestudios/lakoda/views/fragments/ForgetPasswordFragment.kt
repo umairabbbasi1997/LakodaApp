@@ -107,7 +107,6 @@ class ForgetPasswordFragment : BaseFragment() {
                         mView?.pb_forget_pass?.visibility = View.GONE
                         mView.btn_forget_pass.isEnabled=true
                         mView.btn_forget_pass.text="get Code"
-                    }
 
 
                     try {
@@ -134,9 +133,10 @@ class ForgetPasswordFragment : BaseFragment() {
                     catch (e:Exception)
                     {
                         //Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT).show()
-                        activity?.runOnUiThread(java.lang.Runnable {
+
                             Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
-                        })
+
+                    }
                     }
                 }
 

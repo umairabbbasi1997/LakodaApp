@@ -269,9 +269,7 @@ class NotificationFragment : BaseFragment() ,OnItemClickListener {
 
                     activity?.runOnUiThread(java.lang.Runnable {
                         //mView.pb_pofile.visibility=View.GONE
-                        mView.shimmer_follow_req.stopShimmer()
-                        mView.shimmer_follow_req.visibility = View.GONE
-                        mView.rv_follow_request.visibility =View.VISIBLE
+
                         Toast.makeText(requireContext(), ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
                     })
                 }

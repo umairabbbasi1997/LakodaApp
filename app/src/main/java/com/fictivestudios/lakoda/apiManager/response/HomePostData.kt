@@ -13,5 +13,6 @@ data class HomePostData(
     val type: String,
     val user: User,
     val video_image: String,
-    val is_liked: Int
+    val is_liked: Int,
+    val follow_status:String
 )

@@ -27,5 +27,6 @@ data class MyProfileUser(
     val updated_at: String,
     val verified_code: String,
     val is_followed: Int,
-    val follow_status:String
+    val follow_status:String,
+    val post_post_count :Int
 )

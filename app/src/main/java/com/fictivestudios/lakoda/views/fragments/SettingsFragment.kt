@@ -97,7 +97,7 @@ class SettingsFragment : BaseFragment() {
                         mView?.iv_switch?.visibility = View.VISIBLE
                         mView.btn_logout.isEnabled=true
                         mView.tv_logout.text="Logout"
-                    }
+
 
                     Log.d("Response", ""+response?.body()?.message)
                     response.body()?.let { Log.d("Response", it.message) }
@@ -135,23 +135,23 @@ class SettingsFragment : BaseFragment() {
                             else
                             {
 
-                                activity?.runOnUiThread(java.lang.Runnable {
+
                                     Toast.makeText(requireContext(), "msg "+response.body()?.message ?: "something went wrong", Toast.LENGTH_SHORT).show()
                                     response.body()?.let { Log.d("Response", "msg "+it.message) }
-                                })
+
                             }
 
                     }
                     catch (e:Exception)
                     {
                         //Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT).show()
-                        activity?.runOnUiThread(java.lang.Runnable {
+
                             Toast.makeText(requireContext(),"msg "+ e.message, Toast.LENGTH_SHORT).show()
                             response.body()?.let { Log.d("msg "+"Response", it.message) }
-                        })
+
                     }
                 }
-
+                }
                 override fun onFailure(call: Call<CommonResponse>, t: Throwable)
                 {
 

@@ -70,8 +70,13 @@ class CreatePostFragment : BaseFragment() {
 
         mView.btn_create.setOnClickListener {
 
-            createPost()
-
+            if (!mView.et_des.text.toString().isNullOrEmpty())
+            {
+                createPost()
+            }
+            else{
+                Toast.makeText(requireActivity(), "Description is required", Toast.LENGTH_SHORT).show()
+            }
 
         }
 
@@ -92,10 +97,12 @@ class CreatePostFragment : BaseFragment() {
     private fun createPost()
     {
         mView.pb_createPos.visibility=View.VISIBLE
+        mView.btn_create.isEnabled = false
+        mView.btn_create.text = ""
 
         val apiClient = ApiClient.RetrofitInstance.getApiService(requireContext())
 
-        val signupHM = HashMap<String, RequestBody>().apply {
+        val hashMap = HashMap<String, RequestBody>().apply {
             this["title"] = ".".getFormDataBody()
             this["description"] = mView.et_des.text.toString().getFormDataBody() }
 
@@ -117,7 +124,7 @@ class CreatePostFragment : BaseFragment() {
         GlobalScope.launch(Dispatchers.IO)
         {
 
-            apiClient.createPost(signupHM,filePart).enqueue(object: retrofit2.Callback<CreatePostResponse> {
+            apiClient.createPost(hashMap,filePart).enqueue(object: retrofit2.Callback<CreatePostResponse> {
                 override fun onResponse(
                     call: Call<CreatePostResponse>,
                     response: Response<CreatePostResponse>
@@ -125,9 +132,10 @@ class CreatePostFragment : BaseFragment() {
                 {
                     activity?.runOnUiThread(java.lang.Runnable {
                         mView.pb_createPos.visibility=View.GONE
+                        mView.btn_create.isEnabled = true
+                        mView.btn_create.text = "create"
 
 
-                    })
 
 
                     try {
@@ -140,34 +148,35 @@ class CreatePostFragment : BaseFragment() {
 
                             Log.d("response",response.message)
                             MainActivity.getMainActivity?.onBackPressed()
-                            activity?.runOnUiThread(java.lang.Runnable {
+
                                 Toast.makeText(requireContext(),response.message, Toast.LENGTH_SHORT).show()
-                            })
+
 
                         }
                         else {
-                            activity?.runOnUiThread(java.lang.Runnable {
+
                                 Toast.makeText(requireContext(),response.message, Toast.LENGTH_SHORT).show()
-                            })
+
                         }
                     }
                     catch (e:Exception)
                     {
 
-                        activity?.runOnUiThread(java.lang.Runnable {
+
                             Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
                             Log.d("response", e.localizedMessage)
                             Log.d("response", e.message.toString())
-                        })
+
                     }
-                }
+                    })  }
 
                 override fun onFailure(call: Call<CreatePostResponse>, t: Throwable)
                 {
 
                     activity?.runOnUiThread(java.lang.Runnable {
                         mView.pb_createPos.visibility=View.GONE
-
+                        mView.btn_create.isEnabled = true
+                        mView.btn_create.text = "create"
                                                Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
                         Log.d("response", t.localizedMessage)
                     })
@@ -220,6 +229,7 @@ class CreatePostFragment : BaseFragment() {
                         var bitmap = createVideoThumbNail(fileTemporaryVideo!!.path.toString())
                         Log.d("bitmap",bitmap.toString())
                         mView.iv_Post_media.setImageBitmap(bitmap)
+                        mView.iv_Post_media.visibility = View.VISIBLE
 
                        /* val f =
                             File(getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).toString() + "/Silicompressor/videos")
@@ -248,6 +258,7 @@ class CreatePostFragment : BaseFragment() {
                // fileTemporaryUri = uri
                 fileTemporaryFile =  File(uri.path!!)
                 mView.iv_Post_media.setImageURI(uri)
+                mView.iv_Post_media.visibility = View.VISIBLE
                 mView.post_layout.visibility = View.GONE
                 isVideo = false
                 isImage = true

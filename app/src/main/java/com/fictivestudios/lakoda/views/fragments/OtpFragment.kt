@@ -125,7 +125,7 @@ class OtpFragment : BaseFragment() {
                         mView?.pb_otp?.visibility = View.GONE
                       mView.btn_verify.isEnabled=true
                       mView.btn_verify.text="VERIFY"
-                    }
+
 
 
                     try {
@@ -167,9 +167,10 @@ class OtpFragment : BaseFragment() {
                     catch (e:Exception)
                     {
                         //Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT).show()
-                        activity?.runOnUiThread(java.lang.Runnable {
+
                             Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
-                        })
+
+                    }
                     }
                 }
 
@@ -224,7 +225,7 @@ class OtpFragment : BaseFragment() {
                         mView?.pb_otp?.visibility = View.GONE
                         mView.btn_verify.isEnabled=true
                         mView.btn_verify.text="VERIFY"
-                    }
+
 
 
                     try {
@@ -247,10 +248,12 @@ class OtpFragment : BaseFragment() {
                     catch (e:Exception)
                     {
                         //
-                        activity?.runOnUiThread {
+
                             mView?.pb_otp?.visibility = View.GONE
                             Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
-                        }
+
+                    }
+
                     }
                 }
 

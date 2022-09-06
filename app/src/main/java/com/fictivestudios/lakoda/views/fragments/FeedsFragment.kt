@@ -121,7 +121,7 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
                         mView.shimmer_view_container.stopShimmer()
                         mView.shimmer_view_container.visibility = View.GONE
                         mView.feed_post_layout.visibility = View.VISIBLE
-                    })
+
 
                     Log.d("Response",""+ response.message())
 
@@ -141,9 +141,9 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
                                 MainActivity.getMainActivity?.finish()
                                 MainActivity.getMainActivity=null
                                 startActivity(Intent(requireContext(), RegisterationActivity::class.java))
-                                activity?.runOnUiThread(java.lang.Runnable {
+
                                     Toast.makeText(requireContext(), "Login expired please login again", Toast.LENGTH_SHORT).show()
-                                })
+
                             }
 
                             if (response.body()?.status==1)
@@ -161,26 +161,25 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
                             }
                             else
                             {
-                                activity?.runOnUiThread(java.lang.Runnable {
+
                                     Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
-                                })
+
                             }
 
 
                     }
                     catch (e:Exception)
                     {
-                        //Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT).show()
-                        activity?.runOnUiThread(java.lang.Runnable {
+
                             //mView.pb_pofile.visibility=View.GONE
                             mView.shimmer_view_container.stopShimmer()
                             mView.shimmer_view_container.visibility = View.GONE
                             mView.feed_post_layout.visibility = View.VISIBLE
                             Toast.makeText(requireContext(),""+ e.message, Toast.LENGTH_SHORT).show()
                             Log.d("execption",""+e.localizedMessage)
-                        })
+
                     }
-                }
+                    }) }
 
                 override fun onFailure(call: Call<HomePostResponse>, t: Throwable)
                 {
@@ -402,7 +401,7 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
                     activity?.runOnUiThread(java.lang.Runnable {
                         //  mView.pb_createPos.visibility=View.GONE
                         Toast.makeText(requireContext(),"Sharing post...", Toast.LENGTH_SHORT).show()
-                    })
+
 
                     try {
 
@@ -416,27 +415,27 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
 
 
                             //    MainActivity.getMainActivity?.onBackPressed()
-                            activity?.runOnUiThread(java.lang.Runnable {
+
                                 Toast.makeText(requireContext(),response.message, Toast.LENGTH_SHORT).show()
-                            })
+
 
                         }
                         else {
-                            activity?.runOnUiThread(java.lang.Runnable {
+
                                 Toast.makeText(requireContext(),response.message, Toast.LENGTH_SHORT).show()
-                            })
+
                         }
                     }
                     catch (e:Exception)
                     {
 
-                        activity?.runOnUiThread(java.lang.Runnable {
+
                             Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
                             Log.d("response", e.localizedMessage)
                             Log.d("response", e.message.toString())
-                        })
+
                     }
-                }
+                    })   }
 
                 override fun onFailure(call: Call<CommentResponse>, t: Throwable)
                 {

@@ -154,6 +154,7 @@ class MyProfileFragment : BaseFragment() ,OnItemClickListener {
         //mView.pb_pofile.visibility=View.VISIBLE
         mView.shimmer_view_container.startShimmer()
         mView.shimmer_view_container.visibility = View.VISIBLE
+        mView.main_profile_layout.visibility = View.GONE
 
 
         val apiClient = ApiClient.RetrofitInstance.getApiService(requireContext())
@@ -171,7 +172,7 @@ class MyProfileFragment : BaseFragment() ,OnItemClickListener {
                     activity?.runOnUiThread(java.lang.Runnable {
                         mView.shimmer_view_container.stopShimmer()
                         mView.shimmer_view_container.visibility = View.GONE
-                    })
+
 
                     Log.d("Response", ""+response?.body()?.message)
 
@@ -209,14 +210,15 @@ class MyProfileFragment : BaseFragment() ,OnItemClickListener {
                     catch (e:Exception)
                     {
                         //Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT).show()
-                        activity?.runOnUiThread(java.lang.Runnable {
+
                             //mView.pb_pofile.visibility=View.GONE
                             mView.shimmer_view_container.stopShimmer()
                             mView.shimmer_view_container.visibility = View.GONE
                             Toast.makeText(requireContext(),"msg: "+ e.message, Toast.LENGTH_SHORT).show()
                             Log.d("execption","msg: "+e.localizedMessage)
-                        })
+
                     }
+                    })
                 }
 
                 override fun onFailure(call: Call<GetMyProfileResponse>, t: Throwable)
@@ -242,6 +244,7 @@ class MyProfileFragment : BaseFragment() ,OnItemClickListener {
 
     private fun setProfile(response: MyProfileData) {
 
+        postsArray.clear()
         for (item in response?.user?.posts)
         {
             if (item.type.equals("post"))
@@ -259,7 +262,7 @@ class MyProfileFragment : BaseFragment() ,OnItemClickListener {
         mView.tv_username_name.setText(response?.user?.name)
         mView.tv_followers_count.setText(response?.user?.follower_count.toString())
         mView.tv_following_count.setText(response?.user?.following_count.toString())
-        mView.tv_posts_count.setText((response?.user?.post_count + response?.user?.share_count) .toString())
+        mView.tv_posts_count.setText((response?.user?.post_post_count + response?.user?.share_count) .toString())
         mView.tv_city.setText(response?.user?.city)
 
         if (!response?.user?.image.isNullOrBlank())

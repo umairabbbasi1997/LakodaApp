@@ -250,7 +250,7 @@ class PreLoginFragment : BaseFragment() {
                         preLoginBinding.pb_login.visibility=View.GONE
 
 
-                    })
+
 
 
 
@@ -283,20 +283,18 @@ class PreLoginFragment : BaseFragment() {
                         else {
 
 
-                            activity?.runOnUiThread(java.lang.Runnable {
                                 Toast.makeText(requireContext(), response?.body()?.message.toString(), Toast.LENGTH_SHORT).show()
-                            })
+
                         }
                     }
                     catch (e:Exception)
                     {
 
-                        activity?.runOnUiThread(java.lang.Runnable {
                             Toast.makeText(requireContext(),"msg:"+ e.message.toString(), Toast.LENGTH_SHORT).show()
                             Log.d("exception","msg:"+e.localizedMessage.toString())
-                        })
+
                     }
-                }
+                    })  }
 
                 override fun onFailure(call: Call<SocialLoginResponse>, t: Throwable)
                 {

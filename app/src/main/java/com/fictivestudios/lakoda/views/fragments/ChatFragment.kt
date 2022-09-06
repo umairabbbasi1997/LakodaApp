@@ -3,6 +3,7 @@ package com.fictivestudios.lakoda.views.fragments
 import SocketApp
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -317,9 +318,9 @@ class ChatFragment : BaseFragment(),SwipeReply {
                 mView.rv_chat_message?.adapter?.notifyDataSetChanged()
                 mView.rv_chat_message?.smoothScrollToPosition(messageList?.size - 1);
 
-          /*      if (listFromGson.size != 1)
+       /*         if (listFromGson.size != 1)
                 {
-                    chatAdapter =  ChatAdapter( messageList!!,this)
+                    chatAdapter =  ChatAdapter( messageList!!,this,activity as Context)
                     mView.rv_chat_message?.adapter = chatAdapter
                     mView.rv_chat_message?.adapter?.notifyDataSetChanged()
                     mView.rv_chat_message?.smoothScrollToPosition(messageList?.size - 1);
@@ -357,8 +358,8 @@ class ChatFragment : BaseFragment(),SwipeReply {
 
     private fun getMessage() {
         var parameterName = receiverUserId?.let {
-            GetMessage(getUser().id.toString(),it,
-                getUser().id.toString())
+            GetMessage(getUser().id,it.toInt(),
+                getUser().id)
         }
 //        Log.e("GetMessage", "userData.toString() " + userData.id)
         //      Log.e("GetMessage", "navArgs.value.bookingId " + navArgs.value.bookingId)
@@ -380,7 +381,7 @@ class ChatFragment : BaseFragment(),SwipeReply {
     private fun sendMessage(message:String,type:String)
     {
 
-        val model = receiverUserId?.let { SendMessage( getUser().id.toString(), it,message,type) }
+        val model = receiverUserId?.let { SendMessage( getUser().id, it.toInt(),message,type) }
 
 //        Log.e("GetMessage", "userData.toString() " + userData.id)
 //      Log.e("GetMessage", "navArgs.value.bookingId " + navArgs.value.bookingId)

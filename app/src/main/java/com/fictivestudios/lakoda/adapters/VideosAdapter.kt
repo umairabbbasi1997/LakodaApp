@@ -13,6 +13,7 @@ import com.fictivestudios.lakoda.R
 import com.fictivestudios.lakoda.apiManager.response.HomePostData
 import com.fictivestudios.ravebae.utils.Constants
 import com.fictivestudios.ravebae.utils.Constants.Companion.LIKED
+import com.fictivestudios.ravebae.utils.Constants.Companion.STATUS_UNFOLLOWED
 import com.fictivestudios.ravebae.utils.Constants.Companion.UNLIKED
 import com.fictivestudios.ravebae.utils.Constants.Companion.getUser
 import com.squareup.picasso.Picasso
@@ -64,10 +65,23 @@ class VideosAdapter(
                 if (!mVideoItems[position].video_image.isNullOrEmpty())
 
                 {
+
+
                     holder.itemView.tv_like_count.setText(mVideoItems[position].like_count.toString())
                     holder.itemView.tv_comment_count.setText(mVideoItems[position].comment_count.toString())
                     holder.itemView.txtTitle.setText(mVideoItems[position].user.name)
                     holder.itemView.txtDesc.setText(mVideoItems[position].description)
+
+                    if (mVideoItems[position].follow_status == STATUS_UNFOLLOWED)
+                    {
+                        holder.itemView.btn_follow.visibility = View.VISIBLE
+
+                    }
+                    else{
+                        holder.itemView.btn_follow.visibility = View.GONE
+                    }
+
+
 
                     if (getUser().id.equals(mVideoItems[position].user.id))
                     {
@@ -77,7 +91,7 @@ class VideosAdapter(
                     }
                     else
                     {
-                        holder.itemView.btn_follow.visibility = View.VISIBLE
+                       // holder.itemView.btn_follow.visibility = View.VISIBLE
                         holder.itemView.btn_share.visibility = View.VISIBLE
                     }
 

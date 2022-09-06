@@ -224,7 +224,6 @@ class EditProfileFragment : BaseFragment() {
                         mView.btn_save.isEnabled=true
                         mView.btn_save.text="save changes"
 
-                    })
 
                     try {
 
@@ -245,21 +244,22 @@ class EditProfileFragment : BaseFragment() {
                         else {
 
 
-                            activity?.runOnUiThread(java.lang.Runnable {
+
                                 Toast.makeText(requireContext(), "msd: "+response?.message, Toast.LENGTH_SHORT).show()
                                 response?.message?.let { Log.d("response", it) }
 
-                            })
+
                         }
                     }
                     catch (e:Exception)
                     {
 
                         Log.d("response", "msg "+ e.localizedMessage)
-                        activity?.runOnUiThread(java.lang.Runnable {
+
                             Toast.makeText(requireContext(), "msg "+ e.localizedMessage, Toast.LENGTH_SHORT).show()
-                        })
+
                     }
+                    })
                 }
 
                 override fun onFailure(call: Call<UpdateProfileResponse>, t: Throwable)

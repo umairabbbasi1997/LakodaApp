@@ -72,7 +72,7 @@ class VideoViewFragment : BaseFragment() ,OnItemClickListener{
     private fun getAllPost()
     {
 
-        //mView.pb_pofile.visibility=View.VISIBLE
+        mView.pb_home.visibility=View.VISIBLE
        /* mView.shimmer_view_container.startShimmer()
         mView.shimmer_view_container.visibility = View.VISIBLE
 */
@@ -90,11 +90,11 @@ class VideoViewFragment : BaseFragment() ,OnItemClickListener{
                 )
                 {
                     activity?.runOnUiThread(java.lang.Runnable {
-                        //mView.pb_pofile.visibility=View.GONE
+                        mView.pb_home.visibility=View.GONE
                        /* mView.shimmer_view_container.stopShimmer()
                         mView.shimmer_view_container.visibility = View.GONE*/
 
-                    })
+
 
                     Log.d("Response",""+ response.message())
                     Log.d("ResponseMessage",""+ response?.body()?.message.toString())
@@ -136,9 +136,8 @@ class VideoViewFragment : BaseFragment() ,OnItemClickListener{
                         }
                         else
                         {
-                            activity?.runOnUiThread(java.lang.Runnable {
                                 Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
-                            })
+
                         }
 
 
@@ -146,21 +145,21 @@ class VideoViewFragment : BaseFragment() ,OnItemClickListener{
                     catch (e:Exception)
                     {
                         //Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT).show()
-                        activity?.runOnUiThread(java.lang.Runnable {
+
                             //mView.pb_pofile.visibility=View.GONE
                          /*   mView.shimmer_view_container.stopShimmer()
                             mView.shimmer_view_container.visibility = View.GONE*/
                             Toast.makeText(requireContext(),""+ e.message, Toast.LENGTH_SHORT).show()
                             Log.d("execption",""+e.localizedMessage)
-                        })
+
                     }
-                }
+                    })   }
 
                 override fun onFailure(call: Call<HomePostResponse>, t: Throwable)
                 {
                     Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
                     activity?.runOnUiThread(java.lang.Runnable {
-                        //mView.pb_pofile.visibility=View.GONE
+                        mView.pb_home.visibility=View.GONE
                      /*   mView.shimmer_view_container.stopShimmer()
                         mView.shimmer_view_container.visibility = View.GONE
                         mView.feed_post_layout.visibility =View.VISIBLE*/
@@ -412,7 +411,7 @@ class VideoViewFragment : BaseFragment() ,OnItemClickListener{
                     activity?.runOnUiThread(java.lang.Runnable {
                         //  mView.pb_createPos.visibility=View.GONE
                         Toast.makeText(requireContext(),"Sharing post...", Toast.LENGTH_SHORT).show()
-                    })
+
 
                     try {
 
@@ -426,27 +425,26 @@ class VideoViewFragment : BaseFragment() ,OnItemClickListener{
 
 
                             //    MainActivity.getMainActivity?.onBackPressed()
-                            activity?.runOnUiThread(java.lang.Runnable {
+
                                 Toast.makeText(requireContext(),response.message, Toast.LENGTH_SHORT).show()
-                            })
 
                         }
                         else {
-                            activity?.runOnUiThread(java.lang.Runnable {
+
                                 Toast.makeText(requireContext(),response.message, Toast.LENGTH_SHORT).show()
-                            })
+
                         }
                     }
                     catch (e:Exception)
                     {
 
-                        activity?.runOnUiThread(java.lang.Runnable {
+
                             Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
                             Log.d("response", e.localizedMessage)
                             Log.d("response", e.message.toString())
-                        })
+
                     }
-                }
+                    })  }
 
                 override fun onFailure(call: Call<CommentResponse>, t: Throwable)
                 {

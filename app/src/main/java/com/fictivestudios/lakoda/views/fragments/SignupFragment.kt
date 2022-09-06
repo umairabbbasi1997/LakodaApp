@@ -256,7 +256,7 @@ class SignupFragment : BaseFragment() {
                         signupBinding.btn_signup.isEnabled=true
                         signupBinding.btn_signup.text="SIGNUP"
 
-                    })
+
 
 
                     try {
@@ -285,32 +285,34 @@ class SignupFragment : BaseFragment() {
 
                         }
                         else {
-                            activity?.runOnUiThread(java.lang.Runnable {
+
                                 Toast.makeText(requireContext(),response.message, Toast.LENGTH_SHORT).show()
-                            })
+
                         }
                     }
                     catch (e:Exception)
                     {
 
-                        activity?.runOnUiThread(java.lang.Runnable {
+
                             Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
                             Log.d("response", e.localizedMessage)
                             Log.d("response", e.message.toString())
-                        })
+
                     }
+                    })
                 }
 
                 override fun onFailure(call: Call<SignupResponse>, t: Throwable)
                 {
 
-                    activity?.runOnUiThread(java.lang.Runnable {
+                    activity?.runOnUiThread {
                         signupBinding.pb_signup.visibility=View.GONE
                         signupBinding.btn_signup.isEnabled=true
                         signupBinding.btn_signup.text="SIGNUP"
                         Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
                         Log.d("response", t.localizedMessage)
-                    })
+                    }
+
 
                 }
             })

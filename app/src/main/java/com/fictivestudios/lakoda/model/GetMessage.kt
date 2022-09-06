@@ -1,8 +1,8 @@
 package com.fictivestudios.lakoda.model
 
 class GetMessage(
-    val sender_id:String ,
-    val receiver_id:String,
-    val user_id:String
+    val sender_id:Int ,
+    val receiver_id:Int,
+    val user_id:Int
 ) {
 }

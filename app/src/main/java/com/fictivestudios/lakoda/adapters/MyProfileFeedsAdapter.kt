@@ -211,6 +211,7 @@ class MyProfileFeedsAdapter(context: Context, post: List<HomePostData>, onItemCl
 
             itemView.tv_like.setText(post?.like_count.toString())
             itemView.tv_comments.setText(post?.comment_count.toString() + " comments")
+            itemView.tv_post_description.setText(post?.description)
 
             if (post?.is_liked == 1)
             {
@@ -244,6 +245,10 @@ class MyProfileFeedsAdapter(context: Context, post: List<HomePostData>, onItemCl
             itemView.tv_like.setText(post?.like_count.toString())
             itemView.tv_comment.setText(post?.comment_count.toString()+" comment")
             itemView.tv_sharer_username.setText(post?.shared_by?.name)
+            itemView.tv_sharer_username.visibility = View.INVISIBLE
+            itemView.tv_username.visibility = View.INVISIBLE
+           itemView.iv_profile.visibility = View.INVISIBLE
+            itemView.iv_sharer_profile.visibility = View.INVISIBLE
             if (post?.is_liked == 1)
             {
                 itemView.iv_heart.setBackgroundResource(R.drawable.heart_icon)
@@ -289,7 +294,7 @@ class MyProfileFeedsAdapter(context: Context, post: List<HomePostData>, onItemCl
                     .get()
                     .load(Constants.IMAGE_BASE_URL +post?.user?.image)
                     //.placeholder(R.drawable.loading_spinner)
-                    .into(itemView.iv_profile);
+                        .into(itemView.iv_profile);
 
             }
 

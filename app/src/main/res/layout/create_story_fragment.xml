@@ -15,16 +15,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
+
         <ImageView
             android:id="@+id/iv_story_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/black"
             android:scaleType="fitXY"
-            android:src="@drawable/story_background"
-            >
+            android:src="@drawable/story_background">
 
         </ImageView>
+
         <EditText
             android:id="@+id/et_text"
             android:layout_width="match_parent"
@@ -169,10 +170,10 @@
         android:elevation="20dp"
         android:indeterminateTint="@color/white"
         android:visibility="gone"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/btn_add_to_story"
+        app:layout_constraintRight_toRightOf="@id/btn_add_to_story"
+        app:layout_constraintTop_toTopOf="@id/btn_add_to_story"
+        app:layout_constraintBottom_toBottomOf="@id/btn_add_to_story"
         >
 
     </ProgressBar>

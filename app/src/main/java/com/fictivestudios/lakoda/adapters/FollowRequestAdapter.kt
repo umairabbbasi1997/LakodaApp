@@ -13,6 +13,7 @@ import com.fictivestudios.lakoda.apiManager.response.GetFollowRequestData
 import com.fictivestudios.lakoda.views.fragments.FollowRequestFragment
 import com.fictivestudios.ravebae.utils.Constants
 import com.fictivestudios.ravebae.utils.Constants.Companion.ACCEPT
+import com.fictivestudios.ravebae.utils.Constants.Companion.PROFILE
 import com.fictivestudios.ravebae.utils.Constants.Companion.REJECT
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_followers.view.*
@@ -54,6 +55,10 @@ class FollowRequestAdapter(
 
         holder.itemView.btn_delete.setOnClickListener {
             onItemClickListener.onItemClick(position,it, REJECT)
+        }
+
+        holder.itemView.iv_post.setOnClickListener {
+            onItemClickListener.onItemClick(position,it, PROFILE)
         }
 
         holder.bindViews(followReqList[position],holder.itemView,context)

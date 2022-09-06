@@ -81,7 +81,7 @@ class TermsAndConditionFragment : BaseFragment() {
                     activity?.runOnUiThread(java.lang.Runnable {
                        mView.pb_t_and_c.visibility=View.GONE
 
-                    })
+
 
                     Log.d("Response", ""+response?.body()?.message)
 
@@ -112,13 +112,13 @@ class TermsAndConditionFragment : BaseFragment() {
                     catch (e:Exception)
                     {
                         //Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT).show()
-                        activity?.runOnUiThread(java.lang.Runnable {
+
                             mView.pb_t_and_c.visibility=View.GONE
 
                             Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
-                        })
+
                     }
-                }
+                    })   }
 
                 override fun onFailure(call: Call<ContentResponse>, t: Throwable)
                 {

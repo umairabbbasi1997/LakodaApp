@@ -351,6 +351,8 @@ class CreateStoryFragment : BaseFragment() {
     private fun createStory(storyFile: File?)
     {
         mView.pb_createStory.visibility=View.VISIBLE
+        mView.btn_add_to_story.isEnabled = false
+        mView.btn_add_to_story.text = ""
 
         val apiClient = ApiClient.RetrofitInstance.getApiService(requireContext())
 
@@ -382,6 +384,8 @@ class CreateStoryFragment : BaseFragment() {
                 {
                     activity?.runOnUiThread(java.lang.Runnable {
                         mView.pb_createStory.visibility=View.GONE
+                        mView.btn_add_to_story.isEnabled = true
+                        mView.btn_add_to_story.text = "Add To Story"
 
 
                     })
@@ -424,6 +428,8 @@ class CreateStoryFragment : BaseFragment() {
 
                     activity?.runOnUiThread(java.lang.Runnable {
                         mView.pb_createStory.visibility=View.GONE
+                        mView.btn_add_to_story.isEnabled = true
+                        mView.btn_add_to_story.text = "Add To Story"
 
                         Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
                         Log.d("response", t.localizedMessage)
@@ -526,6 +532,15 @@ class CreateStoryFragment : BaseFragment() {
                 dir = null
             }
         }
+       /* else
+        {
+            dir.delete()
+            val success = dir.mkdir()
+            if (!success) {
+                dir = null
+            }
+
+        }*/
         return dir
     }
 

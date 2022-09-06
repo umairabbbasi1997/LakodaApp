@@ -268,7 +268,7 @@ class CommentsFragment : BaseFragment() ,OnItemClickListener{
                       //  mView.pb_createPos.visibility=View.GONE
                         mView.tv_send.isEnabled = true
 
-                    })
+
 
 
                     try {
@@ -299,13 +299,13 @@ class CommentsFragment : BaseFragment() ,OnItemClickListener{
                     catch (e:Exception)
                     {
 
-                        activity?.runOnUiThread(java.lang.Runnable {
+
                             Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
                             Log.d("response", e.localizedMessage)
                             Log.d("response", e.message.toString())
-                        })
+
                     }
-                }
+                    }) }
 
                 override fun onFailure(call: Call<CommonResponse>, t: Throwable)
                 {

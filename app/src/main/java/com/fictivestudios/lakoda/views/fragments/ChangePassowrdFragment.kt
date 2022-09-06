@@ -155,7 +155,7 @@ class ChangePassowrdFragment : BaseFragment() {
                         mView?.pb_change_pass?.visibility = View.GONE
                         mView.btn_update.isEnabled=true
                         mView.btn_update.text="Update password"
-                    }
+
 
 
                     try {
@@ -181,11 +181,11 @@ class ChangePassowrdFragment : BaseFragment() {
                     catch (e:Exception)
                     {
                         //Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT).show()
-                        activity?.runOnUiThread(java.lang.Runnable {
+
                             Toast.makeText(requireContext(), e.message.toString(), Toast.LENGTH_SHORT).show()
-                        })
+
                     }
-                }
+                    }    }
 
                 override fun onFailure(call: Call<CommonResponse>, t: Throwable)
                 {

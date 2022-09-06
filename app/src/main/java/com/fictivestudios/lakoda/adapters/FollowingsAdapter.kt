@@ -21,8 +21,9 @@ import com.fictivestudios.lakoda.views.activities.RegisterationActivity
 import com.fictivestudios.ravebae.utils.Constants
 import com.fictivestudios.ravebae.utils.Constants.Companion.IMAGE_BASE_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.PROFILE
+import com.fictivestudios.ravebae.utils.Constants.Companion.STATUS_FOLLOWED
+import com.fictivestudios.ravebae.utils.Constants.Companion.STATUS_REQUEST_SENT
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.friend_profile_fragment.view.*
 import kotlinx.android.synthetic.main.item_followers.view.*
 import kotlinx.android.synthetic.main.item_followers.view.btn_unfollow
 import kotlinx.coroutines.Dispatchers
@@ -73,7 +74,7 @@ class FollowingsAdapter(followingList: ArrayList<GetFollowingData>,context: Cont
             }
             else if (holder.itemView.btn_unfollow.text.toString().toLowerCase() == MainActivity?.getMainActivity?.getString(R.string.follow))
             {
-                followRequest(followingList?.get(position)?.id,holder.itemView,context)
+                followRequest(followingList?.get(position)?.id,holder.itemView,context,"follow")
 
                // holder.itemView.btn_unfollow.text =  MainActivity?.getMainActivity?.getString(R.string.cancel_request)
 
@@ -82,7 +83,7 @@ class FollowingsAdapter(followingList: ArrayList<GetFollowingData>,context: Cont
             }
             else if (holder.itemView.btn_unfollow.text.toString().toLowerCase() == MainActivity?.getMainActivity?.getString(R.string.cancel_request))
             {
-                followRequest(followingList?.get(position)?.id,holder.itemView,context)
+                followRequest(followingList?.get(position)?.id,holder.itemView,context,"cancel request")
               //  holder.itemView.btn_unfollow.text =  MainActivity?.getMainActivity?.getString(R.string.follow)
 
                 //onItemClickListener.onItemClick(position,it, FOLLOW)
@@ -101,6 +102,20 @@ class FollowingsAdapter(followingList: ArrayList<GetFollowingData>,context: Cont
     {
         fun bindViews(model: GetFollowingData, itemView: View, context: Context) {
 
+            if (model.follow_status == STATUS_FOLLOWED)
+            {
+                itemView.btn_unfollow.setText(MainActivity?.getMainActivity?.getString(R.string.unfollow))
+            }
+            else if (model.follow_status == STATUS_REQUEST_SENT)
+            {
+                itemView.btn_unfollow.setText(MainActivity?.getMainActivity?.getString(R.string.cancel_request))
+
+            }
+            else
+            {
+                itemView.btn_unfollow.setText(MainActivity?.getMainActivity?.getString(R.string.follow))
+            }
+
             itemView.tv_name.setText(model.name)
             if (model.image.isNullOrEmpty())
             {
@@ -118,10 +133,18 @@ class FollowingsAdapter(followingList: ArrayList<GetFollowingData>,context: Cont
     }
 
 
-    private fun followRequest(userID: Int, itemView: View, context: Context)
+    private fun followRequest(userID: Int, itemView: View, context: Context, type: String)
     {
 
         itemView.btn_unfollow.isEnabled = false
+        if (type == "follow")
+        {
+            itemView.btn_unfollow.text = "following..."
+        }
+        else{
+            itemView.btn_unfollow.text = "canceling..."
+        }
+
 
         val apiClient = ApiClient.RetrofitInstance.getApiService(context)
         GlobalScope.launch(Dispatchers.IO)
@@ -157,8 +180,17 @@ class FollowingsAdapter(followingList: ArrayList<GetFollowingData>,context: Cont
                         {
                             (context as Activity)?.runOnUiThread(java.lang.Runnable {
                                 Toast.makeText(this@FollowingsAdapter.context, "" + response?.body()?.message, Toast.LENGTH_SHORT).show()
-                                itemView.btn_unfollow.setText("unfollow")
-                                itemView.btn_unfollow.isEnabled = true
+
+                               if (type == "follow")
+                               {
+                                   itemView.btn_unfollow.setText("cancel request")
+                               }
+                                else
+                                {
+                                    itemView.btn_unfollow.setText("follow")
+                                }
+
+                                   itemView.btn_unfollow.isEnabled = true
 
                                 /*if (userID != null)
                                 {
@@ -174,7 +206,7 @@ class FollowingsAdapter(followingList: ArrayList<GetFollowingData>,context: Cont
                         {
                             (context as Activity)?.runOnUiThread(java.lang.Runnable {
                                 Toast.makeText(this@FollowingsAdapter.context, ""+response.body()?.message, Toast.LENGTH_SHORT).show()
-                                itemView.btn_unfollow.setText("follow")
+                                itemView.btn_unfollow.setText(type)
                                 itemView.btn_unfollow.isEnabled = true
                             })
                         }
@@ -190,7 +222,7 @@ class FollowingsAdapter(followingList: ArrayList<GetFollowingData>,context: Cont
                             itemView.shimmer_following.visibility = View.GONE*/
                             Toast.makeText(context, "msg: "+e.message, Toast.LENGTH_SHORT).show()
                             Log.d("execption","msg: "+e.localizedMessage)
-                            itemView.btn_unfollow.setText("follow")
+                            itemView.btn_unfollow.setText(type)
                             itemView.btn_unfollow.isEnabled = true
                         })
                     }
@@ -205,7 +237,7 @@ class FollowingsAdapter(followingList: ArrayList<GetFollowingData>,context: Cont
                         itemView.shimmer_following.visibility = View.GONE
                         itemView.rv_followers.visibility =View.VISIBLE*/
                         Toast.makeText(context, ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
-                        itemView.btn_unfollow.setText("follow")
+                        itemView.btn_unfollow.setText(type)
                         itemView.btn_unfollow.isEnabled = true
                     })
                 }

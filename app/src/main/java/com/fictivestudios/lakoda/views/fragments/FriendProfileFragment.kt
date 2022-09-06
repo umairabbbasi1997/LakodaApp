@@ -162,6 +162,7 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
             if (! userID.isNullOrEmpty() || !userID .equals( "null"))
             {
 
+
                 blockUser(userID?.toInt()!!,btn_block.text.toString().toLowerCase())
             }
 
@@ -441,7 +442,7 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
                     activity?.runOnUiThread(java.lang.Runnable {
                         mView.shimmer_friend_profile.stopShimmer()
                         mView.shimmer_friend_profile.visibility = View.GONE
-                    })
+
 
                     Log.d("Response", ""+response?.body()?.message)
                     response?.body()?.message?.let { Log.d("Response", it) }
@@ -478,7 +479,7 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
                     catch (e:Exception)
                     {
                         //Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT).show()
-                        activity?.runOnUiThread(java.lang.Runnable {
+
                             //mView.pb_pofile.visibility=View.GONE
                             mView.shimmer_friend_profile.stopShimmer()
                             mView.shimmer_friend_profile.visibility = View.GONE
@@ -487,8 +488,8 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
                             mView.btn_block.visibility =View.VISIBLE
                             Toast.makeText(requireContext(),"msg: "+ e.message, Toast.LENGTH_SHORT).show()
                             Log.d("execption","msg: "+e.localizedMessage)
-                        })
-                    }
+
+                    }     })
                 }
 
                 override fun onFailure(call: Call<GetMyProfileResponse>, t: Throwable)
@@ -520,10 +521,11 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
         mView.tv_username_name.setText(response?.user?.name)
         mView.tv_followers_count.setText(response?.user?.follower_count.toString())
         mView.tv_following_count.setText(response?.user?.following_count.toString())
-        mView.tv_posts_count.setText(response?.user?.post_count.toString())
+        mView.tv_posts_count.setText((response?.user?.post_post_count + response?.user.share_count).toString())
         mView.tv_city.setText(response?.user?.city)
 
-
+        mView.btn_unfollow.visibility =View.VISIBLE
+        postsArray.clear()
         for (item in response?.user?.posts)
         {
             if (item.type.equals("post"))
@@ -537,16 +539,24 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
         {
             mView.btn_unfollow.setText("Follow")
             mView.btn_block.visibility = View.GONE
+
+
+
         }
         else if(response.user.follow_status == STATUS_REQUEST_SENT)
         {
             mView.btn_unfollow.setText("Cancel Request")
             mView.btn_block.visibility = View.GONE
         }
+
         else
         {
             mView.btn_unfollow.setText("UnFollow")
             mView.btn_block.visibility = View.VISIBLE
+         //   mView.btn_unfollow.visibility = View.VISIBLE
+
+
+
 
             var adapter = MyProfileFeedsAdapter(requireContext(),postsArray,this)
             mView.rv_friend_post.adapter = adapter
@@ -566,17 +576,41 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
             mView.btn_block.visibility =View.VISIBLE
         }
 
-
-    /*    if (response.user.is_blocked == 1)
+        if (response.user.is_blocked.equals("1"))
         {
 
-        }*/
+            btn_unfollow.visibility = View.GONE
+            btn_block.setText("Unblock")
+            btn_block.visibility = View.VISIBLE
+        }
+        else
+        {
+
+            btn_unfollow.visibility = View.VISIBLE
+            btn_block.visibility = View.VISIBLE
+            btn_block.setText("block")
+
+        }
+
 
         mView.shimmer_friend_profile.stopShimmer()
         mView.shimmer_friend_profile.visibility = View.GONE
         mView.main_scroll_ll.visibility =View.VISIBLE
-        mView.btn_unfollow.visibility =View.VISIBLE
+       // mView.btn_unfollow.visibility =View.VISIBLE
 
+  /*      if (response.user.is_blocked.equals("1"))
+        {
+
+            btn_unfollow.visibility = View.GONE
+            btn_block.setText("Unblock")
+            btn_block.visibility = View.VISIBLE
+        }
+        else
+        {
+            btn_unfollow.visibility = View.VISIBLE
+            btn_block.setText("block")
+            btn_block.visibility = View.VISIBLE
+        }*/
 
     }
 
@@ -585,16 +619,18 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
     {
         if (type == BLOCK)
         {
-            mView.btn_block.setText("blocking")
+            mView.btn_block.setText("blocking...")
             mView.btn_block.isEnabled = false
+            Toast.makeText(requireContext(), "Blocking", Toast.LENGTH_SHORT).show()
         }
         else
         {
-            mView.btn_block.setText("unblocking")
+            mView.btn_block.setText("unblocking...")
             mView.btn_block.isEnabled = false
+            Toast.makeText(requireContext(), "Unblocking", Toast.LENGTH_SHORT).show()
         }
 
-        Toast.makeText(requireContext(), "Blocking", Toast.LENGTH_SHORT).show()
+
 
         val apiClient = ApiClient.RetrofitInstance.getApiService(requireContext())
         GlobalScope.launch(Dispatchers.IO)
@@ -610,6 +646,10 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
                 {
 
 
+                    activity?.runOnUiThread {
+
+
+
                     response?.body()?.message?.let { Log.d("Response", it) }
 
                     try {
@@ -620,27 +660,31 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
                         {
                             PreferenceUtils.remove(Constants.USER_OBJECT)
                             PreferenceUtils.remove(Constants.ACCESS_TOKEN)
-                            MainActivity.getMainActivity?.finish()
-                            MainActivity.getMainActivity=null
-                            startActivity(Intent(requireContext(), RegisterationActivity::class.java))
+
+
                             activity?.runOnUiThread(java.lang.Runnable {
+                                startActivity(Intent(requireContext(), RegisterationActivity::class.java))
+                                MainActivity.getMainActivity?.finish()
+                                MainActivity.getMainActivity=null
                                 Toast.makeText(requireContext(), "Login expired please login again", Toast.LENGTH_SHORT).show()
                             })
                         }
 
                         if (response.body()?.status==1)
                         {
-                            activity?.runOnUiThread(java.lang.Runnable {
+
                                 Toast.makeText(requireContext(), "" + response?.body()?.message, Toast.LENGTH_SHORT).show()
                                 if (type == BLOCK)
                                 {
                                     mView.btn_block.setText("unblock")
                                     mView.btn_block.isEnabled = true
+                                    btn_unfollow.visibility = View.GONE
                                 }
                                 else
                                 {
                                     mView.btn_block.setText("block")
                                     mView.btn_block.isEnabled = true
+                                    btn_unfollow.visibility = View.VISIBLE
                                 }
 
                                 if (userID != null)
@@ -648,14 +692,14 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
                                     getProfile(userID)
                                 }
 
-                            })
+
 
 
 
                         }
                         else
                         {
-                            activity?.runOnUiThread(java.lang.Runnable {
+
                                 Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
                                 if (type == BLOCK)
                                 {
@@ -667,7 +711,7 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
                                     mView.btn_block.setText("block")
                                     mView.btn_block.isEnabled = true
                                 }
-                            })
+
                         }
 
 
@@ -675,7 +719,7 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
                     catch (e:Exception)
                     {
                         //Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT).show()
-                        activity?.runOnUiThread(java.lang.Runnable {
+
                             //mView.pb_pofile.visibility=View.GONE
 /*                            mView.shimmer_following.stopShimmer()
                             mView.shimmer_following.visibility = View.GONE*/
@@ -691,7 +735,8 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
                                 mView.btn_block.setText("block")
                                 mView.btn_block.isEnabled = true
                             }
-                        })
+
+                    }
                     }
                 }
 

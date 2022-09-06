@@ -291,7 +291,6 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
                         // was executed swipe to the right
                         itemView.swipe_layout_sent.close(true)
 
-                        mSwipeReply.onSwipe(position)
 
                     } else if (direction == SwipeLayout.LEFT) {
                         // was executed swipe to the left
