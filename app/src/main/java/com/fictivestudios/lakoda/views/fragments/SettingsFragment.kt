@@ -13,6 +13,8 @@ import com.fictivestudios.docsvisor.apiManager.client.ApiClient
 import com.fictivestudios.imdfitness.activities.fragments.BaseFragment
 import com.fictivestudios.lakoda.R
 import com.fictivestudios.lakoda.apiManager.response.CommonResponse
+import com.fictivestudios.lakoda.apiManager.response.GetNotificationsResponse
+import com.fictivestudios.lakoda.apiManager.response.NotificationToggleResponse
 import com.fictivestudios.lakoda.utils.PreferenceUtils
 import com.fictivestudios.lakoda.utils.Titlebar
 import com.fictivestudios.lakoda.viewModel.SettingsViewModel
@@ -20,7 +22,11 @@ import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.fictivestudios.lakoda.views.activities.RegisterationActivity
 import com.fictivestudios.ravebae.utils.Constants
 import com.fictivestudios.ravebae.utils.Constants.Companion.ACCESS_TOKEN
+import com.fictivestudios.ravebae.utils.Constants.Companion.NOTIFICATION_TOGGLE
 import com.fictivestudios.ravebae.utils.Constants.Companion.USER_OBJECT
+import com.fictivestudios.ravebae.utils.Constants.Companion.getUser
+import com.google.gson.Gson
+import kotlinx.android.synthetic.main.notification_fragment.view.*
 import kotlinx.android.synthetic.main.otp_fragment.view.*
 import kotlinx.android.synthetic.main.settings_fragment.view.*
 import kotlinx.coroutines.Dispatchers
@@ -59,11 +65,19 @@ class SettingsFragment : BaseFragment() {
         }
 
 
+
+        mView.sw_push.isChecked = getUser().is_notification == 1
+
+
         mView.btn_logout.setOnClickListener {
 
             logout()
 
 
+        }
+
+        mView.sw_push.setOnCheckedChangeListener { compoundButton, b ->
+            notificationToggle()
         }
 
         return mView
@@ -162,6 +176,100 @@ class SettingsFragment : BaseFragment() {
                         mView.tv_logout.text="Logout"
                         Toast.makeText(requireContext(), t.message, Toast.LENGTH_SHORT).show()
                     }
+                }
+            })
+
+        }
+
+
+    }
+
+    private fun notificationToggle()
+    {
+
+
+        val apiClient = ApiClient.RetrofitInstance.getApiService(requireContext())
+
+
+        GlobalScope.launch(Dispatchers.IO)
+        {
+
+            apiClient.notificationToggle().enqueue(object: retrofit2.Callback<NotificationToggleResponse> {
+                override fun onResponse(
+                    call: Call<NotificationToggleResponse>,
+                    response: Response<NotificationToggleResponse>
+                )
+                {
+
+
+                    Log.d("Response", ""+response?.body()?.message)
+
+                    try {
+
+
+                        if (response.isSuccessful) {
+
+
+
+                            if (response?.message() == "Unauthorized"||
+                                response?.body()?.message == "Unauthorized"
+                                || response?.message() == "Unauthenticated.")
+                            {
+                                PreferenceUtils.remove(Constants.USER_OBJECT)
+                                PreferenceUtils.remove(Constants.ACCESS_TOKEN)
+                                MainActivity.getMainActivity?.finish()
+                                MainActivity.getMainActivity=null
+                                startActivity(Intent(requireContext(), RegisterationActivity::class.java))
+                                activity?.runOnUiThread(java.lang.Runnable {
+                                    Toast.makeText(requireContext(), "Login expired please login again", Toast.LENGTH_SHORT).show()
+                                })
+                            }
+
+                            if (response.body()?.status==1)
+                            {
+
+                                activity?.runOnUiThread(java.lang.Runnable {
+                                    Toast.makeText(requireActivity(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
+                                })
+
+                                    Log.d("response",response?.body()?.data.toString())
+                                    val gson = Gson()
+                                    val json:String = gson.toJson(response?.body()?.data?.user )
+                                    PreferenceUtils.saveString(USER_OBJECT,json)
+
+                            }
+                            else
+                            {
+                                activity?.runOnUiThread(java.lang.Runnable {
+                                    Toast.makeText(requireActivity(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
+                                })
+                            }
+
+                        }
+                        else {
+                            activity?.runOnUiThread(java.lang.Runnable {
+                                Toast.makeText(requireActivity(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
+                            })
+
+                        }
+                    }
+                    catch (e:Exception)
+                    {
+                        activity?.runOnUiThread(java.lang.Runnable {
+
+                            //Toast.makeText(requireActivity(), "msg: "+e.message, Toast.LENGTH_SHORT).show()
+                            Log.d("execption","msg: "+e.localizedMessage)
+                        })
+                    }
+                }
+
+                override fun onFailure(call: Call<NotificationToggleResponse>, t: Throwable)
+                {
+
+                    activity?.runOnUiThread(java.lang.Runnable {
+
+                        Toast.makeText(requireActivity(), ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
+                    })
                 }
             })
 

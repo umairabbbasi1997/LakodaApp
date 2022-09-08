@@ -458,11 +458,16 @@ class CreateStoryFragment : BaseFragment() {
 
 
         var file = File(commonDocumentDirPath("temp").toString()+"/image.png")
+
+        if (file.exists())
+        {
+            file.delete()
+        }
        // var filename = File("image.png")
 
         try {
 
-            var ostream =  FileOutputStream(file);
+            var ostream =  FileOutputStream(file,false);
             bitmap?.compress(Bitmap.CompressFormat.PNG, 3, ostream);
             ostream.flush()
             ostream.close();
@@ -525,6 +530,7 @@ class CreateStoryFragment : BaseFragment() {
 
         // Make sure the path directory exists.
         if (!dir.exists()) {
+
             // Make it, if it doesn't exit
 //            val success = dir.mkdirs()
             val success = dir.mkdir()

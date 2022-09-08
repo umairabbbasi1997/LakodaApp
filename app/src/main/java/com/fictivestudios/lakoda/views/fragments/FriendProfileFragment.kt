@@ -486,7 +486,7 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
                             mView.main_scroll_ll.visibility =View.VISIBLE
                             mView.btn_unfollow.visibility =View.VISIBLE
                             mView.btn_block.visibility =View.VISIBLE
-                            Toast.makeText(requireContext(),"msg: "+ e.message, Toast.LENGTH_SHORT).show()
+                         //   Toast.makeText(requireContext(),"msg: "+ e.message, Toast.LENGTH_SHORT).show()
                             Log.d("execption","msg: "+e.localizedMessage)
 
                     }     })
@@ -523,6 +523,13 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
         mView.tv_following_count.setText(response?.user?.following_count.toString())
         mView.tv_posts_count.setText((response?.user?.post_post_count + response?.user.share_count).toString())
         mView.tv_city.setText(response?.user?.city)
+        if (!response?.user?.image.isNullOrBlank())
+        {
+            Picasso.get()
+                .load(Constants.IMAGE_BASE_URL +response?.user?.image)
+                //.placeholder(R.drawable.loading_spinner)
+                .into(mView.iv_user_profile);
+        }
 
         mView.btn_unfollow.visibility =View.VISIBLE
         postsArray.clear()
@@ -566,13 +573,7 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
 
 
 
-            if (!response?.user?.image.isNullOrBlank())
-            {
-                Picasso.get()
-                    .load(Constants.IMAGE_BASE_URL +response?.user?.image)
-                    //.placeholder(R.drawable.loading_spinner)
-                    .into(mView.iv_user_profile);
-            }
+
             mView.btn_block.visibility =View.VISIBLE
         }
 

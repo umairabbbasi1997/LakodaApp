@@ -20,6 +20,7 @@ import com.fictivestudios.ravebae.utils.Constants.Companion.GET_STORY_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.LIKE_UNLIKE_POST_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.LOGIN_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.LOGOUT_URL
+import com.fictivestudios.ravebae.utils.Constants.Companion.NOTIFICATION_TOGGLE_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.OTHER_USER_PROFILE_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.PROFILE_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.REMOVE_FOLLOW_URL
@@ -151,6 +152,8 @@ interface ApiInterface {
     @GET(GET_NOTFICATIONS_URL)
     fun getNotifications(): retrofit2.Call<GetNotificationsResponse>
 
+    @GET(NOTIFICATION_TOGGLE_URL)
+    fun notificationToggle(): retrofit2.Call<NotificationToggleResponse>
 
     /*********************************** CHAT ******************************************/
 
@@ -159,5 +162,5 @@ interface ApiInterface {
 
     @Multipart
     @POST(CHAT_ATTACHMENT)
-    fun chatAttachment(@Query("type")type:String,@Query("chat_id")chat_id:Int,@Part image: MultipartBody.Part?): retrofit2.Call<ChatAttachmentResponse>
+    fun chatAttachment(@Query("receiver_id")receiver_id:Int,@Query("sender_id")sender_id:Int,@Query("type")type:String,@Part message : MultipartBody.Part?): retrofit2.Call<ChatAttachmentResponse>
 }

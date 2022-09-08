@@ -15,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -63,7 +64,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.json.JSONArray
 import org.json.JSONObject
+import org.json.JSONTokener
 import retrofit2.Call
 import retrofit2.Response
 import java.io.File
@@ -75,7 +78,7 @@ class ChatFragment : BaseFragment(),SwipeReply {
 
     private var fileTemporary: File? = null
     private var chatAdapter: ChatAdapter? = null
-    private var messageList = ArrayList<receivedMessageData>()
+    private var messageList = ArrayList<ReceivedLastMessage>()
 
     private var receiverUserId: String? = null
     private  var userName: String? = null
@@ -130,7 +133,7 @@ class ChatFragment : BaseFragment(),SwipeReply {
         receiverUserId = arguments?.getString(Constants.USER_ID).toString()
         userName = arguments?.getString(Constants.USER_NAME).toString()
         profileImage = arguments?.getString(Constants.PROFILE).toString()
-
+        messageList = ArrayList()
 /*        if (!receiverUserId.equals(null) || !receiverUserId.equals("null"))
         {
             PreferenceUtils.saveString(RECEIVER_USER_ID, receiverUserId!!)
@@ -274,6 +277,7 @@ class ChatFragment : BaseFragment(),SwipeReply {
                     messageType =arguments?.getString(MESSAGE_TYPE)
                     message?.let { messageType?.let { it1 -> sendMessage(it, it1) } }
                 }
+
                 getMessage()
 
             }
@@ -301,38 +305,62 @@ class ChatFragment : BaseFragment(),SwipeReply {
         Handler(Looper.getMainLooper()).post {
             val data = arg[0] as JSONObject
             Log.e("receiveMessage", "" + data.getString("data"))
-            val gson = Gson()
-            val listFromGson: ArrayList<receivedMessageData> = gson.fromJson(
-                data.getString("data"),
-                object : TypeToken<ArrayList<receivedMessageData?>?>() {}.type
-            )
 
-            messageList = ArrayList()
-            messageList =   listFromGson
-            if (!messageList.isNullOrEmpty())
+
+            val json =  JSONTokener(data.getString("data")).nextValue();
+            if (json is JSONObject)
             {
+                Log.e("receiveMessage", "Json Object")
+                val gson = Gson()
+                var objectFromJson:ReceivedLastMessage = gson.fromJson(data.getString("data"),object :TypeToken<ReceivedLastMessage>(){}.type)
+                Log.e("lastReceiveMessage", objectFromJson.toString())
+
+               messageList.add(objectFromJson)
+                chatAdapter?.notifyItemChanged(messageList!!.size - 1)
+                mView.rv_chat_message?.smoothScrollToPosition(messageList!!.size - 1);
+            }
+            //you have an object
+            else if (json is JSONArray)
+            {
+                val gson = Gson()
+                val listFromGson: ArrayList<ReceivedLastMessage> = gson.fromJson(
+                    data.getString("data"),
+                    object : TypeToken<ArrayList<ReceivedLastMessage?>?>() {}.type
+                )
 
 
-                chatAdapter =  ChatAdapter( messageList!!,this,requireContext())
-                mView.rv_chat_message?.adapter = chatAdapter
-                mView.rv_chat_message?.adapter?.notifyDataSetChanged()
-                mView.rv_chat_message?.smoothScrollToPosition(messageList?.size - 1);
-
-       /*         if (listFromGson.size != 1)
+                messageList =   listFromGson
+                if (!messageList.isNullOrEmpty())
                 {
-                    chatAdapter =  ChatAdapter( messageList!!,this,activity as Context)
+
+
+                    chatAdapter =  ChatAdapter( messageList!!,this,requireActivity())
                     mView.rv_chat_message?.adapter = chatAdapter
                     mView.rv_chat_message?.adapter?.notifyDataSetChanged()
                     mView.rv_chat_message?.smoothScrollToPosition(messageList?.size - 1);
+
+
+
+                    /*if (listFromGson.size != 1)
+                    {
+                        chatAdapter =  ChatAdapter( messageList!!,this,activity as Context)
+                        mView.rv_chat_message?.adapter = chatAdapter
+                        mView.rv_chat_message?.adapter?.notifyDataSetChanged()
+                        mView.rv_chat_message?.smoothScrollToPosition(messageList?.size - 1);
+                    }
+                    else{
+                        messageList?.add(listFromGson.get(0))
+                        chatAdapter?.notifyItemChanged(messageList!!.size - 1)
+                        mView.rv_chat_message?.smoothScrollToPosition(messageList!!.size - 1);
+                    }*/
+                    Log.e("receiveMessage", listFromGson.toString())
                 }
-                else{
-                    messageList?.add(listFromGson.get(0))
-                    chatAdapter?.notifyItemChanged(messageList!!.size - 1)
-                    mView.rv_chat_message?.smoothScrollToPosition(messageList!!.size - 1);
-                }*/
             }
 
-            Log.e("receiveMessage", listFromGson.toString())
+
+
+
+
 
 
 
@@ -357,9 +385,11 @@ class ChatFragment : BaseFragment(),SwipeReply {
 
 
     private fun getMessage() {
+
+
+
         var parameterName = receiverUserId?.let {
-            GetMessage(getUser().id,it.toInt(),
-                getUser().id)
+            GetMessage(getUser().id,it.toInt())
         }
 //        Log.e("GetMessage", "userData.toString() " + userData.id)
         //      Log.e("GetMessage", "navArgs.value.bookingId " + navArgs.value.bookingId)
@@ -419,12 +449,16 @@ class ChatFragment : BaseFragment(),SwipeReply {
         if (fileTemporary != null){
             part = fileTemporary?.getPartMap("attachment")
         }
+        else
+        {
+
+        }
 
         GlobalScope.launch(Dispatchers.IO)
         {
 
             receiverUserId?.toInt()?.let {
-                apiClient.chatAttachment("file",it,part).enqueue(object: retrofit2.Callback<ChatAttachmentResponse> {
+                apiClient.chatAttachment(it, getUser().id,type,part).enqueue(object: retrofit2.Callback<ChatAttachmentResponse> {
                     override fun onResponse(
                         call: Call<ChatAttachmentResponse>,
                         response: Response<ChatAttachmentResponse>
@@ -439,7 +473,8 @@ class ChatFragment : BaseFragment(),SwipeReply {
 
                                 Log.d("response", response.message)
 
-                                sendMessage(response.data.attachment.attachment, type)
+
+                              //  sendMessage(response.data.attachment.attachment, type)
 
 
                             } else {

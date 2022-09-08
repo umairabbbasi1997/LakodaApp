@@ -77,6 +77,9 @@ class Constants {
         const val GET_CHAT_LIST_URL = "chats/list"
         const val CHAT_ATTACHMENT = "chats/attachments"
 
+        const val NOTIFICATION_TOGGLE_URL = "notification/toggle"
+
+
         /*
 
 
@@ -89,7 +92,7 @@ class Constants {
 
 
         const val IS_USER = "is_user"
-
+        const val NOTIFICATION_TOGGLE = "notificationToggle"
         const val IS_FIRST_TIME ="first_time"
         var isAccountLogin = false
         var loginType:String? =null

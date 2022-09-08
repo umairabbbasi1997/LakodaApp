@@ -6,8 +6,8 @@ enum class FCMEnums  (val value: String){
     LIKE("like"),
     COMMENT("comment"),
     SHARE("share"),
-    FOLLOW_REQUEST("follow request"),
+    FOLLOW_REQUEST("follow-request"),
     FOLLOW("follow"),
-    STARTED_FOLLOW("started following"),
+    STARTED_FOLLOW("started-following"),
 
 }

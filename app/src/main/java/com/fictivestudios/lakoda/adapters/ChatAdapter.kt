@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.fictivestudios.lakoda.R
+import com.fictivestudios.lakoda.model.ReceivedLastMessage
 import com.fictivestudios.lakoda.model.receivedMessageData
 import com.fictivestudios.ravebae.utils.Constants.Companion.IMAGE_BASE_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.TYPE_DOCUMENT
@@ -33,9 +34,9 @@ import kotlinx.android.synthetic.main.item_message_received.view.*
 import kotlinx.android.synthetic.main.item_message_sent.view.*
 
 
-class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: SwipeReply,context: Context) : RecyclerView.Adapter<ChatAdapter.ProfileViewHolder>() {
+class ChatAdapter(messageList: ArrayList<ReceivedLastMessage>, swipeReply: SwipeReply,context: Context) : RecyclerView.Adapter<ChatAdapter.ProfileViewHolder>() {
 
-    private var messageList: ArrayList<receivedMessageData>? = messageList
+    private var messageList: ArrayList<ReceivedLastMessage>? = messageList
     private var context = context
     private var mSwipeReply:SwipeReply = swipeReply
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):ProfileViewHolder{
@@ -115,10 +116,10 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
         @RequiresApi(Build.VERSION_CODES.M)
         fun bindReceivedMessage(
             itemView: View,
-            model: receivedMessageData?,
+            model: ReceivedLastMessage?,
             position: Int,
             mSwipeReply: SwipeReply,
-            messageList: ArrayList<receivedMessageData>?,
+            messageList: ArrayList<ReceivedLastMessage>?,
             context: Context,
 
             ) {
@@ -152,6 +153,7 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
             {
                 itemView.tv_received_time.text = model?.created_at.toString().getTime("yyyy-MM-dd'T'HH:ss:SSS","HH:ss")
             }
+
 
 
             Log.d("type",model?.type.toString())
@@ -279,10 +281,10 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
         @RequiresApi(Build.VERSION_CODES.M)
         fun bindSentMessage(
             itemView: View,
-            model: receivedMessageData?,
+            model: ReceivedLastMessage?,
             position: Int,
             mSwipeReply: SwipeReply,
-            messageList: ArrayList<receivedMessageData>?,
+            messageList: ArrayList<ReceivedLastMessage>?,
             context: Context
         ) {
             itemView.swipe_layout_sent.setOnActionsListener(object : SwipeActionsListener {
@@ -290,7 +292,7 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
                     if (direction == SwipeLayout.RIGHT) {
                         // was executed swipe to the right
                         itemView.swipe_layout_sent.close(true)
-
+                        mSwipeReply.onSwipe(position)
 
                     } else if (direction == SwipeLayout.LEFT) {
                         // was executed swipe to the left
@@ -306,6 +308,16 @@ class ChatAdapter(messageList: ArrayList<receivedMessageData>, swipeReply: Swipe
             if (model?.created_at != null)
             {
                 itemView.tv_sent_time.text = model?.created_at.toString().getTime("yyyy-MM-dd'T'HH:ss:SSS","HH:ss")/*getTime("yyyy-MM-dd'T'HH:ss:SSS","HH:ss a")*/
+            }
+
+
+
+            if (model?.read_at != null)
+            {
+                itemView.iv_last_seen.visibility = View.VISIBLE
+            }
+            else{
+                itemView.iv_last_seen.visibility = View.GONE
             }
 
             //set attachment image

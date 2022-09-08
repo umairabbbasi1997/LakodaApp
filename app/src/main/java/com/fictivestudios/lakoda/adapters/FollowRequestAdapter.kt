@@ -16,7 +16,6 @@ import com.fictivestudios.ravebae.utils.Constants.Companion.ACCEPT
 import com.fictivestudios.ravebae.utils.Constants.Companion.PROFILE
 import com.fictivestudios.ravebae.utils.Constants.Companion.REJECT
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_followers.view.*
 import kotlinx.android.synthetic.main.item_followers_request.view.*
 import kotlinx.android.synthetic.main.item_followers_request.view.tv_name
 
@@ -69,16 +68,15 @@ class FollowRequestAdapter(
      class ProfileViewHolder(itemView:View):RecyclerView.ViewHolder(itemView)
     {
         fun bindViews(model: GetFollowRequestData, itemView: View, context: Context) {
-/*
-            if (model.follower. .isNullOrEmpty())
+            if (model.follower.image .isNullOrEmpty())
             {
-                itemView.iv_user.setImageResource(R.drawable.user_dp)
+                itemView.iv_post.setImageResource(R.drawable.user_dp)
             }
             else
             {
                 Picasso
-                    .get().load(Constants.IMAGE_BASE_URL + model.image).into(itemView.iv_user)
-            }*/
+                    .get().load(Constants.IMAGE_BASE_URL + model.follower.image).into(itemView.iv_post)
+            }
             itemView.tv_name.setText(model.follower.name)
             itemView.tv_followers_count.setText(model.follower.no_of_followers.toString() + " Followers")
         }
