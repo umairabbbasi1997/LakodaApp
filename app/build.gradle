@@ -138,4 +138,18 @@ dependencies {
 
     //number picker
     implementation 'io.github.ShawnLin013:number-picker:2.4.13'
+
+    //image viewer like gallery
+    implementation 'io.github.igreenwood.loupe:loupe:1.2.2'
+    // optional
+    implementation 'io.github.igreenwood.loupe:extensions:1.0.1'
+
+    //map preview
+    implementation 'com.twoeightnine.staticmap:staticmap:0.1'
+
+
+    //glide
+
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 }

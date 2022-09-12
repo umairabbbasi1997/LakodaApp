@@ -223,9 +223,10 @@ class MyProfileFragment : BaseFragment() ,OnItemClickListener {
 
                 override fun onFailure(call: Call<GetMyProfileResponse>, t: Throwable)
                 {
-                    Toast.makeText(requireActivity(), t.localizedMessage, Toast.LENGTH_SHORT).show()
+
                     activity?.runOnUiThread(java.lang.Runnable {
                         //mView.pb_pofile.visibility=View.GONE
+                        Toast.makeText(requireActivity(), t.localizedMessage, Toast.LENGTH_SHORT).show()
                         mView.shimmer_view_container.stopShimmer()
                         mView.shimmer_view_container.visibility = View.GONE
                         mView.main_profile_layout.visibility =View.VISIBLE

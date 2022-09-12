@@ -90,7 +90,10 @@
         android:id="@+id/chatFragment"
         android:name="com.fictivestudios.lakoda.views.fragments.ChatFragment"
         android:label="fragment_inbox"
-        tools:layout="@layout/fragment_chat" />
+        tools:layout="@layout/fragment_chat">
+
+    </fragment>
+
     <fragment
         android:id="@+id/termsAndConditionFragment"
         android:name="com.fictivestudios.lakoda.views.fragments.TermsAndConditionFragment"
@@ -165,4 +168,9 @@
         android:name="com.fictivestudios.lakoda.views.fragments.MapFragment"
         android:label="map_fragment"
         tools:layout="@layout/map_fragment" />
+    <fragment
+        android:id="@+id/viewImageFragment"
+        android:name="com.fictivestudios.lakoda.views.fragments.ViewImageFragment"
+        android:label="fragment_view_image"
+        tools:layout="@layout/fragment_view_image" />
 </navigation>

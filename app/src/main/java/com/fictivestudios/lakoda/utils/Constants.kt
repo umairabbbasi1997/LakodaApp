@@ -8,6 +8,7 @@ import android.media.MediaMetadataRetriever
 import android.media.MediaMetadataRetriever.METADATA_KEY_DURATION
 import android.media.ThumbnailUtils
 import android.net.Uri
+import android.os.Parcelable
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.util.DisplayMetrics
@@ -35,6 +36,7 @@ class Constants {
 
         val BASE_URL: String = "https://server.appsstaging.com/3373/lakoda/public/api/"
         val IMAGE_BASE_URL: String = "https://server.appsstaging.com/3373/lakoda/public/storage/"
+        val THUMB_BASE_URL: String = "https://server.appsstaging.com/3373/lakoda/public/"
 
         val SOCKET_URL: String = "https://server.appsstaging.com:3059/"
 
@@ -152,6 +154,7 @@ class Constants {
         const val STATUS_UNFOLLOWED ="unfollowed"
         const val STATUS_REQUEST_SENT ="sent"
         const val RECEIVER_USER_ID = "receiverUserId"
+         var state: Parcelable? = null
 
         fun isValidEmail(str: String): Boolean{
             return android.util.Patterns.EMAIL_ADDRESS.matcher(str).matches()

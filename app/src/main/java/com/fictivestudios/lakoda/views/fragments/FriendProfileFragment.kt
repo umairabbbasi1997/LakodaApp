@@ -450,7 +450,7 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
                     try {
 
 
-                        if (response.isSuccessful) {
+                       
 
                             if (response.body()?.status==1)
                             {
@@ -471,10 +471,7 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
                                 Toast.makeText(requireContext(), "msg: "+response.body()?.message, Toast.LENGTH_SHORT).show()
                             }
 
-                        }
-                        else {
-                            Toast.makeText(requireContext(), "msg: "+response.body()?.message, Toast.LENGTH_SHORT).show()
-                        }
+
                     }
                     catch (e:Exception)
                     {

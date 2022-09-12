@@ -6,6 +6,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 class ApiClient {
 
@@ -48,6 +49,7 @@ class ApiClient {
             private fun okhttpClient(context: Context): OkHttpClient {
                 return OkHttpClient.Builder()
                     .addInterceptor(AuthInterceptor(context)/*interceptor*/)
+                 //   .connectTimeout(60*1000,TimeUnit.MILLISECONDS)
 
                     .build()
             }

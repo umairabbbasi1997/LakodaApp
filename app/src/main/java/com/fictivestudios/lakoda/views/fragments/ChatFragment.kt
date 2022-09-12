@@ -3,7 +3,6 @@ package com.fictivestudios.lakoda.views.fragments
 import SocketApp
 import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -14,13 +13,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.Toast
-import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.load.model.LazyHeaders
+import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
+
 import com.fictivestudios.docsvisor.apiManager.client.ApiClient
 import com.fictivestudios.imdfitness.activities.fragments.BaseFragment
 import com.fictivestudios.lakoda.Interface.OnItemClickListener
@@ -28,54 +33,52 @@ import com.fictivestudios.lakoda.R
 import com.fictivestudios.lakoda.adapters.ChatAdapter
 import com.fictivestudios.lakoda.adapters.SwipeReply
 import com.fictivestudios.lakoda.apiManager.response.ChatAttachmentResponse
-import com.fictivestudios.lakoda.apiManager.response.CommonResponse
-import com.fictivestudios.lakoda.apiManager.response.UpdateProfileResponse
 import com.fictivestudios.lakoda.liveData.LiveData
 import com.fictivestudios.lakoda.model.*
 import com.fictivestudios.lakoda.utils.PreferenceUtils
 import com.fictivestudios.lakoda.utils.Titlebar
-import com.fictivestudios.lakoda.utils.getFormDataBody
 import com.fictivestudios.lakoda.utils.getPartMap
 import com.fictivestudios.lakoda.viewModel.ChatViewModel
 import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.fictivestudios.ravebae.utils.Constants
 import com.fictivestudios.ravebae.utils.Constants.Companion.MESSAGE
 import com.fictivestudios.ravebae.utils.Constants.Companion.MESSAGE_TYPE
-import com.fictivestudios.ravebae.utils.Constants.Companion.OTHER_USER_PROFILE_URL
-import com.fictivestudios.ravebae.utils.Constants.Companion.RECEIVER_USER_ID
 import com.fictivestudios.ravebae.utils.Constants.Companion.TYPE_DOCUMENT
 import com.fictivestudios.ravebae.utils.Constants.Companion.TYPE_IMAGE
 import com.fictivestudios.ravebae.utils.Constants.Companion.TYPE_LOCATION
 import com.fictivestudios.ravebae.utils.Constants.Companion.TYPE_TEXT
 import com.fictivestudios.ravebae.utils.Constants.Companion.TYPE_VIDEO
 import com.fictivestudios.ravebae.utils.Constants.Companion.getUser
+import com.fictivestudios.ravebae.utils.Constants.Companion.state
 import com.github.dhaval2404.imagepicker.ImagePicker
+import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.permissionx.guolindev.PermissionX
+import global.msnthrp.staticmap.model.Tile
+import global.msnthrp.staticmap.tile.TileEssential
+import global.msnthrp.staticmap.tile.TileLoader
+import global.msnthrp.staticmap.tile.TileProvider
 import io.socket.client.Ack
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
-import kotlinx.android.synthetic.main.edit_profile_fragment.view.*
-import kotlinx.android.synthetic.main.fragment_chat.*
 import kotlinx.android.synthetic.main.fragment_chat.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import org.json.JSONArray
 import org.json.JSONObject
 import org.json.JSONTokener
 import retrofit2.Call
 import retrofit2.Response
 import java.io.File
-import java.util.HashMap
 
 
-class ChatFragment : BaseFragment(),SwipeReply {
+class ChatFragment : BaseFragment(),SwipeReply ,OnItemClickListener{
 
 
+    private var tileEssential: TileEssential?=null
     private var fileTemporary: File? = null
     private var chatAdapter: ChatAdapter? = null
     private var messageList = ArrayList<ReceivedLastMessage>()
@@ -143,19 +146,32 @@ class ChatFragment : BaseFragment(),SwipeReply {
         }*/
 
 
+        if (!arguments?.getString(Constants.USER_ID).toString().isNullOrEmpty() || !arguments?.getString(Constants.USER_ID).toString().equals("null"))
+        {
+            PreferenceUtils.saveString("chatReceiverId",receiverUserId.toString())
+            PreferenceUtils.saveString("chatReceiverName",userName.toString())
+
+        }
+
+        else
+        {
+            receiverUserId =   PreferenceUtils.getString("chatReceiverId")
+            userName = PreferenceUtils.getString("chatReceiverName")
+        }
+
         mView = inflater.inflate(R.layout.fragment_chat, container, false)
 
 
-        val nameObserver = Observer<String> { mapLink ->
+        val nameObserver = Observer<LatLng> { mapLink ->
             // Update the UI, in this case, a TextView.
-            Log.e("Message", mapLink)
+            Log.e("Message", mapLink.toString())
 
             var mapLink = mapLink
 
             if (isLocation)
             {
                 isLocation = false
-                sendMessage(mapLink, TYPE_LOCATION)
+                sendMessage(mapLink.latitude.toString(), TYPE_LOCATION,mapLink.longitude.toString())
             }
 
 
@@ -228,11 +244,11 @@ class ChatFragment : BaseFragment(),SwipeReply {
                 if (mView.ll_message_reply.visibility == View.VISIBLE)
                 {
 
-                    sendMessage(mView.et_write_msg.text.toString(), "replyId:$replyId")
+                    sendMessage(mView.et_write_msg.text.toString(), "replyId:$replyId","")
 
                 }
                 else{
-                    sendMessage(mView.et_write_msg.text.toString(), TYPE_TEXT)
+                    sendMessage(mView.et_write_msg.text.toString(), TYPE_TEXT,"")
                 }
             }
 
@@ -242,16 +258,17 @@ class ChatFragment : BaseFragment(),SwipeReply {
 
 
 
-
+         tileEssential = TileEssential(CustomTileProvider(), CustomTileLoader())
 
 
         return mView
     }
 
 
-
-
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        state.let {   (mView.rv_chat_message.layoutManager as LinearLayoutManager).onRestoreInstanceState(it)}
+    }
 
     private fun getSocket() {
         if(socket==null) {
@@ -275,7 +292,7 @@ class ChatFragment : BaseFragment(),SwipeReply {
                 {
                     message = arguments?.getString(MESSAGE)
                     messageType =arguments?.getString(MESSAGE_TYPE)
-                    message?.let { messageType?.let { it1 -> sendMessage(it, it1) } }
+                    message?.let { messageType?.let { it1 -> sendMessage(it, it1,"") } }
                 }
 
                 getMessage()
@@ -314,10 +331,15 @@ class ChatFragment : BaseFragment(),SwipeReply {
                 val gson = Gson()
                 var objectFromJson:ReceivedLastMessage = gson.fromJson(data.getString("data"),object :TypeToken<ReceivedLastMessage>(){}.type)
                 Log.e("lastReceiveMessage", objectFromJson.toString())
+                messageList.add(objectFromJson)
+                activity?.runOnUiThread {
 
-               messageList.add(objectFromJson)
-                chatAdapter?.notifyItemChanged(messageList!!.size - 1)
-                mView.rv_chat_message?.smoothScrollToPosition(messageList!!.size - 1);
+                    chatAdapter =  ChatAdapter( messageList!!,this,this,requireActivity(),tileEssential)
+                    chatAdapter?.notifyItemChanged(messageList!!.size - 1)
+                    mView.rv_chat_message?.smoothScrollToPosition(messageList!!.size - 1);
+                }
+
+
             }
             //you have an object
             else if (json is JSONArray)
@@ -334,10 +356,13 @@ class ChatFragment : BaseFragment(),SwipeReply {
                 {
 
 
-                    chatAdapter =  ChatAdapter( messageList!!,this,requireActivity())
-                    mView.rv_chat_message?.adapter = chatAdapter
-                    mView.rv_chat_message?.adapter?.notifyDataSetChanged()
-                    mView.rv_chat_message?.smoothScrollToPosition(messageList?.size - 1);
+                    activity?.runOnUiThread {
+                        chatAdapter =  ChatAdapter( messageList!!,this,this,requireActivity(),tileEssential)
+                        mView.rv_chat_message?.adapter = chatAdapter
+                        mView.rv_chat_message?.adapter?.notifyDataSetChanged()
+                        mView.rv_chat_message?.smoothScrollToPosition(messageList?.size - 1);
+                    }
+
 
 
 
@@ -408,10 +433,18 @@ class ChatFragment : BaseFragment(),SwipeReply {
 
     }
 
-    private fun sendMessage(message:String,type:String)
+    private fun sendMessage(message:String,type:String,thumbnail:String)
     {
+        var model:SendMessage2?
+        if (type == TYPE_LOCATION)
+        {
+            model = receiverUserId?.let { SendMessage2( getUser().id, it.toInt(),message,type,thumbnail) }
+        }
+        else
+        {
+           model = receiverUserId?.let { SendMessage2( getUser().id, it.toInt(),message,type) }
+        }
 
-        val model = receiverUserId?.let { SendMessage( getUser().id, it.toInt(),message,type) }
 
 //        Log.e("GetMessage", "userData.toString() " + userData.id)
 //      Log.e("GetMessage", "navArgs.value.bookingId " + navArgs.value.bookingId)
@@ -447,7 +480,7 @@ class ChatFragment : BaseFragment(),SwipeReply {
 
 
         if (fileTemporary != null){
-            part = fileTemporary?.getPartMap("attachment")
+            part = fileTemporary?.getPartMap("message")
         }
         else
         {
@@ -474,6 +507,7 @@ class ChatFragment : BaseFragment(),SwipeReply {
                                 Log.d("response", response.message)
 
 
+                                getMessage()
                               //  sendMessage(response.data.attachment.attachment, type)
 
 
@@ -619,6 +653,17 @@ class ChatFragment : BaseFragment(),SwipeReply {
         super.onDestroy()
         offSocket()
     }
+
+    override fun onPause() {
+        super.onPause()
+        state = (mView.rv_chat_message.layoutManager as LinearLayoutManager).onSaveInstanceState()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getMessage()
+    }
+
     override fun onSwipe(position: Int) {
 
         mView.ll_message_reply.visibility = View.VISIBLE
@@ -630,7 +675,60 @@ class ChatFragment : BaseFragment(),SwipeReply {
         replyId = messageList[position].id.toString()
     }
 
+    override fun onItemClick(position: Int, view: View, value: String) {
 
 
+        if (value == TYPE_IMAGE)
+        {
+
+            val bundle = bundleOf(
+                Constants.IMAGE to   messageList?.get(position)?.message.toString(),
+                Constants.TYPE_TEXT to   TYPE_IMAGE
+
+            )
+
+            MainActivity.getMainActivity?.navControllerMain?.navigate(R.id.viewImageFragment,bundle)
+        }
+        else if (value == TYPE_VIDEO)
+        {
+            val bundle = bundleOf(
+                Constants.IMAGE to   messageList?.get(position)?.message.toString(),
+                Constants.TYPE_TEXT to   TYPE_VIDEO
+
+            )
+
+            MainActivity.getMainActivity?.navControllerMain?.navigate(R.id.viewImageFragment,bundle)
+        }
+
+    }
+
+
+    private inner class CustomTileLoader : TileLoader {
+        override fun loadTile(tileUrl: String, callback: TileLoader.Callback) {
+            try {
+
+                val theImage = GlideUrl(
+                    tileUrl, LazyHeaders.Builder()
+                        .addHeader("User-Agent", "5")
+                        .build()
+                )
+
+                val bitmap = Glide.with(requireActivity())
+                    .asBitmap()
+                    .load(theImage)
+                    .into(MATCH_PARENT, 200)
+                    .get()
+                callback.onLoaded(bitmap)
+            } catch (e: Exception) {
+                callback.onFailed(e)
+                Log.d("mapfailed",e.localizedMessage)
+            }
+        }
+    }
+
+    private inner class CustomTileProvider : TileProvider {
+        override fun getTileUrl(tile: Tile): String =
+            "https://c.tile.openstreetmap.org/${tile.z}/${tile.x}/${tile.y}.png"
+    }
 
 }

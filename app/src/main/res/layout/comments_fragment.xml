@@ -163,7 +163,7 @@
             android:id="@+id/et_comment"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/type_message_here"
+            android:hint="Type comment here"
             android:paddingHorizontal="10dp"
             android:textColor="@color/white"
             android:textColorHint="@color/dark_gray_text"

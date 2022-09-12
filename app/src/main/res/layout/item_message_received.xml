@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zerobranch.layout.SwipeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zerobranch.layout.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:map="http://schemas.android.com/tools"
     android:id="@+id/swipe_layout_received"
     android:background="@color/black_color"
     android:layout_width="match_parent"
@@ -46,9 +46,10 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/text_ll"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginRight="10dp"
             app:layout_constraintLeft_toRightOf="@id/iv_user_rec"
             app:layout_constraintTop_toTopOf="@id/iv_user_rec"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -100,26 +101,54 @@
 
             <ImageView
                 android:id="@+id/iv_media_received"
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:visibility="gone"
+                android:scaleType="centerCrop"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 >
 
             </ImageView>
-            <VideoView
+            <ImageView
                 android:id="@+id/iv_video_received"
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:visibility="gone"
+                android:scaleType="centerCrop"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 >
 
-            </VideoView>
+            </ImageView>
+
+            <ImageButton
+                android:id="@+id/btn_play_r"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/play"
+                android:backgroundTint="@color/transparent_white"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                >
+
+            </ImageButton>
+
+            <ImageView
+                android:id="@+id/map_view_rec"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:visibility="gone"
+                android:scaleType="centerCrop"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                />
 <!--            <ImageButton
                 android:id="@+id/btn_play_rec"
                 android:layout_width="20dp"

@@ -117,11 +117,11 @@ class MapFragment : BaseFragment() ,OnMapReadyCallback {
 
                 val center: LatLng = map!!.getCameraPosition().target
 
-                var mapLink ="https://www.google.com/maps/search/?api=1&query="+ center?.latitude+","+ center?.longitude
+            //    var mapLink ="https://www.google.com/maps/search/?api=1&query="+ center?.latitude+","+ center?.longitude
 
 
                 isLocation = true
-                com.fictivestudios.lakoda.liveData.LiveData.setGetMapLink(mapLink)
+                com.fictivestudios.lakoda.liveData.LiveData.setGetMapLink(center)
 
 
                 MainActivity?.getMainActivity?.onBackPressed()
@@ -159,6 +159,7 @@ class MapFragment : BaseFragment() ,OnMapReadyCallback {
     @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
 
+        MapsInitializer.initialize(requireContext())
         map = googleMap;
         map!!.getUiSettings().setMyLocationButtonEnabled(false);
         if (ActivityCompat.checkSelfPermission(

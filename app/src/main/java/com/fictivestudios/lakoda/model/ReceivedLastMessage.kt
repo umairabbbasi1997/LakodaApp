@@ -13,7 +13,7 @@ data class ReceivedLastMessage(
     val receiver_id: Int,
     val sender_id: Int,
     val status: Any,
-    val thumbnail: Any,
+    val thumbnail: String,
     val type: String,
     val updated_at: String
 )

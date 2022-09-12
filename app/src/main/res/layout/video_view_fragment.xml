@@ -7,28 +7,40 @@
     android:background="@color/black"
     tools:context=".views.fragments.VideoViewFragment">
 
-    <ProgressBar
-        android:id="@+id/pb_home"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:elevation="20dp"
-        android:indeterminateTint="@color/white"
-        android:visibility="gone"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        >
 
-    </ProgressBar>
+
 
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPagerVideos"
         android:orientation="vertical"
+
         android:background="@color/black"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/pb_home"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+
+        android:layout_marginTop="70dp"
+        android:orientation="vertical"
+        app:shimmer_duration="800"
+        android:visibility="gone"
+        >
+
+        <!-- Adding 7 rows of placeholders -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:orientation="vertical">
+            <include layout="@layout/home_loading_layout" />
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
