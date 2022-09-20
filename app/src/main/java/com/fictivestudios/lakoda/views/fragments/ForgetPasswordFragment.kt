@@ -16,7 +16,6 @@ import com.fictivestudios.lakoda.apiManager.response.ForgetPasswordResponse
 import com.fictivestudios.lakoda.apiManager.response.VerifyOtpResponse
 import com.fictivestudios.lakoda.utils.PreferenceUtils
 import com.fictivestudios.lakoda.utils.Titlebar
-import com.fictivestudios.lakoda.viewModel.ForgetPasswordViewModel
 import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.fictivestudios.lakoda.views.activities.RegisterationActivity
 import com.fictivestudios.ravebae.utils.Constants
@@ -42,7 +41,6 @@ class ForgetPasswordFragment : BaseFragment() {
     }
 
     private lateinit var mView: View
-    private lateinit var viewModel: ForgetPasswordViewModel
     override fun setTitlebar(titlebar: Titlebar) {
         titlebar.setBtnBack(getString(R.string.forgot_password_))
     }
@@ -160,7 +158,6 @@ class ForgetPasswordFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ForgetPasswordViewModel::class.java)
         // TODO: Use the ViewModel
     }
 

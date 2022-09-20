@@ -17,7 +17,6 @@ import com.fictivestudios.lakoda.apiManager.response.GetNotificationsResponse
 import com.fictivestudios.lakoda.apiManager.response.NotificationToggleResponse
 import com.fictivestudios.lakoda.utils.PreferenceUtils
 import com.fictivestudios.lakoda.utils.Titlebar
-import com.fictivestudios.lakoda.viewModel.SettingsViewModel
 import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.fictivestudios.lakoda.views.activities.RegisterationActivity
 import com.fictivestudios.ravebae.utils.Constants
@@ -26,6 +25,7 @@ import com.fictivestudios.ravebae.utils.Constants.Companion.NOTIFICATION_TOGGLE
 import com.fictivestudios.ravebae.utils.Constants.Companion.USER_OBJECT
 import com.fictivestudios.ravebae.utils.Constants.Companion.getUser
 import com.google.gson.Gson
+import kotlinx.android.synthetic.main.friend_profile_fragment.view.*
 import kotlinx.android.synthetic.main.notification_fragment.view.*
 import kotlinx.android.synthetic.main.otp_fragment.view.*
 import kotlinx.android.synthetic.main.settings_fragment.view.*
@@ -42,7 +42,6 @@ class SettingsFragment : BaseFragment() {
     }
 
     private lateinit var mView: View
-    private lateinit var viewModel: SettingsViewModel
 
     override fun setTitlebar(titlebar: Titlebar) {
         titlebar.setBtnBack("SETTINGS")
@@ -74,6 +73,11 @@ class SettingsFragment : BaseFragment() {
             logout()
 
 
+        }
+        mView.tv_blocked.setOnClickListener {
+
+            MainActivity.getMainActivity
+                ?.navControllerMain?.navigate(R.id.blockedListFragment)
         }
 
         mView.sw_push.setOnCheckedChangeListener { compoundButton, b ->
@@ -281,7 +285,6 @@ class SettingsFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(SettingsViewModel::class.java)
         // TODO: Use the ViewModel
     }
 

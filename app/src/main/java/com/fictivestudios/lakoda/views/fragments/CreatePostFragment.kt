@@ -23,7 +23,6 @@ import com.fictivestudios.lakoda.apiManager.response.CreatePostResponse
 import com.fictivestudios.lakoda.utils.Titlebar
 import com.fictivestudios.lakoda.utils.getFormDataBody
 import com.fictivestudios.lakoda.utils.getPartMap
-import com.fictivestudios.lakoda.viewModel.CreatePostViewModel
 import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.fictivestudios.ravebae.utils.Constants.Companion.createVideoThumbNail
 import com.fictivestudios.ravebae.utils.Constants.Companion.getMediaDuration
@@ -55,7 +54,6 @@ class CreatePostFragment : BaseFragment() {
         fun newInstance() = CreatePostFragment()
     }
 
-    private lateinit var viewModel: CreatePostViewModel
 
     override fun setTitlebar(titlebar: Titlebar) {
 
@@ -338,10 +336,6 @@ class CreatePostFragment : BaseFragment() {
         onPostExecute(result)
     }*/
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(CreatePostViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
+
 
 }

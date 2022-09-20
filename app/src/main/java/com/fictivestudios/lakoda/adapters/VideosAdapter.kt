@@ -183,7 +183,9 @@ class VideosAdapter(
 
             }
             holder.itemView.btn_share.setOnClickListener {
-                onItemClickListener.onItemClick(position,it, Constants.TYPE_SHARE)
+
+                    onItemClickListener.onItemClick(position,it, Constants.TYPE_SHARE)
+
             }
 
             holder.itemView.btn_follow.setOnClickListener {
@@ -201,7 +203,16 @@ class VideosAdapter(
                 onItemClickListener.onItemClick(position,it, Constants.PROFILE)
             }
             holder.itemView.btn_comment.setOnClickListener {
-                onItemClickListener.onItemClick(position,it, Constants.COMMENTS)
+
+
+                if (mVideoItems[position].shared_by!=null)
+                {
+                    onItemClickListener.onItemClick(position,it, Constants.SHARER_COMMENTS)
+                }
+                else
+                {
+                    onItemClickListener.onItemClick(position,it, Constants.COMMENTS)
+                }
             }
 
             holder.itemView.btn_heart_like.setOnClickListener {
@@ -233,7 +244,14 @@ class VideosAdapter(
                 }
 
 
-                onItemClickListener.onItemClick(position,it, Constants.LIKES)
+                if (mVideoItems[position].shared_by!=null)
+                {
+                    onItemClickListener.onItemClick(position,it, Constants.SHARER_LIKES)
+                }
+                else
+                {
+                    onItemClickListener.onItemClick(position,it, Constants.LIKES)
+                }
             }
 
 

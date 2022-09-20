@@ -2,6 +2,8 @@ package com.fictivestudios.docsvisor.apiManager.client
 
 import com.fictivestudios.lakoda.apiManager.response.*
 import com.fictivestudios.ravebae.utils.Constants.Companion.ACCEPT_FOLLOW_URL
+import com.fictivestudios.ravebae.utils.Constants.Companion.BERBIX_CLIENT_TOKEN_URL
+import com.fictivestudios.ravebae.utils.Constants.Companion.BLOCK_LIST_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.BLOCK_USER_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.CHAT_ATTACHMENT
 import com.fictivestudios.ravebae.utils.Constants.Companion.CREATE_COMMENT_URL
@@ -17,6 +19,7 @@ import com.fictivestudios.ravebae.utils.Constants.Companion.GET_MY_FOLLOWERS_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.GET_MY_FOLLOWINGS_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.GET_NOTFICATIONS_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.GET_STORY_URL
+import com.fictivestudios.ravebae.utils.Constants.Companion.ID_VERIFICATION_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.LIKE_UNLIKE_POST_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.LOGIN_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.LOGOUT_URL
@@ -50,7 +53,7 @@ interface ApiInterface {
 
     @Multipart
     @POST(SIGNUP_URL)
-    fun signup(@PartMap hashMap: HashMap<String, RequestBody>, @Part image: MultipartBody.Part?, @Part id_card: MultipartBody.Part?): retrofit2.Call<SignupResponse>
+    fun signup(@PartMap hashMap: HashMap<String, RequestBody>, @Part image: MultipartBody.Part?): retrofit2.Call<SignupResponse>
 
     @POST(VERIFY_OTP_URL)
     fun verifyOTP(@Body info: RequestBody): retrofit2.Call<VerifyOtpResponse>
@@ -74,7 +77,11 @@ interface ApiInterface {
     @GET(LOGOUT_URL)
     fun logout(): retrofit2.Call<CommonResponse>
 
+    @POST(ID_VERIFICATION_URL)
+    fun idVerification(@Query("id") type:String): retrofit2.Call<IdVerifyResponse>
 
+    @GET(BERBIX_CLIENT_TOKEN_URL)
+    fun getBerbixToken(): retrofit2.Call<BerbixTokenResponse>
 
     /***********************************PROFILE & POSTS ******************************************/
 
@@ -87,6 +94,9 @@ interface ApiInterface {
 
     @POST(BLOCK_USER_URL)
     fun blockUser(@Query("blocked_user_id") blocked_user_id:Int,@Query("type") type:String): retrofit2.Call<CommonResponse>
+
+    @GET(BLOCK_LIST_URL)
+    fun getBlockList(): retrofit2.Call<BlockedListResponse>
 
     @Multipart
     @POST(CREATE_POST_URL)

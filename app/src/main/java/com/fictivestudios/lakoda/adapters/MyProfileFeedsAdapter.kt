@@ -18,10 +18,8 @@ import kotlinx.android.synthetic.main.item_friend_post.view.iv_Comment
 import kotlinx.android.synthetic.main.item_friend_post.view.iv_heart
 import kotlinx.android.synthetic.main.item_friend_post.view.iv_post
 import kotlinx.android.synthetic.main.item_friend_post.view.tv_like
-import kotlinx.android.synthetic.main.item_home_post.view.*
 import kotlinx.android.synthetic.main.item_shared_home_post.view.*
 import kotlinx.android.synthetic.main.item_shared_home_post.view.iv_profile
-import kotlinx.android.synthetic.main.item_shared_home_post.view.tv_comment
 import kotlinx.android.synthetic.main.item_shared_home_post.view.tv_post_description
 import kotlinx.android.synthetic.main.item_shared_home_post.view.tv_username
 
@@ -179,26 +177,48 @@ class MyProfileFeedsAdapter(context: Context, post: List<HomePostData>, onItemCl
         }
 
 
-        holder.itemView.iv_Comment.setOnClickListener {
 
-            onItemClickListener.onItemClick(position,it,COMMENTS)
-
-
-        }
 
 
         if ( postList?.get(position)?.is_post == Constants.VIEW_TYPE_POST)
         {
+            holder.itemView.iv_Comment.setOnClickListener {
+
+                onItemClickListener.onItemClick(position,it,COMMENTS)
+
+
+            }
+            holder.itemView.tv_comments.setOnClickListener {
+
+                onItemClickListener.onItemClick(position,it,COMMENTS)
+
+
+            }
+
             holder.bind(position, postList?.get(position),holder.itemView,context)
         }
         else
         {
-            holder.bindShared(position, postList?.get(position),holder.itemView,context)
+
+            holder.itemView.iv_comment_sharer.setOnClickListener {
+
+                onItemClickListener.onItemClick(position,it,COMMENTS)
+
+
+            }
+            holder.itemView.tv_comment_sharer.setOnClickListener {
+
+                onItemClickListener.onItemClick(position,it,COMMENTS)
+
+
+            }
+
 
             holder.itemView.iv_sharer_profile.setOnClickListener {
 
                 onItemClickListener.onItemClick(position,it, Constants.SHARER_PROFILE)
             }
+            holder.bindShared(position, postList?.get(position),holder.itemView,context)
         }
 
     }
@@ -243,7 +263,7 @@ class MyProfileFeedsAdapter(context: Context, post: List<HomePostData>, onItemCl
             itemView.tv_username.setText(post?.user?.name)
             itemView.tv_post_description .setText(post?.description)
             itemView.tv_like.setText(post?.like_count.toString())
-            itemView.tv_comment.setText(post?.comment_count.toString()+" comment")
+            itemView.tv_comment_sharer.setText(post?.comment_count.toString()+" comment")
             itemView.tv_sharer_username.setText(post?.shared_by?.name)
             itemView.tv_sharer_username.visibility = View.INVISIBLE
             itemView.tv_username.visibility = View.INVISIBLE

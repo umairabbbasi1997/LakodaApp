@@ -21,5 +21,6 @@ data class User(
     val social_token: Any,
     val social_type: Any,
     val updated_at: String,
-    val verified_code: Any
+    val verified_code: Any,
+    val is_berbix_verified:String
 )

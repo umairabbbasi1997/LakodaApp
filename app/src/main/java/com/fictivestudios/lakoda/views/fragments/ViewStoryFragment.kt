@@ -19,7 +19,6 @@ import androidx.navigation.fragment.findNavController
 import com.fictivestudios.imdfitness.activities.fragments.BaseFragment
 import com.fictivestudios.lakoda.R
 import com.fictivestudios.lakoda.utils.Titlebar
-import com.fictivestudios.lakoda.viewModel.ViewStoryViewModel
 import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.fictivestudios.lakoda.views.activities.RegisterationActivity
 import com.fictivestudios.ravebae.utils.Constants
@@ -52,7 +51,6 @@ class ViewStoryFragment : BaseFragment() {
     private val SELECT_VIDEO: Int = 29
     var isAttachment = false
     private lateinit var mView: View
-    private lateinit var viewModel: ViewStoryViewModel
     override fun setTitlebar(titlebar: Titlebar) {
 
         titlebar.hideTitleBar()
@@ -62,6 +60,9 @@ class ViewStoryFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+
+
         mView = inflater.inflate(R.layout.view_story_fragment, container, false)
 
 
@@ -91,7 +92,7 @@ class ViewStoryFragment : BaseFragment() {
 
             if (storyDuration !=null )
             {
-                Log.d("durataion",storyDuration.toString())
+                Log.d("duration",storyDuration.toString())
 
 
                 val timer = object: CountDownTimer(storyDuration?.times(1000)?.toLong()!!, 1000) {
@@ -283,10 +284,6 @@ class ViewStoryFragment : BaseFragment() {
     }
 
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ViewStoryViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
+
 
 }

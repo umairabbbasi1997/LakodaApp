@@ -17,7 +17,6 @@ import com.fictivestudios.lakoda.adapters.MyProfileFeedsAdapter
 import com.fictivestudios.lakoda.apiManager.response.*
 import com.fictivestudios.lakoda.utils.PreferenceUtils
 import com.fictivestudios.lakoda.utils.Titlebar
-import com.fictivestudios.lakoda.viewModel.FriendProfileViewModel
 import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.fictivestudios.lakoda.views.activities.RegisterationActivity
 import com.fictivestudios.ravebae.utils.Constants
@@ -50,7 +49,6 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
     private  var userID: String? = null
     private  var userName: String? = null
     private  var profileImage: String? = null
-    private lateinit var viewModel: FriendProfileViewModel
 
     private lateinit var mView: View
 
@@ -81,13 +79,22 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mView = inflater.inflate(R.layout.friend_profile_fragment, container, false)
-
 
 
         userID = arguments?.getString(Constants.USER_ID).toString()
         userName = arguments?.getString(Constants.USER_NAME).toString()
         profileImage = arguments?.getString(Constants.PROFILE).toString()
+
+        if (!this::mView.isInitialized) {
+            mView = inflater.inflate(R.layout.friend_profile_fragment, container, false)
+            if (! userID.isNullOrEmpty() || userID .equals("null") )
+            {
+                getProfile(userID?.toInt())
+            }
+        }
+
+
+
 
         Log.d("postId", "retrievedId$userID")
 
@@ -209,14 +216,7 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
         return mView
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        if (! userID.isNullOrEmpty() || userID .equals("null") )
-        {
-            getProfile(userID?.toInt())
-        }
 
-    }
 
 
     private fun followRequest(userID: Int)
@@ -841,11 +841,7 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
 
 
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(FriendProfileViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
+
 
     override fun onItemClick(position: Int, view: View, value: String) {
 

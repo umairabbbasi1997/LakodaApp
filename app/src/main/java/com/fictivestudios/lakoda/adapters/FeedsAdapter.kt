@@ -91,11 +91,8 @@ class FeedsAdapter(context: Context, post: List<HomePostData>?, onItemClickListe
 
 
 
-        holder.itemView.tv_comment.setOnClickListener {
 
-            onItemClickListener.onItemClick(position,it, Constants.COMMENTS)
 
-        }
         holder.itemView.tv_like.setOnClickListener {
 
             if (holder.itemView.iv_heart.tag == UNLIKED)
@@ -183,16 +180,192 @@ class FeedsAdapter(context: Context, post: List<HomePostData>?, onItemClickListe
 
         if ( postList?.get(position)?.is_post == VIEW_TYPE_POST)
         {
+
+            holder.itemView.tv_like.setOnClickListener {
+
+                if (holder.itemView.iv_heart.tag == UNLIKED)
+                {
+                    holder.itemView.iv_heart.setTag(LIKED)
+                    var count = 0
+                    count = postList?.get(position)?.like_count!!
+                    if (count != null) {
+                        count += 1
+                        holder.itemView.tv_like.text = count.toString()
+                        postList?.get(position)?.like_count = count
+
+                    }
+
+                    holder.itemView.iv_heart.setBackgroundResource(R.drawable.heart_icon)
+                }
+                else
+                {
+                    holder.itemView.iv_heart.setTag(UNLIKED)
+                    var count = 0
+                    count = postList?.get(position)?.like_count!!
+
+
+
+                    if (count != null) {
+                        count -= 1
+                        holder.itemView.tv_like.text = count.toString()
+                        postList?.get(position)?.like_count = count
+                    }
+
+                    holder.itemView.iv_heart.setBackgroundResource(R.drawable.heart_white_icon)
+
+                }
+                onItemClickListener.onItemClick(position,it, Constants.LIKES)
+
+            }
+
+            holder.itemView.iv_heart.setOnClickListener {
+
+                if (holder.itemView.iv_heart.tag == UNLIKED)
+                //(postList?.get(position)?.is_liked == 0)
+                {
+                    holder.itemView.iv_heart.setTag(LIKED)
+
+
+                    var count = 0
+                    count = postList?.get(position)?.like_count!!
+                    if (count != null) {
+                        count += 1
+                        holder.itemView.tv_like.text = count.toString()
+                        holder.itemView.iv_heart.setTag(LIKED)
+                        postList?.get(position)?.like_count = count
+
+                    }
+
+                    holder.itemView.iv_heart.setBackground(context.getDrawable(R.drawable.heart_icon))
+                }
+                else
+                {
+                    holder.itemView.iv_heart.setTag(UNLIKED)
+                    var count = 0
+                    count = postList?.get(position)?.like_count!!
+                    if (count != null) {
+                        count -= 1
+                        holder.itemView.tv_like.text = count.toString()
+                        holder.itemView.iv_heart.setTag(UNLIKED)
+                        postList?.get(position)?.like_count = count
+                    }
+                    holder.itemView.iv_heart.setBackground(context.getDrawable(R.drawable.heart_white_icon))
+                }
+                onItemClickListener.onItemClick(position,it, Constants.LIKES)
+
+            }
+
+
+            holder.itemView.tv_comment.setOnClickListener {
+
+                onItemClickListener.onItemClick(position,it, Constants.COMMENTS)
+
+            }
+
+            holder.itemView.iv_Comment.setOnClickListener {
+                onItemClickListener.onItemClick(position,it, Constants.COMMENTS)
+            }
+
+
+
             holder.bind(position, postList?.get(position),holder.itemView,context)
         }
         else
         {
-            holder.bindShared(position, postList?.get(position),holder.itemView,context)
+
+            holder.itemView.tv_like.setOnClickListener {
+
+                if (holder.itemView.iv_heart.tag == UNLIKED)
+                {
+                    holder.itemView.iv_heart.setTag(LIKED)
+                    var count = 0
+                    count = postList?.get(position)?.like_count!!
+                    if (count != null) {
+                        count += 1
+                        holder.itemView.tv_like.text = count.toString()
+                        postList?.get(position)?.like_count = count
+
+                    }
+
+                    holder.itemView.iv_heart.setBackgroundResource(R.drawable.heart_icon)
+                }
+                else
+                {
+                    holder.itemView.iv_heart.setTag(UNLIKED)
+                    var count = 0
+                    count = postList?.get(position)?.like_count!!
+
+
+
+                    if (count != null) {
+                        count -= 1
+                        holder.itemView.tv_like.text = count.toString()
+                        postList?.get(position)?.like_count = count
+                    }
+
+                    holder.itemView.iv_heart.setBackgroundResource(R.drawable.heart_white_icon)
+
+                }
+                onItemClickListener.onItemClick(position,it, Constants.SHARER_LIKES)
+
+            }
+
+            holder.itemView.iv_heart.setOnClickListener {
+
+                if (holder.itemView.iv_heart.tag == UNLIKED)
+                //(postList?.get(position)?.is_liked == 0)
+                {
+                    holder.itemView.iv_heart.setTag(LIKED)
+
+
+                    var count = 0
+                    count = postList?.get(position)?.like_count!!
+                    if (count != null) {
+                        count += 1
+                        holder.itemView.tv_like.text = count.toString()
+                        holder.itemView.iv_heart.setTag(LIKED)
+                        postList?.get(position)?.like_count = count
+
+                    }
+
+                    holder.itemView.iv_heart.setBackground(context.getDrawable(R.drawable.heart_icon))
+                }
+                else
+                {
+                    holder.itemView.iv_heart.setTag(UNLIKED)
+                    var count = 0
+                    count = postList?.get(position)?.like_count!!
+                    if (count != null) {
+                        count -= 1
+                        holder.itemView.tv_like.text = count.toString()
+                        holder.itemView.iv_heart.setTag(UNLIKED)
+                        postList?.get(position)?.like_count = count
+                    }
+                    holder.itemView.iv_heart.setBackground(context.getDrawable(R.drawable.heart_white_icon))
+                }
+                onItemClickListener.onItemClick(position,it, Constants.SHARER_LIKES)
+
+            }
+
+
+
+
+            holder.itemView.iv_comment_sharer.setOnClickListener {
+                onItemClickListener.onItemClick(position,it, Constants.SHARER_COMMENTS)
+            }
+
+            holder.itemView.tv_comment_sharer.setOnClickListener {
+                onItemClickListener.onItemClick(position,it, Constants.SHARER_COMMENTS)
+            }
 
             holder.itemView.iv_sharer_profile.setOnClickListener {
 
                 onItemClickListener.onItemClick(position,it, Constants.SHARER_PROFILE)
             }
+            holder.bindShared(position, postList?.get(position),holder.itemView,context)
+
+
+
         }
 
 
@@ -264,7 +437,7 @@ class FeedsAdapter(context: Context, post: List<HomePostData>?, onItemClickListe
             itemView.tv_username.setText(post?.user?.name)
             itemView.tv_post_description .setText(post?.description)
             itemView.tv_like.setText(post?.like_count.toString())
-            itemView.tv_comment.setText(post?.comment_count.toString()+" comment")
+            itemView.tv_comment_sharer.setText(post?.comment_count.toString()+" comment")
             itemView.tv_sharer_username.setText(post?.shared_by?.name)
 
             if (Constants.getUser().id.equals(post?.user?.id))

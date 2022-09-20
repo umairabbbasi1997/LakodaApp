@@ -23,12 +23,13 @@ import com.fictivestudios.lakoda.utils.PreferenceUtils
 import com.fictivestudios.lakoda.utils.Titlebar
 import com.fictivestudios.lakoda.utils.getFormDataBody
 import com.fictivestudios.lakoda.utils.getPartMap
-import com.fictivestudios.lakoda.viewModel.SignupViewModel
 import com.fictivestudios.lakoda.views.activities.RegisterationActivity
 import com.fictivestudios.ravebae.utils.Constants
+import com.fictivestudios.ravebae.utils.Constants.Companion.BERBIX_TOKEN
 import com.fictivestudios.ravebae.utils.Constants.Companion.CURRENT_USER_ID
 import com.fictivestudios.ravebae.utils.Constants.Companion.EMAIL
 import com.fictivestudios.ravebae.utils.Constants.Companion.FCM
+import com.fictivestudios.ravebae.utils.Constants.Companion.IS_ID_CARD_VERIFIED
 import com.github.dhaval2404.imagepicker.ImagePicker
 import kotlinx.android.synthetic.main.signup_fragment.view.*
 import kotlinx.coroutines.Dispatchers
@@ -54,7 +55,6 @@ class SignupFragment : BaseFragment() {
     var dialog:Dialog? = null
     private var isShowPass=false
     private var isShowRepeatPass=false
-    private lateinit var viewModel: SignupViewModel
     var isId=false
     private var fileTemporaryProfilePicture: File? = null
     private var fileTemporaryIdCard: File? = null
@@ -196,8 +196,8 @@ class SignupFragment : BaseFragment() {
         {
             Constants.isAccountLogin = true
 
-            showAgeVerifyDialog()
-            //signUp()
+            //showAgeVerifyDialog()
+            signUp()
 //
 
 
@@ -231,21 +231,23 @@ class SignupFragment : BaseFragment() {
         }
 
         var imagepart: MultipartBody.Part? = null
-        var idCardpart: MultipartBody.Part? = null
+       // var idCardpart: MultipartBody.Part? = null
 
         if (fileTemporaryProfilePicture != null){
             imagepart = fileTemporaryProfilePicture?.getPartMap("image")
         }
 
+/*
         if (fileTemporaryIdCard != null){
             idCardpart = fileTemporaryIdCard?.getPartMap("id_card")
         }
+*/
 
 
         GlobalScope.launch(Dispatchers.IO)
         {
 
-            apiClient.signup(signupHM,imagepart,idCardpart).enqueue(object: retrofit2.Callback<SignupResponse> {
+            apiClient.signup(signupHM,imagepart).enqueue(object: retrofit2.Callback<SignupResponse> {
                 override fun onResponse(
                     call: Call<SignupResponse>,
                     response: Response<SignupResponse>
@@ -278,6 +280,9 @@ class SignupFragment : BaseFragment() {
 
                             PreferenceUtils.saveString(CURRENT_USER_ID,response.data.id.toString())
                             PreferenceUtils.saveString(EMAIL,signupBinding.et_email.text.toString())
+                            PreferenceUtils.saveString(BERBIX_TOKEN,response.data.client_token)
+
+
 
 
                             RegisterationActivity.getRegActivity
@@ -333,11 +338,6 @@ class SignupFragment : BaseFragment() {
 
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(SignupViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
 
 
 

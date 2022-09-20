@@ -20,7 +20,6 @@ import com.fictivestudios.lakoda.apiManager.response.GetChatListData
 import com.fictivestudios.lakoda.apiManager.response.GetChatListResponse
 import com.fictivestudios.lakoda.utils.PreferenceUtils
 import com.fictivestudios.lakoda.utils.Titlebar
-import com.fictivestudios.lakoda.viewModel.MessagesViewModel
 import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.fictivestudios.lakoda.views.activities.RegisterationActivity
 import com.fictivestudios.ravebae.utils.Constants
@@ -37,7 +36,6 @@ class MessagesFragment : BaseFragment() , OnItemClickListener {
         fun newInstance() = MessagesFragment()
     }
 
-    private lateinit var viewModel: MessagesViewModel
 
     private lateinit var mView: View
     private var chatList = ArrayList<GetChatListData>()
@@ -63,16 +61,18 @@ class MessagesFragment : BaseFragment() , OnItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mView = inflater.inflate(R.layout.fragment_messages, container, false)
+
+        if (!this::mView.isInitialized) {
+            mView = inflater.inflate(R.layout.fragment_messages, container, false)
+
+            getChatList()
+        }
+
 
 
         return mView
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        getChatList()
-    }
 
 
     private fun getChatList()
@@ -202,11 +202,7 @@ class MessagesFragment : BaseFragment() , OnItemClickListener {
 
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MessagesViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
+
 
     override fun onItemClick(position: Int, view: View, value: String) {
 

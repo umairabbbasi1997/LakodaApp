@@ -165,6 +165,7 @@
                 android:backgroundTint="@color/white"
                 android:gravity="start"
                 android:hint="@string/description"
+                android:maxLength="30"
                 android:minHeight="150dp"
                 android:textColor="@color/gray_text"
                 android:textColorHint="@color/dark_gray_text"

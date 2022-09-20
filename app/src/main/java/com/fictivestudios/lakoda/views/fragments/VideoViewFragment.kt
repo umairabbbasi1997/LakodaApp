@@ -22,7 +22,6 @@ import com.fictivestudios.lakoda.apiManager.response.HomePostData
 import com.fictivestudios.lakoda.apiManager.response.HomePostResponse
 import com.fictivestudios.lakoda.utils.PreferenceUtils
 import com.fictivestudios.lakoda.utils.Titlebar
-import com.fictivestudios.lakoda.viewModel.VideoViewViewModel
 import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.fictivestudios.lakoda.views.activities.RegisterationActivity
 import com.fictivestudios.ravebae.utils.Constants
@@ -40,7 +39,6 @@ class VideoViewFragment : BaseFragment() ,OnItemClickListener{
         fun newInstance() = VideoViewFragment()
     }
 
-    private lateinit var viewModel: VideoViewViewModel
     private lateinit var mView: View
 
     private var videosAdapter:VideosAdapter? = null
@@ -56,10 +54,15 @@ class VideoViewFragment : BaseFragment() ,OnItemClickListener{
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-       mView = inflater.inflate(R.layout.video_view_fragment, container, false)
+
+        if (!this::mView.isInitialized) {
+            mView = inflater.inflate(R.layout.video_view_fragment, container, false)
+            getAllPost()
+        }
 
 
-        getAllPost()
+
+
 
         return mView
     }
@@ -466,18 +469,27 @@ class VideoViewFragment : BaseFragment() ,OnItemClickListener{
 
 
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(VideoViewViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
 
     override fun onItemClick(position: Int, view: View, value: String) {
 
 
         if (value == Constants.COMMENTS)
         {
-            val bundle = bundleOf(Constants.POST_ID to   videoList?.get(position)?.id.toString())
+            val bundle = bundleOf(Constants.POST_ID to   videoList?.get(position)?.id.toString(),
+                Constants.POST_TYPE to Constants.TYPE_POST)
+            Log.d(Constants.POST_ID,  videoList?.get(position)?.id.toString())
+
+            MainActivity.getMainActivity
+                ?.navControllerMain?.navigate(R.id.commentsFragment,bundle)
+        }
+
+        else if(value == Constants.SHARER_COMMENTS)
+        {
+
+            val bundle = bundleOf(
+                Constants.POST_ID to   videoList?.get(position)?.id.toString(),
+                Constants.POST_TYPE to Constants.TYPE_SHARE
+            )
             Log.d(Constants.POST_ID,  videoList?.get(position)?.id.toString())
 
             MainActivity.getMainActivity
@@ -487,6 +499,12 @@ class VideoViewFragment : BaseFragment() ,OnItemClickListener{
         {
 
             likeUnlike(Constants.TYPE_POST, videoList?.get(position)?.id)
+        }
+
+        else if(value == Constants.SHARER_LIKES)
+        {
+
+            likeUnlike(Constants.TYPE_SHARE, videoList?.get(position)?.id)
         }
         else if (value == Constants.PROFILE)
         {

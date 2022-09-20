@@ -20,7 +20,6 @@ import com.fictivestudios.lakoda.adapters.StoriesAdapter
 import com.fictivestudios.lakoda.apiManager.response.*
 import com.fictivestudios.lakoda.utils.PreferenceUtils
 import com.fictivestudios.lakoda.utils.Titlebar
-import com.fictivestudios.lakoda.viewModel.FeedsViewModel
 import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.fictivestudios.lakoda.views.activities.RegisterationActivity
 import com.fictivestudios.ravebae.utils.Constants
@@ -30,7 +29,10 @@ import com.fictivestudios.ravebae.utils.Constants.Companion.IMAGE
 import com.fictivestudios.ravebae.utils.Constants.Companion.IMAGE_BASE_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.LIKES
 import com.fictivestudios.ravebae.utils.Constants.Companion.POST_ID
+import com.fictivestudios.ravebae.utils.Constants.Companion.POST_TYPE
 import com.fictivestudios.ravebae.utils.Constants.Companion.PROFILE
+import com.fictivestudios.ravebae.utils.Constants.Companion.SHARER_COMMENTS
+import com.fictivestudios.ravebae.utils.Constants.Companion.SHARER_LIKES
 import com.fictivestudios.ravebae.utils.Constants.Companion.SHARER_PROFILE
 import com.fictivestudios.ravebae.utils.Constants.Companion.STORY_DURATION
 import com.fictivestudios.ravebae.utils.Constants.Companion.TYPE_POST
@@ -39,6 +41,7 @@ import com.fictivestudios.ravebae.utils.Constants.Companion.USER_ID
 import com.fictivestudios.ravebae.utils.Constants.Companion.USER_IMAGE
 import com.fictivestudios.ravebae.utils.Constants.Companion.USER_NAME
 import com.fictivestudios.ravebae.utils.Constants.Companion.VIEW_STORY
+import com.fictivestudios.ravebae.utils.Constants.Companion.VIEW_TYPE_POST
 import kotlinx.android.synthetic.main.feeds_fragment.view.*
 import kotlinx.android.synthetic.main.feeds_fragment.view.shimmer_view_container
 import kotlinx.android.synthetic.main.feeds_fragment.view.tv_search
@@ -60,7 +63,6 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
         fun newInstance() = FeedsFragment()
     }
 
-    private lateinit var viewModel: FeedsViewModel
 
     override fun setTitlebar(titlebar: Titlebar) {
 
@@ -72,7 +74,13 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
         savedInstanceState: Bundle?
     ): View? {
 
-        mView = inflater.inflate(R.layout.feeds_fragment, container, false)
+        if (!this::mView.isInitialized)
+        {
+            mView = inflater.inflate(R.layout.feeds_fragment, container, false)
+            getAllPost()
+            getStories()
+        }
+
 
 
         //mView.rv_stories.adapter = StoriesAdapter(requireContext(), response, this)
@@ -84,8 +92,7 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
         super.onViewCreated(view, savedInstanceState)
 
        // mView.rv_stories.adapter= StoriesAdapter(requireContext(),null,this@FeedsFragment)
-        getAllPost()
-        getStories()
+
     }
 
     override fun onStart() {
@@ -485,18 +492,26 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
 
 
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(FeedsViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
 
     override fun onItemClick(position: Int, view: View, value: String) {
 
 
         if (value == COMMENTS)
         {
-            val bundle = bundleOf(POST_ID to   arrayPostList?.get(position)?.id.toString())
+            val bundle = bundleOf(POST_ID to   arrayPostList?.get(position)?.id.toString(),
+                POST_TYPE to   TYPE_POST)
+            Log.d(POST_ID,  arrayPostList?.get(position)?.id.toString())
+
+            MainActivity.getMainActivity
+                ?.navControllerMain?.navigate(R.id.commentsFragment,bundle)
+        }
+
+        else if(value == SHARER_COMMENTS)
+        {
+
+            val bundle = bundleOf(POST_ID to   arrayPostList?.get(position)?.id.toString(),
+                POST_TYPE to   TYPE_SHARE
+            )
             Log.d(POST_ID,  arrayPostList?.get(position)?.id.toString())
 
             MainActivity.getMainActivity
@@ -506,6 +521,12 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
         {
 
             likeUnlike(TYPE_POST, arrayPostList?.get(position)?.id)
+        }
+
+        else if(value == SHARER_LIKES)
+        {
+
+            likeUnlike(TYPE_SHARE, arrayPostList?.get(position)?.id)
         }
         else if (value == PROFILE)
         {
@@ -536,20 +557,26 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
             val bundle = bundleOf(
                 USER_ID to   arrayPostList?.get(position)?.shared_by.id.toString(),
                 USER_NAME to   arrayPostList?.get(position)?.shared_by.name.toString(),
-                PROFILE to   arrayPostList?.get(position)?.shared_by.image.toString()
+                PROFILE to   arrayPostList?.get(position)?.shared_by?.image?.toString()
 
             )
 
 
-            MainActivity.getMainActivity
-                ?.navControllerMain?.navigate(R.id.friendProfileFragment,bundle)
+            if (!Constants.getUser().id.equals(arrayPostList?.get(position)?.shared_by?.id))
+            {
+                MainActivity.getMainActivity
+                    ?.navControllerMain?.navigate(R.id.friendProfileFragment,bundle)
+
+            }
+            else
+            {
+                MainActivity.getMainActivity
+                    ?.navControllerMain?.navigate(R.id.myProfileFragment)
+
+            }
         }
 
-        else if(value == LIKES)
-        {
 
-            likeUnlike(TYPE_POST, arrayPostList?.get(position)?.id)
-        }
 
         else if(value == CREATE_STORY)
         {

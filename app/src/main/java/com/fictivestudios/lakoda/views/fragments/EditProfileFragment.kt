@@ -20,7 +20,6 @@ import com.fictivestudios.lakoda.utils.PreferenceUtils
 import com.fictivestudios.lakoda.utils.Titlebar
 import com.fictivestudios.lakoda.utils.getFormDataBody
 import com.fictivestudios.lakoda.utils.getPartMap
-import com.fictivestudios.lakoda.viewModel.EditProfileViewModel
 import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.fictivestudios.ravebae.utils.Constants
 import com.fictivestudios.ravebae.utils.Constants.Companion.IMAGE_BASE_URL
@@ -61,7 +60,6 @@ class EditProfileFragment : BaseFragment() {
         fun newInstance() = EditProfileFragment()
     }
 
-    private lateinit var viewModel: EditProfileViewModel
 
     override fun setTitlebar(titlebar: Titlebar) {
         titlebar.setBtnBack("EDIT PROFILE")
@@ -71,9 +69,14 @@ class EditProfileFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mView =  inflater.inflate(R.layout.edit_profile_fragment, container, false)
 
-        setUser()
+
+        if (!this::mView.isInitialized) {
+            mView =  inflater.inflate(R.layout.edit_profile_fragment, container, false)
+
+            setUser()
+        }
+
 
         mView.btn_save.setOnClickListener {
 
@@ -284,11 +287,6 @@ class EditProfileFragment : BaseFragment() {
 
 
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(EditProfileViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
 
 
     private fun openImagePicker()

@@ -20,7 +20,6 @@ import com.fictivestudios.lakoda.apiManager.response.GetFollowingData
 import com.fictivestudios.lakoda.apiManager.response.GetFollowingResponse
 import com.fictivestudios.lakoda.utils.PreferenceUtils
 import com.fictivestudios.lakoda.utils.Titlebar
-import com.fictivestudios.lakoda.viewModel.FollowersViewModel
 import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.fictivestudios.lakoda.views.activities.RegisterationActivity
 import com.fictivestudios.ravebae.utils.Constants
@@ -41,7 +40,6 @@ class FollowersFragment : BaseFragment() ,OnItemClickListener{
 
     private var userID: String? = null
     private var isRemove: Boolean? = false
-    private lateinit var viewModel: FollowersViewModel
     private lateinit var mView: View
 
     private var followersList = ArrayList<GetFollowingData>()
@@ -54,20 +52,28 @@ class FollowersFragment : BaseFragment() ,OnItemClickListener{
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mView = inflater.inflate(R.layout.followers_fragment, container, false)
-
 
         userID = arguments?.getString(Constants.USER_ID)
         isRemove = arguments?.getBoolean(Constants.IS_REMOVE)
 
+
+        if (!this::mView.isInitialized) {
+
+            mView = inflater.inflate(R.layout.followers_fragment, container, false)
+
+            if (! userID.isNullOrEmpty() || userID.equals("null"))
+            {
+
+                getFollowers(userID?.toInt()!!)
+
+            }
+        }
+
+
+
         Log.d("userId", "$userID")
 
-        if (! userID.isNullOrEmpty() || userID.equals("null"))
-        {
 
-            getFollowers(userID?.toInt()!!)
-
-        }
 
         return mView
     }
@@ -295,11 +301,7 @@ class FollowersFragment : BaseFragment() ,OnItemClickListener{
     }
 
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(FollowersViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
+
 
     override fun onItemClick(position: Int, view: View, value: String) {
 

@@ -10,16 +10,15 @@ import com.fictivestudios.lakoda.R
 import com.fictivestudios.lakoda.adapters.HomeAdapter
 import com.fictivestudios.lakoda.databinding.HomeFragmentBinding
 import com.fictivestudios.lakoda.utils.Titlebar
-import com.fictivestudios.lakoda.viewModel.HomeViewModel
 
 class   HomeFragment : BaseFragment() {
 
     private lateinit var homeFragmentBinding: HomeFragmentBinding
+    private lateinit var mView: View
     companion object {
         fun newInstance() = HomeFragment()
     }
 
-    private lateinit var viewModel: HomeViewModel
     override fun setTitlebar(titlebar: Titlebar) {
         titlebar.setHomeTitle("HOME")
     }
@@ -27,11 +26,15 @@ class   HomeFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-        var mView =inflater.inflate(R.layout.home_fragment, container, false)
+        if (!this::homeFragmentBinding.isInitialized) {
+            mView =inflater.inflate(R.layout.home_fragment, container, false)
 
-        homeFragmentBinding = HomeFragmentBinding.bind(mView)
+            homeFragmentBinding = HomeFragmentBinding.bind(mView)
+            initRecylcerView()
+        }
+
       //  viewModel = homeFragmentBinding.v
-        initRecylcerView()
+
 
             return mView
     }
@@ -44,7 +47,6 @@ class   HomeFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         // TODO: Use the ViewModel
     }
 

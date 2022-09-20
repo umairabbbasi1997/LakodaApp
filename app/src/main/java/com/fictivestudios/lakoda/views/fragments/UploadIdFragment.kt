@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.fictivestudios.lakoda.R
-import com.fictivestudios.lakoda.viewModel.UploadIdViewModel
 import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.fictivestudios.lakoda.views.activities.RegisterationActivity
 import com.github.dhaval2404.imagepicker.ImagePicker
@@ -25,7 +24,6 @@ class UploadIdFragment : Fragment() {
     }
 
     private lateinit var mView: View
-    private lateinit var viewModel: UploadIdViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -79,12 +77,6 @@ class UploadIdFragment : Fragment() {
     }
 
 
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(UploadIdViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
 
 
 }

@@ -16,7 +16,6 @@ import com.fictivestudios.lakoda.R
 import com.fictivestudios.lakoda.adapters.MyProfileFeedsAdapter
 import com.fictivestudios.lakoda.apiManager.response.*
 import com.fictivestudios.lakoda.utils.Titlebar
-import com.fictivestudios.lakoda.viewModel.MyProfileViewModel
 import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.fictivestudios.ravebae.utils.Constants
 import com.fictivestudios.ravebae.utils.Constants.Companion.getUser
@@ -45,7 +44,6 @@ class MyProfileFragment : BaseFragment() ,OnItemClickListener {
         fun newInstance() = MyProfileFragment()
     }
 
-    private lateinit var viewModel: MyProfileViewModel
 
     private var postsArray = ArrayList<HomePostData>()
 
@@ -67,13 +65,18 @@ class MyProfileFragment : BaseFragment() ,OnItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mView = inflater.inflate(R.layout.my_profile_fragment, container, false)
-
-
-
         userID = arguments?.getString(Constants.USER_ID).toString()
 
         Log.d("userId", "retrievedId$userID")
+        if (!this::mView.isInitialized) {
+            mView = inflater.inflate(R.layout.my_profile_fragment, container, false)
+            getProfile()
+        }
+
+
+
+
+
 
 /*
         mView.lay_following.setOnClickListener {
@@ -140,10 +143,6 @@ class MyProfileFragment : BaseFragment() ,OnItemClickListener {
         return mView
     }
 
-    override fun onStart() {
-        super.onStart()
-        getProfile()
-    }
 
 
 
@@ -353,11 +352,7 @@ class MyProfileFragment : BaseFragment() ,OnItemClickListener {
     }
 
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MyProfileViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
+
 
     override fun onItemClick(position: Int, view: View, value: String) {
 

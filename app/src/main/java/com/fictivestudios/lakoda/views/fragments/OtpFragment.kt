@@ -17,13 +17,13 @@ import com.fictivestudios.lakoda.apiManager.response.CommonResponse
 import com.fictivestudios.lakoda.apiManager.response.VerifyOtpResponse
 import com.fictivestudios.lakoda.utils.PreferenceUtils
 import com.fictivestudios.lakoda.utils.Titlebar
-import com.fictivestudios.lakoda.viewModel.OtpViewModel
 import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.fictivestudios.lakoda.views.activities.RegisterationActivity
 import com.fictivestudios.ravebae.utils.Constants
 import com.fictivestudios.ravebae.utils.Constants.Companion.CURRENT_USER_ID
 import com.fictivestudios.ravebae.utils.Constants.Companion.EMAIL
 import com.fictivestudios.ravebae.utils.Constants.Companion.FCM
+import com.fictivestudios.ravebae.utils.Constants.Companion.IS_ID_CARD_VERIFIED
 import com.fictivestudios.ravebae.utils.Constants.Companion.USER_OBJECT
 import com.fictivestudios.ravebae.utils.Constants.Companion.VERIFY_TYPE_ACCOUNT
 import com.fictivestudios.ravebae.utils.Constants.Companion.VERIFY_TYPE_PASSWORD
@@ -44,7 +44,6 @@ class OtpFragment : BaseFragment() {
         fun newInstance() = OtpFragment()
     }
 
-    private lateinit var viewModel: OtpViewModel
 
     private lateinit var mView: View
     lateinit var sessionManager: SessionManager
@@ -146,10 +145,14 @@ class OtpFragment : BaseFragment() {
                                 val json:String = gson.toJson(verifyResponse.data.user)
                                 PreferenceUtils.saveString(USER_OBJECT,json)
                                 sessionManager.saveAuthToken(verifyResponse.data.bearer_token)
+                                PreferenceUtils.saveString(IS_ID_CARD_VERIFIED,verifyResponse.data.user.is_berbix_verified)
 
-                                startActivity(Intent(requireContext(), MainActivity::class.java))
+                                RegisterationActivity.getRegActivity
+                                    ?.navControllerReg?.navigate(R.id.idVerificationFragment)
+
+/*                                startActivity(Intent(requireContext(), MainActivity::class.java))
                                 RegisterationActivity.getRegActivity?.finish()
-                                RegisterationActivity.getRegActivity = null
+                                RegisterationActivity.getRegActivity = null*/
                             }
                             else
                             {
@@ -275,10 +278,6 @@ class OtpFragment : BaseFragment() {
 
 
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(OtpViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
+
 
 }

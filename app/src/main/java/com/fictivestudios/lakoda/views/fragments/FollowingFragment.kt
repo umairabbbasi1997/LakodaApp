@@ -20,7 +20,6 @@ import com.fictivestudios.lakoda.apiManager.response.GetFollowingData
 import com.fictivestudios.lakoda.apiManager.response.GetFollowingResponse
 import com.fictivestudios.lakoda.utils.PreferenceUtils
 import com.fictivestudios.lakoda.utils.Titlebar
-import com.fictivestudios.lakoda.viewModel.FollowingViewModel
 import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.fictivestudios.lakoda.views.activities.RegisterationActivity
 import com.fictivestudios.ravebae.utils.Constants
@@ -40,7 +39,6 @@ class FollowingFragment : BaseFragment() ,OnItemClickListener{
     }
 
     private var userID: String? = null
-    private lateinit var viewModel: FollowingViewModel
     private lateinit var mView: View
 
     private var followingList= ArrayList<GetFollowingData>()
@@ -318,11 +316,7 @@ class FollowingFragment : BaseFragment() ,OnItemClickListener{
 
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(FollowingViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
+
 
 
 

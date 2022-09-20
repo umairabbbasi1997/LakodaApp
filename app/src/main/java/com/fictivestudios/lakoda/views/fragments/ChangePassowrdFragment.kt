@@ -17,7 +17,6 @@ import com.fictivestudios.lakoda.apiManager.response.CommonResponse
 import com.fictivestudios.lakoda.apiManager.response.ForgetPasswordResponse
 import com.fictivestudios.lakoda.utils.PreferenceUtils
 import com.fictivestudios.lakoda.utils.Titlebar
-import com.fictivestudios.lakoda.viewModel.ChangePassowrdViewModel
 import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.fictivestudios.lakoda.views.activities.RegisterationActivity
 import com.fictivestudios.ravebae.utils.Constants
@@ -43,7 +42,6 @@ class ChangePassowrdFragment : BaseFragment() {
     private var isShowRepeatPass = false
     private var isShowNewPass = false
 
-    private lateinit var viewModel: ChangePassowrdViewModel
 
     private lateinit var mView: View
     override fun setTitlebar(titlebar: Titlebar) {
@@ -215,10 +213,6 @@ class ChangePassowrdFragment : BaseFragment() {
     }
 
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ChangePassowrdViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
+
 
 }

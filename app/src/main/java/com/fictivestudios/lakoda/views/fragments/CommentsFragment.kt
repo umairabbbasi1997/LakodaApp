@@ -26,11 +26,11 @@ import com.fictivestudios.lakoda.utils.PreferenceUtils
 import com.fictivestudios.lakoda.utils.Titlebar
 import com.fictivestudios.lakoda.utils.getFormDataBody
 import com.fictivestudios.lakoda.utils.getPartMap
-import com.fictivestudios.lakoda.viewModel.CommentsViewModel
 import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.fictivestudios.lakoda.views.activities.RegisterationActivity
 import com.fictivestudios.ravebae.utils.Constants
 import com.fictivestudios.ravebae.utils.Constants.Companion.POST_ID
+import com.fictivestudios.ravebae.utils.Constants.Companion.POST_TYPE
 import com.fictivestudios.ravebae.utils.Constants.Companion.TYPE_POST
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.permissionx.guolindev.PermissionX
@@ -56,12 +56,12 @@ class CommentsFragment : BaseFragment() ,OnItemClickListener{
 
     private var commentsList: ArrayList<GetCommentsData>? = ArrayList<GetCommentsData>()
     private var postID: String?=null
+    private var postType: String?=null
     private var fileTemporaryFile: File? = null
     private val PICKFILE_RESULT_CODE: Int =88
     private val SELECT_VIDEO: Int = 29
     var isAttachment = false
 
-    private lateinit var viewModel: CommentsViewModel
     private lateinit var mView: View
     override fun setTitlebar(titlebar: Titlebar) {
         titlebar.setBtnBack("COMMENTS")
@@ -71,12 +71,22 @@ class CommentsFragment : BaseFragment() ,OnItemClickListener{
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mView = inflater.inflate(R.layout.comments_fragment, container, false)
 
+
+        if (!this::mView.isInitialized) {
+            mView = inflater.inflate(R.layout.comments_fragment, container, false)
+
+            if (!postID.isNullOrEmpty() || !postID.equals( "null") && !postType.isNullOrEmpty() || !postType.equals( "null"))
+            {
+                getComments()
+            }
+        }
 
         postID = arguments?.getString(POST_ID).toString()
+        postType = arguments?.getString(POST_TYPE).toString()
 
-        Log.d("postId", "retrievedId$postID")
+        Log.d("postId", "postId$postID")
+        Log.d("postType: ", postType.toString())
 
 
        // val bundle = getIntent().extras
@@ -125,14 +135,7 @@ class CommentsFragment : BaseFragment() ,OnItemClickListener{
         return mView
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
-        if (!postID.isNullOrEmpty() || !postID.equals( "null"))
-        {
-            getComments()
-        }
-    }
 
     private fun getComments()
     {
@@ -147,84 +150,86 @@ class CommentsFragment : BaseFragment() ,OnItemClickListener{
         {
 
             postID?.toInt()?.let {
-                apiClient.getComments(it, TYPE_POST).enqueue(object: retrofit2.Callback<GetCommentsResponse> {
-                    override fun onResponse(
-                        call: Call<GetCommentsResponse>,
-                        response: Response<GetCommentsResponse>
-                    ) {
-                        activity?.runOnUiThread(java.lang.Runnable {
+                postType?.let { it1 ->
+                    apiClient.getComments(it, it1).enqueue(object: retrofit2.Callback<GetCommentsResponse> {
+                        override fun onResponse(
+                            call: Call<GetCommentsResponse>,
+                            response: Response<GetCommentsResponse>
+                        ) {
+                            activity?.runOnUiThread(java.lang.Runnable {
 
-                              mView.shimmer_comments.stopShimmer()
-                                      mView.shimmer_comments.visibility = View.GONE
-                            mView.commment_lay.visibility =View.VISIBLE
-                        })
+                                mView.shimmer_comments.stopShimmer()
+                                mView.shimmer_comments.visibility = View.GONE
+                                mView.commment_lay.visibility =View.VISIBLE
+                            })
 
-                        Log.d("Response", ""+response?.body()?.message)
-                        Log.d("Response", ""+response?.body()?.message)
-                        try {
-
-
-                            if (response.isSuccessful) {
+                            Log.d("Response", ""+response?.body()?.message)
+                            Log.d("Response", ""+response?.body()?.message)
+                            try {
 
 
-                                if (response?.message() == "Unauthorized"||
-                                    response?.body()?.message == "Unauthorized"
-                                    || response?.message() == "Unauthenticated.") {
-                                    PreferenceUtils.remove(Constants.USER_OBJECT)
-                                    PreferenceUtils.remove(Constants.ACCESS_TOKEN)
-                                    MainActivity.getMainActivity?.finish()
-                                    MainActivity.getMainActivity=null
-                                    startActivity(Intent(requireContext(), RegisterationActivity::class.java))
-                                    activity?.runOnUiThread(java.lang.Runnable {
-                                        Toast.makeText(requireContext(), "Login expired please login again", Toast.LENGTH_SHORT).show()
-                                    })
-                                }
+                                if (response.isSuccessful) {
 
-                                if (response.body()?.status==1) {
 
-                                    if (response.body()?.data != null) {
-
-                                        var response = response.body()?.data
-
-                                        setData(response)
+                                    if (response?.message() == "Unauthorized"||
+                                        response?.body()?.message == "Unauthorized"
+                                        || response?.message() == "Unauthenticated.") {
+                                        PreferenceUtils.remove(Constants.USER_OBJECT)
+                                        PreferenceUtils.remove(Constants.ACCESS_TOKEN)
+                                        MainActivity.getMainActivity?.finish()
+                                        MainActivity.getMainActivity=null
+                                        startActivity(Intent(requireContext(), RegisterationActivity::class.java))
+                                        activity?.runOnUiThread(java.lang.Runnable {
+                                            Toast.makeText(requireContext(), "Login expired please login again", Toast.LENGTH_SHORT).show()
+                                        })
                                     }
 
+                                    if (response.body()?.status==1) {
+
+                                        if (response.body()?.data != null) {
+
+                                            var response = response.body()?.data
+
+                                            setData(response)
+                                        }
+
+
+                                    } else {
+                                        activity?.runOnUiThread(java.lang.Runnable {
+                                            Toast.makeText(requireContext(),""+ response.body()?.message, Toast.LENGTH_SHORT).show()
+                                        })
+                                    }
 
                                 } else {
                                     activity?.runOnUiThread(java.lang.Runnable {
-                                        Toast.makeText(requireContext(),""+ response.body()?.message, Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
                                     })
+
                                 }
-
-                            } else {
+                            } catch (e:Exception) {
+                                //Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT).show()
                                 activity?.runOnUiThread(java.lang.Runnable {
-                                    Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
+
+                                    mView.shimmer_comments.stopShimmer()
+                                    mView.shimmer_comments.visibility = View.GONE
+                                    Toast.makeText(requireContext(), "msg: "+e.message, Toast.LENGTH_SHORT).show()
+                                    Log.d("execption","msg: "+e.localizedMessage)
                                 })
-
                             }
-                        } catch (e:Exception) {
-                            //Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT).show()
-                            activity?.runOnUiThread(java.lang.Runnable {
+                        }
 
-                                      mView.shimmer_comments.stopShimmer()
-                                              mView.shimmer_comments.visibility = View.GONE
-                                Toast.makeText(requireContext(), "msg: "+e.message, Toast.LENGTH_SHORT).show()
-                                Log.d("execption","msg: "+e.localizedMessage)
+                        override fun onFailure(call: Call<GetCommentsResponse>, t: Throwable) {
+
+                            activity?.runOnUiThread(java.lang.Runnable {
+                                //mView.pb_pofile.visibility=View.GONE
+                                mView.shimmer_comments.stopShimmer()
+                                mView.shimmer_comments.visibility = View.GONE
+                                mView.commment_lay.visibility =View.VISIBLE
+                                Toast.makeText(requireContext(), ""+t.message, Toast.LENGTH_SHORT).show()
                             })
                         }
-                    }
-
-                    override fun onFailure(call: Call<GetCommentsResponse>, t: Throwable) {
-
-                        activity?.runOnUiThread(java.lang.Runnable {
-                            //mView.pb_pofile.visibility=View.GONE
-                            mView.shimmer_comments.stopShimmer()
-                            mView.shimmer_comments.visibility = View.GONE
-                            mView.commment_lay.visibility =View.VISIBLE
-                            Toast.makeText(requireContext(), ""+t.message, Toast.LENGTH_SHORT).show()
-                        })
-                    }
-                })
+                    })
+                }
             }
 
         }
@@ -245,7 +250,7 @@ class CommentsFragment : BaseFragment() ,OnItemClickListener{
         val commentHM = HashMap<String, RequestBody>().apply {
             this["comment"] = mView.et_comment .text.toString().getFormDataBody()
             this["post_id"] = postID.toString().getFormDataBody()
-            this["type"] = "post ".toString().getFormDataBody()
+            this["type"] = postType.toString().getFormDataBody()
         }
 
 
@@ -401,11 +406,6 @@ class CommentsFragment : BaseFragment() ,OnItemClickListener{
 
 
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(CommentsViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
 
     override fun onItemClick(position: Int, view: View, value: String) {
          if (value == Constants.PROFILE)

@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import com.fictivestudios.imdfitness.activities.fragments.BaseFragment
 import com.fictivestudios.lakoda.R
 import com.fictivestudios.lakoda.utils.Titlebar
-import com.fictivestudios.lakoda.viewModel.UserProfileViewModel
 import com.fictivestudios.lakoda.views.activities.MainActivity
 import kotlinx.android.synthetic.main.user_profile_fragment.view.*
 
@@ -20,7 +19,6 @@ class UserProfileFragment : BaseFragment() {
         fun newInstance() = UserProfileFragment()
     }
 
-    private lateinit var viewModel: UserProfileViewModel
 
     override fun setTitlebar(titlebar: Titlebar) {
         titlebar.setBtnBack("USER PROFILE")
@@ -39,10 +37,6 @@ class UserProfileFragment : BaseFragment() {
         return mView
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(UserProfileViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
+
 
 }

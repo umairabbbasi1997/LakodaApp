@@ -199,7 +199,7 @@ class ChatAdapter(
                 itemView.iv_video_received.visibility = View.GONE
                 itemView.btn_play_r.visibility = View.GONE
                 itemView.map_view_rec.visibility = View.GONE
-                itemView.text_ll.setBackgroundColor(context.resources.getColor( R.color.black))
+                itemView.text_ll.setBackgroundColor(context.resources.getColor( R.color.black_color))
                 Picasso
                     .get()
                     .load(IMAGE_BASE_URL+model?.message)?.into(itemView.iv_media_received)
@@ -218,7 +218,7 @@ class ChatAdapter(
                     itemView.tv_received_reply.visibility = View.GONE
                     itemView.btn_play_r.visibility = View.VISIBLE
                     itemView.map_view_rec.visibility = View.GONE
-                    itemView.text_ll.setBackgroundColor(context.resources.getColor( R.color.black))
+                    itemView.text_ll.setBackgroundColor(context.resources.getColor( R.color.black_color))
 
                     itemView.iv_video_received.visibility = View.VISIBLE
 
@@ -253,7 +253,7 @@ class ChatAdapter(
                 itemView.iv_video_received.visibility = View.GONE
                 itemView.btn_play_r.visibility = View.GONE
 
-                itemView.text_ll.setBackgroundColor(context.resources.getColor( R.color.black))
+                itemView.text_ll.setBackgroundColor(context.resources.getColor( R.color.black_color))
 
 
                 val latLngZoom = LatLngZoom(model?.message.toDouble(),model?.thumbnail.toDouble(),   zoom = 14)
@@ -333,7 +333,7 @@ class ChatAdapter(
                 itemView.iv_video_received.visibility = View.GONE
                 itemView.btn_play_r.visibility = View.GONE
                 itemView.map_view_rec.visibility = View.GONE
-                itemView.text_ll.setBackgroundColor(context.resources.getColor( R.color.black))
+                itemView.text_ll.setBackgroundColor(context.resources.getColor( R.color.black_color))
                 itemView.tv_text_received.text = model?.message.toString()
 
             }
@@ -433,7 +433,7 @@ class ChatAdapter(
                     itemView.iv_video_sent.visibility = View.GONE
                     itemView.btn_play.visibility = View.GONE
                     itemView.map_view.visibility = View.GONE
-                    itemView.text_layout.setBackgroundColor(context.resources.getColor( R.color.black))
+                    itemView.text_layout.setBackgroundColor(context.resources.getColor( R.color.black_color))
                     Picasso
                         .get()
                         .load(IMAGE_BASE_URL+model?.message)?.into(itemView.iv_media_sent)
@@ -452,7 +452,7 @@ class ChatAdapter(
                     itemView.tv_text_reply.visibility = View.GONE
                     itemView.iv_video_sent.visibility = View.VISIBLE
                     itemView.map_view.visibility = View.GONE
-                    itemView.text_layout.setBackgroundColor(context.resources.getColor( R.color.black))
+                    itemView.text_layout.setBackgroundColor(context.resources.getColor( R.color.black_color))
                     itemView.btn_play.visibility = View.VISIBLE
 
                     Log.d("videofile",IMAGE_BASE_URL + model.message)
@@ -483,14 +483,14 @@ class ChatAdapter(
 
             else if ( model?.type == TYPE_LOCATION)
             {
-                itemView.iv_media_sent.visibility = View.GONE
+                itemView.iv_media_sent.visibility = View.VISIBLE
                 itemView.tv_text_sent.visibility = View.GONE
                 itemView.tv_text_reply.visibility = View.GONE
                 itemView.iv_video_sent.visibility = View.GONE
                 itemView.btn_play.visibility = View.GONE
-                itemView.map_view.visibility = View.VISIBLE
+                itemView.map_view.visibility = View.GONE
               //  itemView.richLinkView.visibility = View.GONE
-                itemView.text_layout.setBackgroundColor(context.resources.getColor( R.color.black))
+                itemView.text_layout.setBackgroundColor(context.resources.getColor( R.color.black_color))
 
 
               //  itemView.tv_text_sent.setTextColor(context.resources.getColor(R.color.fb_color))
@@ -505,12 +505,12 @@ class ChatAdapter(
                             .load(latLngZoom)
                             .pin(pinIcon)
                             .clearBeforeLoading(true)
-                            .into( itemView.map_view)
+                            .into( itemView.iv_media_sent)
                     }
                 }
 
 
-             itemView.map_view.setOnClickListener {
+             itemView.iv_media_sent.setOnClickListener {
 
                 val url =
                     "https://www.google.com/maps/search/?api=1&query="+model?.message.toDouble()+","+ model?.thumbnail.toDouble()

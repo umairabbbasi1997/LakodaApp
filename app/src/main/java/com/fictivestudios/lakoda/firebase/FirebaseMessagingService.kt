@@ -4,18 +4,18 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.core.os.bundleOf
 import androidx.navigation.NavDeepLinkBuilder
-import com.fictivestudios.lakoda.Enum.FCMEnums
 import com.fictivestudios.lakoda.R
 import com.fictivestudios.lakoda.utils.PreferenceUtils
 import com.fictivestudios.lakoda.views.activities.MainActivity
+import com.fictivestudios.ravebae.utils.Constants
 import com.fictivestudios.ravebae.utils.Constants.Companion.FCM
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -35,7 +35,7 @@ class FirebaseMessaging : FirebaseMessagingService() {
         if (message.data.get("type")?.equals("message") == true)
         {
 
-            var type = message?.data?.get("title")
+            var type = message?.data?.get("type")
             var body =  message?.data?.get("body")
             var senderId =   message?.data?.get("sender_id")
             var senderName =   message?.data?.get("user_name")
@@ -52,7 +52,7 @@ class FirebaseMessaging : FirebaseMessagingService() {
         }
         else
         {
-            var type = message?.data?.get("title")
+            var type = message?.data?.get("type")
             var body =  message?.data?.get("body")
 
 
@@ -80,13 +80,16 @@ class FirebaseMessaging : FirebaseMessagingService() {
 
 
 
+        val intent = Intent(this,MainActivity::class.java)
+        intent.putExtra(Constants.USER_ID , senderId)
+        intent.putExtra(Constants.USER_NAME , senderName)
+        intent.putExtra(Constants.NOTIFICATION_TYPE , type)
 
-        val bundle = bundleOf(
-            "receiverUserId" to senderId
-                    ,"username" to senderName
-        )
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
-        var pendingIntent = getPendingIntent(destinationId = R.id.chatFragment,bundle)
+
+        var pendingIntent = getActivityPendingIntent(applicationContext,1,intent,PendingIntent.FLAG_ONE_SHOT)
+            //getPendingIntent(destinationId = R.id.chatFragment,bundle)
 
         notification(pendingIntent,type,body)
 
@@ -94,15 +97,24 @@ class FirebaseMessaging : FirebaseMessagingService() {
 
     private fun sendNotification(type:String,body:String) {
 
-        var pendingIntent: PendingIntent? = null
 
-            pendingIntent = when(type){
-                FCMEnums.LIKE .value -> getPendingIntent(destinationId = R.id.notificationFragment)
-                FCMEnums.COMMENT .value -> getPendingIntent(destinationId = R.id.notificationFragment)
-                FCMEnums.FOLLOW .value -> getPendingIntent(destinationId = R.id.notificationFragment)
-                FCMEnums.FOLLOW_REQUEST .value -> getPendingIntent(destinationId = R.id.notificationFragment)
-                else -> null
-            }
+
+        val intent = Intent(this,MainActivity::class.java)
+        intent.putExtra(Constants.NOTIFICATION_TYPE , type)
+
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        var pendingIntent = getActivityPendingIntent(applicationContext,1,intent,PendingIntent.FLAG_ONE_SHOT)
+
+
+//        var pendingIntent: PendingIntent? = null
+
+        /*     pendingIntent = when(type){
+                 FCMEnums.LIKE .value -> getPendingIntent(destinationId = R.id.notificationFragment)
+                 FCMEnums.COMMENT .value -> getPendingIntent(destinationId = R.id.notificationFragment)
+                 FCMEnums.FOLLOW .value -> getPendingIntent(destinationId = R.id.notificationFragment)
+                 FCMEnums.FOLLOW_REQUEST .value -> getPendingIntent(destinationId = R.id.notificationFragment)
+                 else -> null
+             }*/
 
         if (pendingIntent != null) {
             notification(pendingIntent,type,body)
@@ -114,7 +126,7 @@ class FirebaseMessaging : FirebaseMessagingService() {
 
         val alarmSound: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(applicationContext, packageName)
-            .setSmallIcon(R.drawable.notify_icon)
+            .setSmallIcon(R.mipmap.ic_app_icon)
             .setContentTitle("Lakoda" ?: "title")
             .setContentText(body ?: "body")
             .setAutoCancel(true)
@@ -150,5 +162,13 @@ class FirebaseMessaging : FirebaseMessagingService() {
         }
 
         notificationManager.notify(0, notificationBuilder.build())
+    }
+
+    fun getActivityPendingIntent(context: Context?, id: Int, intent: Intent?, flag: Int): PendingIntent {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.getActivity(context, id, intent, PendingIntent.FLAG_MUTABLE)
+        } else {
+            PendingIntent.getActivity(context,id, intent, flag)
+        }
     }
 }

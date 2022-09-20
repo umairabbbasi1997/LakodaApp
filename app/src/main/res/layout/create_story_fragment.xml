@@ -44,26 +44,12 @@
 
 
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_done"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="done"
-            android:layout_marginTop="40dp"
-            android:visibility="gone"
-            android:layout_gravity="center|right"
-            android:background="@drawable/bg_main_btn"
-            app:layout_constraintTop_toTopOf="@id/et_text"
-            app:layout_constraintBottom_toBottomOf="@id/et_text"
-            app:layout_constraintRight_toRightOf="@id/et_text"
-            >
 
-        </androidx.appcompat.widget.AppCompatButton>
         <TextView
             android:id="@+id/tv1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="hello"
+            android:text=""
             android:textSize="20sp"
 
             android:visibility="gone"
@@ -83,6 +69,21 @@
 
 
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="done"
+        android:layout_marginTop="60dp"
+        android:visibility="gone"
+        android:layout_gravity="center|right"
+        android:background="@drawable/bg_main_btn"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        >
+
+    </androidx.appcompat.widget.AppCompatButton>
 
 
     <ImageView

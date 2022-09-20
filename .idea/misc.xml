@@ -102,18 +102,28 @@
         <entry key="..\:/Users/umair.riaz/AndroidStudioProjects/Lakoda/app/src/main/res/mipmap-anydpi-v26/ic_app_icon_round.xml" value="0.142" />
         <entry key="..\:/Users/umair.riaz/AndroidStudioProjects/Lakoda/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.142" />
         <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/drawable/switch_track_selector.xml" value="0.2115" />
+        <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/activity_launch.xml" value="0.36102564102564105" />
+        <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/comments_fragment.xml" value="0.3490740740740741" />
         <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/comments_loading_layout.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/create_post_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/create_story_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/edit_profile_fragment.xml" value="0.3490740740740741" />
+        <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/feeds_fragment.xml" value="0.3490740740740741" />
         <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/follow_loading_layout.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/follow_req_loading_layout.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/followers_fragment.xml" value="0.36102564102564105" />
         <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/following_fragment.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/fragment_blocked_list.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/fragment_chat.xml" value="0.3509259259259259" />
+        <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/fragment_id_verification.xml" value="0.34717948717948716" />
+        <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/fragment_messages.xml" value="0.23541666666666666" />
         <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/fragment_view_image.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/friend_profile_fragment.xml" value="0.3490740740740741" />
+        <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/home_fragment.xml" value="0.36102564102564105" />
         <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/home_loading_layout.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/item_blocked.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/item_comment.xml" value="0.19270833333333334" />
         <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/item_followers.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/item_followers_request.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/item_friend_post.xml" value="0.3509259259259259" />
@@ -128,10 +138,14 @@
         <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/map_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/my_profile_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/notification_fragment.xml" value="0.253125" />
+        <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/otp_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/pre_login_fragment.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/settings_fragment.xml" value="0.5" />
+        <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/settings_fragment.xml" value="0.41013824884792627" />
+        <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/titlebar.xml" value="0.36102564102564105" />
+        <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/upload_id_fragment.xml" value="0.36102564102564105" />
         <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/video_view_fragment.xml" value="0.24791666666666667" />
         <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/layout/view_story_fragment.xml" value="0.3509259259259259" />
+        <entry key="..\:/Users/umair.riaz/Documents/lokada/app/src/main/res/mipmap-anydpi-v26/ic_app_icon.xml" value="0.2115" />
       </map>
     </option>
   </component>

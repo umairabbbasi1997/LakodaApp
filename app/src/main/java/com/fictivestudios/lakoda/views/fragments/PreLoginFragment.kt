@@ -26,7 +26,6 @@ import com.fictivestudios.lakoda.apiManager.response.LoginResponse
 import com.fictivestudios.lakoda.apiManager.response.SocialLoginResponse
 import com.fictivestudios.lakoda.utils.PreferenceUtils
 import com.fictivestudios.lakoda.utils.Titlebar
-import com.fictivestudios.lakoda.viewModel.PreLoginViewModel
 import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.fictivestudios.lakoda.views.activities.RegisterationActivity
 import com.fictivestudios.ravebae.utils.Constants
@@ -62,7 +61,6 @@ class PreLoginFragment : BaseFragment() {
 
     private var callbackManager: CallbackManager? = null
     private lateinit var preLoginBinding: View
-    private lateinit var viewModel: PreLoginViewModel
 
     private val RC_SIGN_IN = 234
     lateinit var mGoogleSignInClient:GoogleSignInClient
@@ -203,13 +201,6 @@ class PreLoginFragment : BaseFragment() {
         dialog.window?.setGravity(Gravity.BOTTOM)
         dialog.window?.setBackgroundDrawableResource(R.color.transparent)
     }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(PreLoginViewModel::class.java)
-      }
-
-
 
 
 

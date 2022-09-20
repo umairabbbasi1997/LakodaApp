@@ -35,7 +35,6 @@ import com.fictivestudios.lakoda.R
 import com.fictivestudios.lakoda.apiManager.response.CommonResponse
 import com.fictivestudios.lakoda.utils.Titlebar
 import com.fictivestudios.lakoda.utils.getPartMap
-import com.fictivestudios.lakoda.viewModel.CreateStoryViewModel
 import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.permissionx.guolindev.PermissionX
@@ -67,7 +66,6 @@ class CreateStoryFragment : BaseFragment() {
 
 
     private var imageURI: Uri? = null
-    private lateinit var viewModel: CreateStoryViewModel
 
     override fun setTitlebar(titlebar: Titlebar) {
         titlebar.setBtnBack("CREATE STORY")
@@ -275,7 +273,7 @@ class CreateStoryFragment : BaseFragment() {
 
     private fun openImagePicker()
     {    ImagePicker.with(this)
-        .crop()	    			//Crop image(Optional), Check Customization for more option
+     	    			//Crop image(Optional), Check Customization for more option
         .compress(1024)			//Final image size will be less than 1 MB(Optional)
         .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
         .start()
@@ -340,11 +338,6 @@ class CreateStoryFragment : BaseFragment() {
             TextOnImage.TEXT_ON_IMAGE_REQUEST_CODE
         ) //start activity for the result
     }*/
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(CreateStoryViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
 
 
 
@@ -398,6 +391,11 @@ class CreateStoryFragment : BaseFragment() {
                         val response: CommonResponse? =response.body()
                         val statuscode= response!!.status
                         if (statuscode==1) {
+
+                            if (storyFile!!.exists())
+                            {
+                                storyFile!!.delete()
+                            }
 
                             Log.d("response",response.message)
                             MainActivity.getMainActivity?.onBackPressed()
@@ -459,10 +457,13 @@ class CreateStoryFragment : BaseFragment() {
 
         var file = File(commonDocumentDirPath("temp").toString()+"/image.png")
 
+
         if (file.exists())
         {
             file.delete()
         }
+
+       // file.copyTo()
        // var filename = File("image.png")
 
         try {
@@ -538,15 +539,24 @@ class CreateStoryFragment : BaseFragment() {
                 dir = null
             }
         }
-       /* else
+        else
         {
             dir.delete()
+
+            dir = if (SDK_INT >= Build.VERSION_CODES.R) {
+                File(
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+                        .toString() + "/" + FolderName
+                )
+            } else {
+                File(Environment.getExternalStorageDirectory().toString() + "/" + FolderName)
+            }
             val success = dir.mkdir()
-            if (!success) {
+            /*if (!success) {
                 dir = null
             }
-
-        }*/
+*/
+        }
         return dir
     }
 

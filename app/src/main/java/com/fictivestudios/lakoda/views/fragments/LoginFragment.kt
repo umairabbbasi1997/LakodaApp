@@ -21,11 +21,11 @@ import com.fictivestudios.lakoda.R
 import com.fictivestudios.lakoda.apiManager.response.LoginResponse
 import com.fictivestudios.lakoda.utils.PreferenceUtils
 import com.fictivestudios.lakoda.utils.Titlebar
-import com.fictivestudios.lakoda.viewModel.LoginViewModel
 import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.fictivestudios.lakoda.views.activities.RegisterationActivity
 import com.fictivestudios.ravebae.utils.Constants
 import com.fictivestudios.ravebae.utils.Constants.Companion.FCM
+import com.fictivestudios.ravebae.utils.Constants.Companion.IS_ID_CARD_VERIFIED
 import com.fictivestudios.ravebae.utils.Constants.Companion.USER_OBJECT
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.login_fragment.view.*
@@ -51,7 +51,6 @@ class LoginFragment : BaseFragment() {
         fun newInstance() = LoginFragment()
     }
 
-    private lateinit var viewModel: LoginViewModel
     private lateinit var loginBinding:View
     lateinit var sessionManager: SessionManager
     override fun setTitlebar(titlebar: Titlebar) {
@@ -244,12 +243,26 @@ class LoginFragment : BaseFragment() {
                                 val gson = Gson()
                                 val json:String = gson.toJson(loginResponse.data.user )
                                 PreferenceUtils.saveString(USER_OBJECT,json)
+                                PreferenceUtils.saveString(IS_ID_CARD_VERIFIED,loginResponse.data.user.is_berbix_verified)
                                 sessionManager.saveAuthToken(loginResponse.data.bearer_token)
 
+                                if (loginResponse.data.user.is_berbix_verified.equals(Constants.STATUS_NOT_VERIFIED))
+                                {
+                                    RegisterationActivity.getRegActivity
+                                        ?.navControllerReg?.navigate(R.id.idVerificationFragment)
+                                }
+                                else if (loginResponse.data.user.is_berbix_verified.equals(Constants.STATUS_REJECTED))
+                                    {
+                                        RegisterationActivity.getRegActivity
+                                            ?.navControllerReg?.navigate(R.id.idVerificationFragment)
+                                    }
+                                else
+                                {
+                                    startActivity(Intent(requireContext(), MainActivity::class.java))
+                                    RegisterationActivity.getRegActivity?.finish()
+                                    RegisterationActivity.getRegActivity = null
 
-                                startActivity(Intent(requireContext(), MainActivity::class.java))
-                                RegisterationActivity.getRegActivity?.finish()
-                                RegisterationActivity.getRegActivity = null
+                                }
 
                             }
 
@@ -315,10 +328,6 @@ class LoginFragment : BaseFragment() {
         dialog.window?.setBackgroundDrawableResource(R.color.transparent)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
+
 
 }

@@ -14,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
@@ -38,7 +39,6 @@ import com.fictivestudios.lakoda.model.*
 import com.fictivestudios.lakoda.utils.PreferenceUtils
 import com.fictivestudios.lakoda.utils.Titlebar
 import com.fictivestudios.lakoda.utils.getPartMap
-import com.fictivestudios.lakoda.viewModel.ChatViewModel
 import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.fictivestudios.ravebae.utils.Constants
 import com.fictivestudios.ravebae.utils.Constants.Companion.MESSAGE
@@ -102,7 +102,6 @@ class ChatFragment : BaseFragment(),SwipeReply ,OnItemClickListener{
         var isLocation = false
     }
 
-    private lateinit var viewModel: ChatViewModel
 
     private lateinit var mView: View
 
@@ -137,6 +136,8 @@ class ChatFragment : BaseFragment(),SwipeReply ,OnItemClickListener{
         userName = arguments?.getString(Constants.USER_NAME).toString()
         profileImage = arguments?.getString(Constants.PROFILE).toString()
         messageList = ArrayList()
+
+        getActivity()?.getWindow()?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 /*        if (!receiverUserId.equals(null) || !receiverUserId.equals("null"))
         {
             PreferenceUtils.saveString(RECEIVER_USER_ID, receiverUserId!!)
@@ -159,8 +160,10 @@ class ChatFragment : BaseFragment(),SwipeReply ,OnItemClickListener{
             userName = PreferenceUtils.getString("chatReceiverName")
         }
 
-        mView = inflater.inflate(R.layout.fragment_chat, container, false)
-
+        if (!this::mView.isInitialized) {
+            mView = inflater.inflate(R.layout.fragment_chat, container, false)
+            getSocket()
+        }
 
         val nameObserver = Observer<LatLng> { mapLink ->
             // Update the UI, in this case, a TextView.
@@ -231,7 +234,7 @@ class ChatFragment : BaseFragment(),SwipeReply ,OnItemClickListener{
             videoPicker()
         }
 
-        getSocket()
+
 
 
 
@@ -334,9 +337,19 @@ class ChatFragment : BaseFragment(),SwipeReply ,OnItemClickListener{
                 messageList.add(objectFromJson)
                 activity?.runOnUiThread {
 
-                    chatAdapter =  ChatAdapter( messageList!!,this,this,requireActivity(),tileEssential)
-                    chatAdapter?.notifyItemChanged(messageList!!.size - 1)
-                    mView.rv_chat_message?.smoothScrollToPosition(messageList!!.size - 1);
+                    if (chatAdapter == null)
+                    {
+                        chatAdapter =  ChatAdapter( messageList!!,this,this,requireActivity(),tileEssential)
+                        mView.rv_chat_message?.adapter = chatAdapter
+                        chatAdapter?.notifyDataSetChanged()
+                        //getMessage()
+                    }
+                    else {
+                        chatAdapter?.notifyItemChanged(messageList!!.size - 1)
+                        mView.rv_chat_message?.smoothScrollToPosition(messageList!!.size - 1);
+                    }
+
+
                 }
 
 
@@ -549,11 +562,7 @@ class ChatFragment : BaseFragment(),SwipeReply ,OnItemClickListener{
 
 
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ChatViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
+
 
     private fun openImagePicker()
     {    ImagePicker.with(this)

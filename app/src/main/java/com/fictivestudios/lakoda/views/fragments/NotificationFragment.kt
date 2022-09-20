@@ -20,7 +20,6 @@ import com.fictivestudios.lakoda.apiManager.response.GetNotificationData
 import com.fictivestudios.lakoda.apiManager.response.GetNotificationsResponse
 import com.fictivestudios.lakoda.utils.PreferenceUtils
 import com.fictivestudios.lakoda.utils.Titlebar
-import com.fictivestudios.lakoda.viewModel.NotificationViewModel
 import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.fictivestudios.lakoda.views.activities.RegisterationActivity
 import com.fictivestudios.ravebae.utils.Constants
@@ -41,7 +40,6 @@ class NotificationFragment : BaseFragment() ,OnItemClickListener {
         fun newInstance() = NotificationFragment()
     }
 
-    private lateinit var viewModel: NotificationViewModel
     private lateinit var mView: View
     private var notificationList = ArrayList<GetNotificationData>()
 
@@ -56,7 +54,14 @@ class NotificationFragment : BaseFragment() ,OnItemClickListener {
         savedInstanceState: Bundle?
     ): View? {
 
-        mView = inflater.inflate(R.layout.notification_fragment, container, false)
+        if (!this::mView.isInitialized) {
+            mView = inflater.inflate(R.layout.notification_fragment, container, false)
+
+            getFollowRequest()
+            getNotifications()
+        }
+
+
 
         mView.follow_request.setOnClickListener {
 
@@ -66,11 +71,6 @@ class NotificationFragment : BaseFragment() ,OnItemClickListener {
     }
 
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        getFollowRequest()
-        getNotifications()
-    }
 
 
     private fun getNotifications()
@@ -197,7 +197,7 @@ class NotificationFragment : BaseFragment() ,OnItemClickListener {
                     activity?.runOnUiThread(java.lang.Runnable {
 
 
-                    })
+
 
                     response?.body()?.message?.let { Log.d("Response", it) }
 
@@ -233,14 +233,23 @@ class NotificationFragment : BaseFragment() ,OnItemClickListener {
                                     setFollowerData(response)
 
                                 }
-                                else{            mView.tv_name.setText("No Following Request")
+
+                                else{
+                                    mView.tv_name.setText("No Following Request")
+                                    mView.iv_post_2.visibility = View.INVISIBLE
+                                    mView.iv_post.visibility = View.INVISIBLE
+                                    mView.iv_post_1.visibility = View.INVISIBLE
+
                                 }
 
                             }
                             else
                             {
                                 activity?.runOnUiThread(java.lang.Runnable {
-
+                            /*        mView.tv_name.setText("No Following Request")
+                                    mView.iv_post_2.visibility = View.INVISIBLE
+                                    mView.iv_post.visibility = View.INVISIBLE
+                                    mView.iv_post_1.visibility = View.INVISIBLE*/
                                 })
                             }
 
@@ -262,6 +271,7 @@ class NotificationFragment : BaseFragment() ,OnItemClickListener {
                             Log.d("execption","msg: "+e.localizedMessage)
                         })
                     }
+                    })
                 }
 
                 override fun onFailure(call: Call<GetFollowRequest>, t: Throwable)
@@ -300,29 +310,57 @@ class NotificationFragment : BaseFragment() ,OnItemClickListener {
                     followerName = item?.follower?.name
                     if (!item.follower?.image.isNullOrEmpty()) {
                     Picasso
-                        .get().load(Constants.IMAGE_BASE_URL + item.follower?.image).into(mView.iv_post_1)
+                        .get()
+                        .load(Constants.IMAGE_BASE_URL + item.follower?.image)
+                        .placeholder(R.drawable.user_dp)
+                        .into(mView.iv_post_1)
 
                     mView.iv_post_2.visibility = View.INVISIBLE
                     mView.iv_post.visibility = View.INVISIBLE
                     mView.iv_post_1.visibility = View.VISIBLE
 
                 }
+                    else{
+                        mView.iv_post_1.setBackgroundResource(R.drawable.user_dp)
+
+                        mView.iv_post_2.visibility = View.INVISIBLE
+                        mView.iv_post.visibility = View.INVISIBLE
+                        mView.iv_post_1.visibility = View.VISIBLE
+                    }
 
                 } else if (count == 2) {
-                            if (!item.follower?.image.isNullOrEmpty()) {
-                    Picasso
-                        .get().load(Constants.IMAGE_BASE_URL + item.follower?.image).into(mView.iv_post_2)
+
+                    if (!item.follower?.image.isNullOrEmpty()) {
+                                Picasso
+                                    .get()
+                                    .load(Constants.IMAGE_BASE_URL + item.follower?.image)
+                                    .placeholder(R.drawable.user_dp)
+                                    .into(mView.iv_post_2)
 
                     mView.iv_post.visibility = View.INVISIBLE
                     mView.iv_post_2.visibility = View.VISIBLE
                 }
+                    else{
+                        mView.iv_post_2.setBackgroundResource(R.drawable.user_dp)
+                        mView.iv_post.visibility = View.INVISIBLE
+                        mView.iv_post_2.visibility = View.VISIBLE
+                    }
                 } else if (count == 3) {
                        if (!item.follower?.image.isNullOrEmpty()) {
-                    Picasso
-                        .get().load(Constants.IMAGE_BASE_URL + item.follower?.image).into(mView.iv_post)
+
+                           Picasso
+                               .get()
+                               .load(Constants.IMAGE_BASE_URL + item.follower?.image)
+                               .placeholder(R.drawable.user_dp)
+                               .into(mView.iv_post)
 
                     mView.iv_post.visibility = View.VISIBLE
                 }
+                       else{
+                           mView.iv_post.setBackgroundResource(R.drawable.user_dp)
+                           mView.iv_post.visibility = View.VISIBLE
+                       }
+
             }
                 }
 
@@ -341,6 +379,9 @@ class NotificationFragment : BaseFragment() ,OnItemClickListener {
 
             mView.card_request.visibility = View.GONE
             mView.tv_name.setText("No Following Request")
+            mView.iv_post_2.visibility = View.INVISIBLE
+            mView.iv_post.visibility = View.INVISIBLE
+            mView.iv_post_1.visibility = View.INVISIBLE
         }
     }
 
@@ -426,11 +467,7 @@ class NotificationFragment : BaseFragment() ,OnItemClickListener {
     }
 
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(NotificationViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
+
 
     override fun onItemClick(position: Int, view: View, value: String) {
 

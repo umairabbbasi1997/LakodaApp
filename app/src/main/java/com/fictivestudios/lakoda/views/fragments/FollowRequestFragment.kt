@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import com.fictivestudios.docsvisor.apiManager.client.ApiClient
 import com.fictivestudios.imdfitness.activities.fragments.BaseFragment
 import com.fictivestudios.lakoda.Interface.OnItemClickListener
@@ -16,7 +17,6 @@ import com.fictivestudios.lakoda.adapters.FollowRequestAdapter
 import com.fictivestudios.lakoda.apiManager.response.*
 import com.fictivestudios.lakoda.utils.PreferenceUtils
 import com.fictivestudios.lakoda.utils.Titlebar
-import com.fictivestudios.lakoda.viewModel.FollowRequestViewModel
 import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.fictivestudios.lakoda.views.activities.RegisterationActivity
 import com.fictivestudios.ravebae.utils.Constants
@@ -41,7 +41,6 @@ class FollowRequestFragment : BaseFragment(),OnItemClickListener {
     }
 
     private var followReqList = ArrayList<GetFollowRequestData>()
-    private lateinit var viewModel: FollowRequestViewModel
 
     private lateinit var mView: View
     override fun setTitlebar(titlebar: Titlebar) {
@@ -52,17 +51,19 @@ class FollowRequestFragment : BaseFragment(),OnItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mView = inflater.inflate(R.layout.follow_request_fragment, container, false)
+
+
+        if (!this::mView.isInitialized) {
+            mView = inflater.inflate(R.layout.follow_request_fragment, container, false)
+            getFollowRequest()
+        }
+
 
 
         return mView
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
-        getFollowRequest()
-    }
 
     private fun getFollowRequest()
     {
@@ -279,7 +280,6 @@ class FollowRequestFragment : BaseFragment(),OnItemClickListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(FollowRequestViewModel::class.java)
         // TODO: Use the ViewModel
     }
 
@@ -292,6 +292,22 @@ class FollowRequestFragment : BaseFragment(),OnItemClickListener {
         else if (value == REJECT)
         {
             acceptFollow(followReqList[position].follower.id, REJECT)
+        }
+
+        else if (value == Constants.PROFILE)
+        {
+            val bundle = bundleOf(
+                Constants.USER_ID to   followReqList?.get(position)?.follower .id.toString(),
+                Constants.USER_NAME to   followReqList?.get(position)?.follower.name.toString(),
+                Constants.PROFILE to   followReqList?.get(position)?.follower?.image?.toString()
+            )
+
+
+             MainActivity.getMainActivity
+                    ?.navControllerMain?.navigate(R.id.friendProfileFragment,bundle)
+
+
+
         }
     }
 

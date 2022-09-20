@@ -51,11 +51,13 @@ class Constants {
         const val UPDATE_PROFILE_URL = "update-profile"
         const val GET_CONTENT_URL = "content"
         const val LOGOUT_URL = "logout"
+        const val ID_VERIFICATION_URL = "ID-verification"
+        const val BERBIX_CLIENT_TOKEN_URL = "client-token"
 
         const val PROFILE_URL = "complete-profile"
         const val OTHER_USER_PROFILE_URL = "user-profile"
         const val BLOCK_USER_URL = "user/block"
-
+        const val BLOCK_LIST_URL = "user/block-list"
 
         const val CREATE_POST_URL = "post/create"
         const val SHARE_POST_URL = "post/share/{id}"
@@ -99,6 +101,11 @@ class Constants {
         var isAccountLogin = false
         var loginType:String? =null
         const val EMAIL = "email"
+        const val BERBIX_TOKEN = "berbixToken"
+        const val IS_ID_CARD_VERIFIED = "isIdVerified"
+        const val STATUS_VERIFIED ="verified"
+        const val STATUS_NOT_VERIFIED ="not-verified"
+        const val STATUS_REJECTED ="rejected"
         const val PHONE ="phone"
 
         const val STORY_DURATION="storyDuration"
@@ -111,7 +118,7 @@ class Constants {
 
         const val VIEW_TYPE_POST = 1
         const val VIEW_TYPE_SHARED_POST = 0
-
+        const val POST_TYPE = "postType"
 
         var FCM="fcmToken"
         var CURRENT_USER_ID ="userId"
@@ -121,7 +128,9 @@ class Constants {
         var VERIFY_TYPE_PASSWORD = "forgot"
         var ACCESS_TOKEN = "accesToken"
         const val COMMENTS ="comments"
+        const val SHARER_COMMENTS ="sharerComments"
         const val LIKES ="likes"
+        const val SHARER_LIKES ="sharerLikes"
         const val PROFILE ="profile"
         const val SHARER_PROFILE ="sharerProfile"
         const val TYPE_POST ="post"
@@ -147,6 +156,8 @@ class Constants {
         const val TYPE_VIDEO = "video"
         const val MESSAGE_TYPE ="messageType"
 
+        const val NOTIFICATION_TYPE = "type"
+
         const val BLOCK ="block"
         const val UNBLOCK ="unblock"
 
@@ -155,6 +166,8 @@ class Constants {
         const val STATUS_REQUEST_SENT ="sent"
         const val RECEIVER_USER_ID = "receiverUserId"
          var state: Parcelable? = null
+
+        var IS_PUSH = false
 
         fun isValidEmail(str: String): Boolean{
             return android.util.Patterns.EMAIL_ADDRESS.matcher(str).matches()
