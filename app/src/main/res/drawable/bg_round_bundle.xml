@@ -3,8 +3,9 @@
 
     <item >
         <shape >
-            <corners android:radius="10dp"></corners>
-            <solid android:color="@color/gmail_color"></solid>
+            <corners android:radius="20dp"></corners>
+            <solid android:color="@color/black_color"></solid>
+            <stroke android:color="@color/pink" android:width="2.5dp"></stroke>
             </shape>
     </item>
 </selector>

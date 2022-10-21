@@ -64,6 +64,11 @@ class SettingsFragment : BaseFragment() {
         }
 
 
+        mView.tv_bundles.setOnClickListener {
+            MainActivity.getMainActivity
+                ?.navControllerMain?.navigate(R.id.bundlesFragment)
+        }
+
 
         mView.sw_push.isChecked = getUser().is_notification == 1
 

@@ -38,6 +38,7 @@ android {
     buildFeatures {
         dataBinding = true
     }
+    namespace 'com.fictivestudios.lakoda'
 }
 
 dependencies {
@@ -164,4 +165,12 @@ dependencies {
 
     // Berbix SDK Dependency
     implementation 'com.berbix:berbixverify:3.0.1'
+
+    //card stack view
+    implementation 'com.github.vinodpandey:dotsindicator:2.1.2.1'
+
+    //billing
+
+    implementation("com.android.billingclient:billing-ktx:5.0.0")
+
 }

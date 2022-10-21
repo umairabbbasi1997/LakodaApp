@@ -8,6 +8,9 @@
 
     <string name="pre_login">PRE LOGIN</string>
     <string name="login">LOGIN</string>
+    <string name="buy_now">BUY NOW</string>
+
+
     <string name="email_address">Email Address</string>
     <string name="password">Password</string>
     <string name="otp_verification">OTP VERIFICATION</string>

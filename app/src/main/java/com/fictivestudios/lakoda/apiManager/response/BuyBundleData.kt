@@ -1,5 +1,5 @@
 package com.fictivestudios.lakoda.apiManager.response
 
-data class DataX(
+data class BuyBundleData(
     val subscription: Subscription
 )

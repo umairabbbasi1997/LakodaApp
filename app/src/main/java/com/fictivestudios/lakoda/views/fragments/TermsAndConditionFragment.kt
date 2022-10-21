@@ -122,7 +122,7 @@ class TermsAndConditionFragment : BaseFragment() {
 
                 override fun onFailure(call: Call<ContentResponse>, t: Throwable)
                 {
-                    Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
+
                      activity?.runOnUiThread(java.lang.Runnable {
                          mView.pb_t_and_c.visibility=View.GONE
 

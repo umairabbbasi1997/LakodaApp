@@ -83,7 +83,9 @@ class Constants {
 
         const val NOTIFICATION_TOGGLE_URL = "notification/toggle"
 
+        const val BUNDLE_LIST_URL = "bundle/list"
 
+        const val BUY_BUNDLE_URL = "subscription/buy-bundle"
         /*
 
 

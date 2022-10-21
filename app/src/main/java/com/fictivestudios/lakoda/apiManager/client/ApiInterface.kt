@@ -5,6 +5,8 @@ import com.fictivestudios.ravebae.utils.Constants.Companion.ACCEPT_FOLLOW_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.BERBIX_CLIENT_TOKEN_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.BLOCK_LIST_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.BLOCK_USER_URL
+import com.fictivestudios.ravebae.utils.Constants.Companion.BUNDLE_LIST_URL
+import com.fictivestudios.ravebae.utils.Constants.Companion.BUY_BUNDLE_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.CHAT_ATTACHMENT
 import com.fictivestudios.ravebae.utils.Constants.Companion.CREATE_COMMENT_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.CREATE_FOLLOW_REQ_URL
@@ -173,4 +175,15 @@ interface ApiInterface {
     @Multipart
     @POST(CHAT_ATTACHMENT)
     fun chatAttachment(@Query("receiver_id")receiver_id:Int,@Query("sender_id")sender_id:Int,@Query("type")type:String,@Part message : MultipartBody.Part?): retrofit2.Call<ChatAttachmentResponse>
+
+    /*********************************** BUNDLES ******************************************/
+
+    @GET(BUNDLE_LIST_URL)
+    fun bundleList(): retrofit2.Call<BundleResponse>
+
+
+    @POST(BUY_BUNDLE_URL)
+    fun buyBundle(@Query("bundle_id") bundle_id:Int, @Query("receipt") receipt:String,
+                  @Query("source") source:String, @Query("home_id") home_id: Int?, @Query("post_id") post_id: Int?
+    ): retrofit2.Call<BuyBundleResponse>
 }
