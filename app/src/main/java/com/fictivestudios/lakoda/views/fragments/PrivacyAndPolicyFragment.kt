@@ -101,12 +101,12 @@ class PrivacyAndPolicyFragment : BaseFragment() {
                             }
                             else
                             {
-                                Toast.makeText(requireContext(), response.body()?.message, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(),""+ response.body()?.message, Toast.LENGTH_SHORT).show()
                             }
 
                         }
                         else {
-                            Toast.makeText(requireContext(), response.body()?.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
                         }
                     }
                     catch (e:Exception)
@@ -115,7 +115,7 @@ class PrivacyAndPolicyFragment : BaseFragment() {
 
                             mView.pb_privacy.visibility=View.GONE
 
-                            Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), ""+e.message, Toast.LENGTH_SHORT).show()
 
                     }
                     })
@@ -123,11 +123,10 @@ class PrivacyAndPolicyFragment : BaseFragment() {
 
                 override fun onFailure(call: Call<ContentResponse>, t: Throwable)
                 {
-                    Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
+
                     activity?.runOnUiThread(java.lang.Runnable {
                         mView.pb_privacy.visibility=View.GONE
-
-                        Toast.makeText(requireContext(), t.message, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), ""+t.message, Toast.LENGTH_SHORT).show()
                     })
                 }
             })

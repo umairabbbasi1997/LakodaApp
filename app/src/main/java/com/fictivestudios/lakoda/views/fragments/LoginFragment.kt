@@ -269,7 +269,7 @@ class LoginFragment : BaseFragment() {
 
                             else {
 
-                                    Toast.makeText(requireContext(), response?.body()?.message.toString(), Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(requireContext(), ""+response?.body()?.message.toString(), Toast.LENGTH_SHORT).show()
 
                             }
                         }

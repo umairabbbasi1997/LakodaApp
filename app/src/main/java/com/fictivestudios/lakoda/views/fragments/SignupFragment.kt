@@ -271,7 +271,7 @@ class SignupFragment : BaseFragment() {
 
 
 
-                            Log.d("response",response.message)
+                            Log.d("response",""+response.message)
 
                             //                        val gson = Gson()
                             //                          val json:String = gson.toJson(response.data )
@@ -291,7 +291,7 @@ class SignupFragment : BaseFragment() {
                         }
                         else {
 
-                                Toast.makeText(requireContext(),response.message, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(),""+response.message, Toast.LENGTH_SHORT).show()
 
                         }
                     }
@@ -299,9 +299,9 @@ class SignupFragment : BaseFragment() {
                     {
 
 
-                            Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
-                            Log.d("response", e.localizedMessage)
-                            Log.d("response", e.message.toString())
+                            Toast.makeText(requireContext(),""+ e.message, Toast.LENGTH_SHORT).show()
+                            Log.d("response",""+ e.localizedMessage)
+                            Log.d("response", ""+e.message.toString())
 
                     }
                     })
@@ -314,8 +314,8 @@ class SignupFragment : BaseFragment() {
                         signupBinding.pb_signup.visibility=View.GONE
                         signupBinding.btn_signup.isEnabled=true
                         signupBinding.btn_signup.text="SIGNUP"
-                        Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
-                        Log.d("response", t.localizedMessage)
+                        Toast.makeText(requireContext(), ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Log.d("response", ""+t.localizedMessage)
                     }
 
 

@@ -33,13 +33,21 @@ class Constants {
         /*********************************** API URL ******************************************/
 
 
+        // val BASE_URL: String = "https://server.appsstaging.com/3373/lakoda/public/api/"
+       val BASE_URL: String = "https://lakoda06.com/webservices/live/public/api/"
 
-        val BASE_URL: String = "https://server.appsstaging.com/3373/lakoda/public/api/"
-        val IMAGE_BASE_URL: String = "https://server.appsstaging.com/3373/lakoda/public/storage/"
-        val THUMB_BASE_URL: String = "https://server.appsstaging.com/3373/lakoda/public/"
 
-        val SOCKET_URL: String = "https://server.appsstaging.com:3059/"
 
+        // val SOCKET_URL: String = "https://server.appsstaging.com:3059/"
+        val SOCKET_URL: String = "https://lakoda06.com:3000/"
+
+
+        val IMAGE_BASE_URL: String = "https://lakoda06.com/webservices/live/public/storage/"
+        // val IMAGE_BASE_URL: String = "https://server.appsstaging.com/3373/lakoda/public/storage/"
+
+        val THUMB_BASE_URL: String = "https://lakoda06.com/webservices/live/public/"
+
+        // val THUMB_BASE_URL: String = "https://server.appsstaging.com/3373/lakoda/public/"
 
         const val SOCIAL_LOGIN_URL = "social_login"
         const val LOGIN_URL = "login"

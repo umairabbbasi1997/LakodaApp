@@ -1,6 +1,5 @@
 package com.fictivestudios.lakoda.views.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -17,11 +16,7 @@ import com.fictivestudios.lakoda.R
 import com.fictivestudios.lakoda.adapters.BundleAdapter
 import com.fictivestudios.lakoda.apiManager.response.*
 import com.fictivestudios.lakoda.utils.CarouselMembership
-import com.fictivestudios.lakoda.utils.PreferenceUtils
 import com.fictivestudios.lakoda.utils.Titlebar
-import com.fictivestudios.lakoda.views.activities.MainActivity
-import com.fictivestudios.lakoda.views.activities.RegisterationActivity
-import com.fictivestudios.ravebae.utils.Constants
 import kotlinx.android.synthetic.main.fragment_bundles_list.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -40,6 +35,8 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class BundlesFragment : BaseFragment() , OnItemClickListener {
+    private var purchasetoken: String?=null
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -48,9 +45,9 @@ class BundlesFragment : BaseFragment() , OnItemClickListener {
 
 
     var membershipAdapter: BundleAdapter? = null
+    var currentItem:Int?=null
 
-
-    private var bundleList: ArrayList<BundleData>? = ArrayList<BundleData>()
+    private var bundleList: ArrayList<SkuDetails>? = ArrayList<SkuDetails>()
 
     private val purchasesUpdatedListener =
         PurchasesUpdatedListener { billingResult, purchases ->
@@ -82,28 +79,38 @@ class BundlesFragment : BaseFragment() , OnItemClickListener {
             mView = inflater.inflate(R.layout.fragment_bundles_list, container, false)
 
 
-            getBundleList()
+         //   getBundleList()
+
+            requireActivity().runOnUiThread {
+
+                billingClient = BillingClient.newBuilder(requireContext())
+                    .setListener(purchasesUpdatedListener)
+                    .enablePendingPurchases()
+                    .build()
 
 
-            billingClient = BillingClient.newBuilder(requireContext())
-                .setListener(purchasesUpdatedListener)
-                .enablePendingPurchases()
-                .build()
+                billingClient?.startConnection(object : BillingClientStateListener {
+                    override fun onBillingSetupFinished(billingResult: BillingResult) {
+                        if (billingResult.responseCode ==  BillingClient.BillingResponseCode.OK) {
+                            Log.d("billing","billing ok")
+                            // The BillingClient is ready. You can query purchases here.
 
 
-            billingClient?.startConnection(object : BillingClientStateListener {
-                override fun onBillingSetupFinished(billingResult: BillingResult) {
-                    if (billingResult.responseCode ==  BillingClient.BillingResponseCode.OK) {
-                        // The BillingClient is ready. You can query purchases here.
-                        queryAvaliableProducts()
+                            queryAvaliableProducts()
+
+
+
+                        }
                     }
-                }
-                override fun onBillingServiceDisconnected() {
-                    // Try to restart the connection on the next request to
-                    // Google Play by calling the startConnection() method.
-                    Log.d("billing","billing disconnected")
-                }
-            })
+                    override fun onBillingServiceDisconnected() {
+                        // Try to restart the connection on the next request to
+                        // Google Play by calling the startConnection() method.
+                        Log.d("billing","billing disconnected")
+                    }
+                })
+            }
+
+
 
            // getBlockedList()
 
@@ -113,13 +120,13 @@ class BundlesFragment : BaseFragment() , OnItemClickListener {
         return mView
     }
 
-    private fun setData(response: List<BundleData>?) {
+    private fun setData(response: MutableList<SkuDetails>?) {
 
 
 
 
 
-        bundleList = response as ArrayList<BundleData>?
+        bundleList = response as ArrayList<SkuDetails>
 
         mView?.viewpager?.setClipChildren(false)
         mView?.viewpager?.setOffscreenPageLimit(bundleList!!.size)
@@ -127,12 +134,15 @@ class BundlesFragment : BaseFragment() , OnItemClickListener {
         membershipAdapter = BundleAdapter(requireActivity(), bundleList!!)
         mView?.viewpager?.setAdapter(membershipAdapter)
         mView?.viewpager?.currentItem = 1
-        membershipAdapter!!.notifyDataSetChanged()
+
         mView!!.viewpager.adapter = membershipAdapter
        mView!!.indicator.setViewPager(mView!!.viewpager)
+        membershipAdapter!!.notifyDataSetChanged()
+
+        changeListener()
     }
 
-    private fun getBundleList()
+  /*  private fun getBundleList()
     {
         mView.pb_bundle.visibility = View.VISIBLE
 
@@ -232,11 +242,12 @@ class BundlesFragment : BaseFragment() , OnItemClickListener {
         }
 
 
-    }
+    }*/
 
-    private fun setClick(skuDetails: SkuDetails) {
+    private fun changeListener()
+    {
 
-        var currentItem:Int?=null
+
         mView.viewpager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
             override fun onPageScrolled(
                 position: Int,
@@ -255,7 +266,7 @@ class BundlesFragment : BaseFragment() , OnItemClickListener {
 
             }
         })
-        mView.btnAccept.setOnClickListener {
+/*        mView.btnAccept.setOnClickListener {
 
             if (currentItem!=null)
             {
@@ -265,12 +276,12 @@ class BundlesFragment : BaseFragment() , OnItemClickListener {
                         .build()
                     billingClient?.launchBillingFlow(requireActivity(), billingFlowParams)?.responseCode
                 }?:"failed"
-                buyBundle(bundleList?.get(currentItem!!)!!.id,"abc","android",null,null)
+
+                buyBundle(*//*bundleList?.get(currentItem!!)!!.id*//*1,"abc","android",null,null)
             }
 
-        }
+        }*/
     }
-
     private fun buyBundle(bundleId: Int,receipt:String,source:String,videoId:Int?,postId:Int?)
     {
 
@@ -343,23 +354,198 @@ class BundlesFragment : BaseFragment() , OnItemClickListener {
     }
 
     private fun queryAvaliableProducts() {
+        Log.d("billing","queryAvaliableProducts")
         val skuList = ArrayList<String>()
-        skuList.add("test.sample")
+
+
+//        skuList.add("com.andriod.test")
+
+     /*   skuList.add("com.fictivestudios.lakoda_photo_sb1")
+        skuList.add("com.fictivestudios.lakoda_photo_sb1")
+        skuList.add("com.fictivestudios.lakoda_photo_sb2")
+        skuList.add("com.fictivestudios.lakoda_photo_sb3")
+        skuList.add("com.fictivestudios.lakoda_photo_sb4")
+        skuList.add("com.fictivestudios.lakoda_photo_sb5")
+
+        skuList.add("com.fictivestudios.lakoda_photopost_sb1")
+        skuList.add("com.fictivestudios.lakoda_photopost_sb2")
+        skuList.add("com.fictivestudios.lakoda_photopost_sb3")
+
+        skuList.add("com.fictivestudios.lakoda_video_sb1")
+        skuList.add("com.fictivestudios.lakoda_video_sb2")
+        skuList.add("com.fictivestudios.lakoda_video_sb3")
+        skuList.add("com.fictivestudios.lakoda_video_sb4")
+        skuList.add("com.fictivestudios.lakoda_video_sb5")
+        skuList.add("com.fictivestudios.lakoda_video_sb6")
+        skuList.add("com.fictivestudios.lakoda_video_sb7")
+        skuList.add("com.fictivestudios.lakoda_video_sb8")*/
+
+
+        skuList.add("photo_bundle_1")
+        skuList.add("photo_bundle_2")
+        skuList.add("photo_bundle_3")
+
+        skuList.add("video_bundle_1")
+        skuList.add("video_bundle_2")
+        skuList.add("video_bundle_3")
+
+
         val params = SkuDetailsParams.newBuilder()
         params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP)
 
         billingClient?.querySkuDetailsAsync(params.build()) { billingResult, skuDetailsList ->
             // Process the result.
-            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && !skuDetailsList.isNullOrEmpty()) {
-                for (skuDetails in skuDetailsList) {
-                    Log.v("TAG_INAPP","skuDetailsList : ${skuDetailsList}")
-                    //This list should contain the products added above
-                 //  updateUI(skuDetails)
-                    setClick(skuDetails)
+
+
+            requireActivity().runOnUiThread {
+
+                Log.d("billing",billingResult.responseCode.toString())
+                Log.d("billing","skuList:"+skuDetailsList.toString())
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && !skuDetailsList.isNullOrEmpty()) {
+
+                    setData(skuDetailsList)
+                    for (skuDetails in skuDetailsList) {
+                        Log.v("TAG_INAPP","skuDetailsList : ${skuDetailsList}")
+
+
+
+
+                        //This list should contain the products added above
+                        //  updateUI(skuDetails)
+
+                        /* skuDetails?.let {
+                             val billingFlowParams = BillingFlowParams.newBuilder()
+                                 .setSkuDetails(it)
+                                 .build()
+                             billingClient?.launchBillingFlow(requireActivity(), billingFlowParams)?.responseCode
+                         }?:"failed"*/
+                    }
+
+                    mView.btnAccept.setOnClickListener {
+
+                        Log.d("billing",currentItem.toString())
+                        currentItem?.let {
+                                it1 -> skuDetailsList.get(it1) }
+                            ?.let { it2 -> launchBillingFlow(it2) }
+                    }
                 }
             }
+
+
         }
     }
+
+
+    private fun launchBillingFlow(skuDetails:SkuDetails)
+    {
+
+        if (currentItem!=null)
+        {
+            skuDetails?.let {
+                val billingFlowParams = BillingFlowParams.newBuilder()
+                    .setSkuDetails(it)
+                    .build()
+                billingClient?.launchBillingFlow(requireActivity(), billingFlowParams)?.responseCode
+            }?:"failed"
+
+            buyBundle(/*bundleList?.get(currentItem!!)!!.sku.toString()*/1 ,"abc","android",null,null)
+        }
+    }
+
+
+
+/*    private fun billingsetup() {
+        billingClient = BillingClient.newBuilder(requireActivity()).setListener(object :
+            PurchasesUpdatedListener {
+
+            override fun onPurchasesUpdated(p0: BillingResult, p1: MutableList<Purchase>?) {
+                // i//f (p1 != null)
+                if (p0.responseCode == BillingClient.BillingResponseCode.OK && p1 != null) {
+
+                    for (purchase in p1!!) {
+                        Log.d("TAG", "onPurchasesUpdated: ")
+
+                        if (!purchase.isAcknowledged) {
+                            purchasetoken = purchase.purchaseToken
+                            val consumeParams = ConsumeParams
+                                .newBuilder()
+                                .setPurchaseToken(purchase!!.purchaseToken!!)
+                                .build()
+                            billingClient?.consumeAsync(consumeParams,
+                                ConsumeResponseListener { billingResult, s ->
+                                    if (billingResult.responseCode === BillingClient.BillingResponseCode.OK) {
+                                        Log.i("TAG", "onPurchasesUpdated: ")
+                                    }
+                                })
+
+
+              *//*              if(HomeActivity.home != null){
+
+                                if(coin_status!!){
+                                    coin_status = false
+                                    HomeActivity.home.callapi(purchasetoken,"", getToken(),
+                                        getCurrentUser()!!.userId.toString(),pacakagenameinapp)
+                                }
+
+                            }*//*
+                           // break
+
+//                            val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
+//                                .setPurchaseToken(purchase.purchaseToken)
+////                                .setDeveloperPayload(purchase.developerPayload)
+//                                .build()
+//                            mBillingClient!!.acknowledgePurchase(acknowledgePurchaseParams, AcknowledgePurchaseResponseListener { billingResult ->
+//                                if (billingResult.responseCode === BillingClient.BillingResponseCode.OK) {
+//                                    Toast.makeText(getHomeActivity(), "Purchase Acknowledged", Toast.LENGTH_SHORT).show()
+//                                }
+                            //                  })
+                        }
+
+                    }
+
+
+
+
+
+
+                    //When every a new purchase is made
+                } else if (p0.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
+                    // Handle an error caused by a user cancelling the purchase flow.
+                } else {
+                    // Handle any other error codes.
+                }
+
+            }
+        }) .enablePendingPurchases().build()
+
+
+
+        billingClient?.startConnection(object : BillingClientStateListener {
+            override fun onBillingSetupFinished(p0: BillingResult) {
+                Log.d("TAG", "onBillingSetupFinished: ")
+                if (p0.responseCode == BillingClient.BillingResponseCode.OK) {
+                    Log.d("TAG", "onBillingSetupFinished: ")
+                   // loadproduct()
+//                    if (mainActivity!!.preferenceManager!!.getfaulttype() == "user") {
+//                        loadsubscription()
+//                    } else {
+//                        loadproduct()
+//                    }
+                    // The billing client is ready. You can query purchases here.
+                }
+
+            }
+
+            override fun onBillingServiceDisconnected() {
+                Log.d("TAG", "onBillingSetupFinished: ")
+
+                // Try to restart the connection on the next request to
+                // Google Play by calling the startConnection() method.
+            }
+        })
+    }*/
+
+
 
     companion object {
         /**

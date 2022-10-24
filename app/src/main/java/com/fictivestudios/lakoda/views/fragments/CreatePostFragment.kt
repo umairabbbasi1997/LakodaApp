@@ -138,22 +138,22 @@ class CreatePostFragment : BaseFragment() {
 
                     try {
 
-                        Log.d("response", response.body()?.message ?: "null")
+                        Log.d("response", ""+response.body()?.message ?: "null")
 
                         val response: CreatePostResponse? =response.body()
                         val statuscode= response!!.status
                         if (statuscode==1) {
 
-                            Log.d("response",response.message)
+                            Log.d("response",""+response.message)
                             MainActivity.getMainActivity?.onBackPressed()
 
-                                Toast.makeText(requireContext(),response.message, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(),""+response.message, Toast.LENGTH_SHORT).show()
 
 
                         }
                         else {
 
-                                Toast.makeText(requireContext(),response.message, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(),""+response.message, Toast.LENGTH_SHORT).show()
 
                         }
                     }
@@ -161,9 +161,9 @@ class CreatePostFragment : BaseFragment() {
                     {
 
 
-                            Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
-                            Log.d("response", e.localizedMessage)
-                            Log.d("response", e.message.toString())
+                            Toast.makeText(requireContext(), ""+e.message, Toast.LENGTH_SHORT).show()
+                            Log.d("response", ""+e.localizedMessage)
+                            Log.d("response",""+ e.message.toString())
 
                     }
                     })  }
@@ -175,8 +175,8 @@ class CreatePostFragment : BaseFragment() {
                         mView.pb_createPos.visibility=View.GONE
                         mView.btn_create.isEnabled = true
                         mView.btn_create.text = "create"
-                                               Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
-                        Log.d("response", t.localizedMessage)
+                                               Toast.makeText(requireContext(), ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Log.d("response",""+ t.localizedMessage)
                     })
 
                 }

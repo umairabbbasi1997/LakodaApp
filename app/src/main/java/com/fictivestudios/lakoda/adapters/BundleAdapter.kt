@@ -7,12 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
+import com.android.billingclient.api.SkuDetails
 import com.fictivestudios.lakoda.R
-import com.fictivestudios.lakoda.apiManager.response.BundleData
 import java.util.*
 import kotlin.collections.ArrayList
 
-class BundleAdapter(private val mContext: Context, val feedsModels: ArrayList<BundleData>) :
+class BundleAdapter(private val mContext: Context, val feedsModels: ArrayList<SkuDetails>) :
     PagerAdapter() {
         var title: AppCompatTextView? = null
         var desc: AppCompatTextView? = null
@@ -25,9 +25,9 @@ class BundleAdapter(private val mContext: Context, val feedsModels: ArrayList<Bu
             title = layout.findViewById(R.id.package_name)
             desc = layout.findViewById(R.id.package_des)
             price = layout.findViewById(R.id.package_price)
-            title!!.text = model.name
+            title!!.text = model.title
             desc!!.text = model.description
-            price!!.text = "$"+model.cost.toString()
+            price!!.text = model.price .toString()
             collection.addView(layout)
             return layout
 

@@ -156,7 +156,7 @@
             android:paddingVertical="15dp"
             android:textColor="@color/white"
             android:textSize="16sp"
-            android:text="Bundles"
+            android:text="In-App Purchase"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/v_bundles"
             >
