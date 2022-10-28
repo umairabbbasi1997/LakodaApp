@@ -2,16 +2,15 @@ package com.fictivestudios.lakoda.views.fragments
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.android.billingclient.api.*
 import com.fictivestudios.docsvisor.apiManager.client.ApiClient
 import com.fictivestudios.imdfitness.activities.fragments.BaseFragment
-import com.fictivestudios.lakoda.Interface.OnItemClickListener
 import com.fictivestudios.lakoda.R
 import com.fictivestudios.lakoda.adapters.BundleAdapter
 import com.fictivestudios.lakoda.apiManager.response.*
@@ -24,6 +23,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
 
+
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
@@ -34,7 +34,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [BundlesFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class BundlesFragment : BaseFragment() , OnItemClickListener {
+class BundlesFragment : BaseFragment()   {
     private var purchasetoken: String?=null
 
     // TODO: Rename and change types of parameters
@@ -43,16 +43,15 @@ class BundlesFragment : BaseFragment() , OnItemClickListener {
     private lateinit var mView: View
 
 
+    private var skuDetails:SkuDetails? =null
 
     var membershipAdapter: BundleAdapter? = null
-    var currentItem:Int?=null
+    var currentItem:Int?= 0
 
     private var bundleList: ArrayList<SkuDetails>? = ArrayList<SkuDetails>()
 
-    private val purchasesUpdatedListener =
-        PurchasesUpdatedListener { billingResult, purchases ->
-            // To be implemented in a later section.
-        }
+    private var purchasesUpdatedListener : PurchasesUpdatedListener?=null
+
 
     private var billingClient : BillingClient?=null
 
@@ -81,34 +80,9 @@ class BundlesFragment : BaseFragment() , OnItemClickListener {
 
          //   getBundleList()
 
-            requireActivity().runOnUiThread {
-
-                billingClient = BillingClient.newBuilder(requireContext())
-                    .setListener(purchasesUpdatedListener)
-                    .enablePendingPurchases()
-                    .build()
+            setUpBilling()
 
 
-                billingClient?.startConnection(object : BillingClientStateListener {
-                    override fun onBillingSetupFinished(billingResult: BillingResult) {
-                        if (billingResult.responseCode ==  BillingClient.BillingResponseCode.OK) {
-                            Log.d("billing","billing ok")
-                            // The BillingClient is ready. You can query purchases here.
-
-
-                            queryAvaliableProducts()
-
-
-
-                        }
-                    }
-                    override fun onBillingServiceDisconnected() {
-                        // Try to restart the connection on the next request to
-                        // Google Play by calling the startConnection() method.
-                        Log.d("billing","billing disconnected")
-                    }
-                })
-            }
 
 
 
@@ -120,6 +94,63 @@ class BundlesFragment : BaseFragment() , OnItemClickListener {
         return mView
     }
 
+    private fun setUpBilling() {
+        requireActivity().runOnUiThread {
+           purchasesUpdatedListener = PurchasesUpdatedListener { billingResult, purchases ->
+                // To be implemented in a later section.
+
+                if (purchases != null) {
+                    for (purchase in purchases) {
+                        handlePurchase(purchase)
+
+
+               /*         billingClient?.queryPurchaseHistoryAsync(BillingClient.SkuType.INAPP,object :PurchaseHistoryResponseListener{
+                            override fun onPurchaseHistoryResponse(
+                                billingResult: BillingResult,
+                                purchaseHistory: MutableList<PurchaseHistoryRecord>?
+                            ) {
+                                Log.d("billing response",purchaseHistory.toString())
+
+                                var bundleType:String
+
+
+                            }
+                        })*/
+                    }
+                }
+
+
+            }
+            billingClient = purchasesUpdatedListener?.let {
+                BillingClient.newBuilder(requireContext())
+                    .setListener(it)
+                    .enablePendingPurchases()
+                    .build()
+            }
+
+
+            billingClient?.startConnection(object : BillingClientStateListener {
+                override fun onBillingSetupFinished(billingResult: BillingResult) {
+                    if (billingResult.responseCode ==  BillingClient.BillingResponseCode.OK) {
+                        Log.d("billing","billing ok")
+                        // The BillingClient is ready. You can query purchases here.
+
+
+                        queryAvaliableProducts()
+
+
+
+                    }
+                }
+                override fun onBillingServiceDisconnected() {
+                    // Try to restart the connection on the next request to
+                    // Google Play by calling the startConnection() method.
+                    Log.d("billing","billing disconnected")
+                }
+            })
+        }
+    }
+
     private fun setData(response: MutableList<SkuDetails>?) {
 
 
@@ -127,6 +158,7 @@ class BundlesFragment : BaseFragment() , OnItemClickListener {
 
 
         bundleList = response as ArrayList<SkuDetails>
+
 
         mView?.viewpager?.setClipChildren(false)
         mView?.viewpager?.setOffscreenPageLimit(bundleList!!.size)
@@ -142,107 +174,6 @@ class BundlesFragment : BaseFragment() , OnItemClickListener {
         changeListener()
     }
 
-  /*  private fun getBundleList()
-    {
-        mView.pb_bundle.visibility = View.VISIBLE
-
-        val apiClient = ApiClient.RetrofitInstance.getApiService(requireContext())
-
-
-        GlobalScope.launch(Dispatchers.IO)
-        {
-
-            apiClient.bundleList().enqueue(object: retrofit2.Callback<BundleResponse> {
-                override fun onResponse(
-                    call: Call<BundleResponse>,
-                    response: Response<BundleResponse>
-                )
-                {
-                    activity?.runOnUiThread(java.lang.Runnable {
-
-                        mView.pb_bundle.visibility = View.GONE
-
-                    })
-
-                    Log.d("Response", ""+response?.body()?.message)
-
-                    try {
-
-
-                        if (response.isSuccessful) {
-
-
-                            if (response?.message() == "Unauthorized"||
-                                response?.body()?.message == "Unauthorized"
-                                || response?.message() == "Unauthenticated.")
-                            {
-                                PreferenceUtils.remove(Constants.USER_OBJECT)
-                                PreferenceUtils.remove(Constants.ACCESS_TOKEN)
-                                MainActivity.getMainActivity?.finish()
-                                MainActivity.getMainActivity=null
-                                startActivity(Intent(requireContext(), RegisterationActivity::class.java))
-                                activity?.runOnUiThread(java.lang.Runnable {
-                                    Toast.makeText(requireContext(), "Login expired please login again", Toast.LENGTH_SHORT).show()
-                                })
-                            }
-
-                            if (response.body()?.status==1)
-                            {
-
-                                if (response.body()?.data != null)
-                                {
-                                    Log.d("data", ""+response.body()?.data.toString())
-                                    var response = response.body()?.data
-
-
-
-                                    setData(response)
-
-                                  //  setClick(skuList)
-                                }
-
-                            }
-                            else
-                            {
-                                activity?.runOnUiThread(java.lang.Runnable {
-                                    Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
-                                })
-                            }
-
-                        }
-                        else {
-                            activity?.runOnUiThread(java.lang.Runnable {
-                                Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
-                            })
-
-                        }
-                    }
-                    catch (e:Exception)
-                    {
-                        activity?.runOnUiThread(java.lang.Runnable {
-                            mView.pb_bundle.visibility = View.GONE
-                            Toast.makeText(requireContext(), "msg: "+e.message, Toast.LENGTH_SHORT).show()
-                            Log.d("execption","msg: "+e.localizedMessage)
-                        })
-                    }
-                }
-
-                override fun onFailure(call: Call<BundleResponse>, t: Throwable)
-                {
-
-                    activity?.runOnUiThread(java.lang.Runnable {
-
-                        mView.pb_bundle.visibility = View.GONE
-
-                        Toast.makeText(requireContext(), ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
-                    })
-                }
-            })
-
-        }
-
-
-    }*/
 
     private fun changeListener()
     {
@@ -259,6 +190,9 @@ class BundlesFragment : BaseFragment() , OnItemClickListener {
 
             override fun onPageSelected(position: Int) {
                 currentItem = position
+
+                Log.d("billing_id",bundleList?.get(currentItem!!)?.sku.toString())
+                Toast.makeText(requireContext(), bundleList?.get(currentItem!!)?.sku.toString(), Toast.LENGTH_SHORT).show()
 
             }
 
@@ -282,104 +216,11 @@ class BundlesFragment : BaseFragment() , OnItemClickListener {
 
         }*/
     }
-    private fun buyBundle(bundleId: Int,receipt:String,source:String,videoId:Int?,postId:Int?)
-    {
 
-        mView.pb_bundle.visibility = View.VISIBLE
-
-        val apiClient = ApiClient.RetrofitInstance.getApiService(requireContext())
-
-        GlobalScope.launch(Dispatchers.IO)
-        {
-
-
-                apiClient.buyBundle(bundleId, receipt,source,videoId, postId).enqueue(object: retrofit2.Callback<BuyBundleResponse> {
-                    override fun onResponse(
-                        call: Call<BuyBundleResponse>,
-                        response: Response<BuyBundleResponse>
-                    ) {
-
-                        try {
-
-                            activity?.runOnUiThread(java.lang.Runnable {
-
-                                mView.pb_bundle.visibility = View.GONE
-
-                            })
-
-                            val response: BuyBundleResponse? =response.body()
-                            val statuscode= response?.status
-                            if (statuscode==1) {
-
-                                Log.d("response", response.message)
-
-                                Toast.makeText(requireContext(), " "+response?.message, Toast.LENGTH_SHORT).show()
-
-
-                            } else {
-
-
-                                activity?.runOnUiThread(java.lang.Runnable {
-                                    Toast.makeText(requireContext(), "msg: "+response?.message, Toast.LENGTH_SHORT).show()
-                                    response?.message?.let { Log.d("response", it) }
-
-                                })
-                            }
-                        } catch (e:Exception) {
-
-                            Log.d("response", "msg "+ e.localizedMessage)
-                            activity?.runOnUiThread(java.lang.Runnable {
-                                Toast.makeText(requireContext(), "msg "+ e.localizedMessage, Toast.LENGTH_SHORT).show()
-                            })
-                        }
-                    }
-
-                    override fun onFailure(call: Call<BuyBundleResponse>, t: Throwable) {
-
-                        activity?.runOnUiThread(java.lang.Runnable {
-                            Toast.makeText(requireContext(), "msg "+  t.localizedMessage, Toast.LENGTH_SHORT).show()
-                            Log.d("response", "msg "+  t.localizedMessage)
-
-
-                            mView.pb_bundle.visibility = View.GONE
-
-                        })
-                    }
-                })
-
-
-        }
-
-
-    }
 
     private fun queryAvaliableProducts() {
         Log.d("billing","queryAvaliableProducts")
         val skuList = ArrayList<String>()
-
-
-//        skuList.add("com.andriod.test")
-
-     /*   skuList.add("com.fictivestudios.lakoda_photo_sb1")
-        skuList.add("com.fictivestudios.lakoda_photo_sb1")
-        skuList.add("com.fictivestudios.lakoda_photo_sb2")
-        skuList.add("com.fictivestudios.lakoda_photo_sb3")
-        skuList.add("com.fictivestudios.lakoda_photo_sb4")
-        skuList.add("com.fictivestudios.lakoda_photo_sb5")
-
-        skuList.add("com.fictivestudios.lakoda_photopost_sb1")
-        skuList.add("com.fictivestudios.lakoda_photopost_sb2")
-        skuList.add("com.fictivestudios.lakoda_photopost_sb3")
-
-        skuList.add("com.fictivestudios.lakoda_video_sb1")
-        skuList.add("com.fictivestudios.lakoda_video_sb2")
-        skuList.add("com.fictivestudios.lakoda_video_sb3")
-        skuList.add("com.fictivestudios.lakoda_video_sb4")
-        skuList.add("com.fictivestudios.lakoda_video_sb5")
-        skuList.add("com.fictivestudios.lakoda_video_sb6")
-        skuList.add("com.fictivestudios.lakoda_video_sb7")
-        skuList.add("com.fictivestudios.lakoda_video_sb8")*/
-
 
         skuList.add("photo_bundle_1")
         skuList.add("photo_bundle_2")
@@ -404,22 +245,6 @@ class BundlesFragment : BaseFragment() , OnItemClickListener {
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && !skuDetailsList.isNullOrEmpty()) {
 
                     setData(skuDetailsList)
-                    for (skuDetails in skuDetailsList) {
-                        Log.v("TAG_INAPP","skuDetailsList : ${skuDetailsList}")
-
-
-
-
-                        //This list should contain the products added above
-                        //  updateUI(skuDetails)
-
-                        /* skuDetails?.let {
-                             val billingFlowParams = BillingFlowParams.newBuilder()
-                                 .setSkuDetails(it)
-                                 .build()
-                             billingClient?.launchBillingFlow(requireActivity(), billingFlowParams)?.responseCode
-                         }?:"failed"*/
-                    }
 
                     mView.btnAccept.setOnClickListener {
 
@@ -428,6 +253,12 @@ class BundlesFragment : BaseFragment() , OnItemClickListener {
                                 it1 -> skuDetailsList.get(it1) }
                             ?.let { it2 -> launchBillingFlow(it2) }
                     }
+                   /* for (skuDetails in skuDetailsList) {
+                        Log.v("TAG_INAPP","skuDetailsList : ${skuDetailsList}")
+
+                    }*/
+
+
                 }
             }
 
@@ -436,7 +267,7 @@ class BundlesFragment : BaseFragment() , OnItemClickListener {
     }
 
 
-    private fun launchBillingFlow(skuDetails:SkuDetails)
+    private  fun launchBillingFlow(skuDetails:SkuDetails)
     {
 
         if (currentItem!=null)
@@ -446,105 +277,129 @@ class BundlesFragment : BaseFragment() , OnItemClickListener {
                     .setSkuDetails(it)
                     .build()
                 billingClient?.launchBillingFlow(requireActivity(), billingFlowParams)?.responseCode
-            }?:"failed"
 
-            buyBundle(/*bundleList?.get(currentItem!!)!!.sku.toString()*/1 ,"abc","android",null,null)
+
+           }?:"failed"
+
+            this.skuDetails = skuDetails
+
         }
+
+
     }
 
 
 
-/*    private fun billingsetup() {
-        billingClient = BillingClient.newBuilder(requireActivity()).setListener(object :
-            PurchasesUpdatedListener {
+    fun handlePurchase(purchase: Purchase) {
+        // Purchase retrieved from BillingClient#queryPurchasesAsync or your PurchasesUpdatedListener.
+        val purchase: Purchase = purchase
+        purchasetoken = purchase.purchaseToken
 
-            override fun onPurchasesUpdated(p0: BillingResult, p1: MutableList<Purchase>?) {
-                // i//f (p1 != null)
-                if (p0.responseCode == BillingClient.BillingResponseCode.OK && p1 != null) {
+        // Verify the purchase.
+        // Ensure entitlement was not already granted for this purchaseToken.
+        // Grant entitlement to the user.
 
-                    for (purchase in p1!!) {
-                        Log.d("TAG", "onPurchasesUpdated: ")
+        //consumeable
+        val consumeParams =
+            ConsumeParams.newBuilder()
+                .setPurchaseToken(purchase.getPurchaseToken())
+                .build()
+        val consumeResult = GlobalScope.launch(Dispatchers.IO) {
+            billingClient?.consumePurchase(consumeParams)
 
-                        if (!purchase.isAcknowledged) {
-                            purchasetoken = purchase.purchaseToken
-                            val consumeParams = ConsumeParams
-                                .newBuilder()
-                                .setPurchaseToken(purchase!!.purchaseToken!!)
-                                .build()
-                            billingClient?.consumeAsync(consumeParams,
-                                ConsumeResponseListener { billingResult, s ->
-                                    if (billingResult.responseCode === BillingClient.BillingResponseCode.OK) {
-                                        Log.i("TAG", "onPurchasesUpdated: ")
-                                    }
-                                })
+            if (skuDetails!=null && purchasetoken!=null )
+            {
+                val string =skuDetails!!.description.substring(0,9);
+                var limit   = string.filter { it.isDigit() }
+                if (skuDetails!!.sku.contains("photo"))
+                {
+
+                    buyBundle(skuDetails!!.sku.toString(), purchasetoken!!,"google",null,limit.toInt())
+                }
+                else
+                {
+                    buyBundle(skuDetails!!.sku.toString(), purchasetoken!!,"google",limit.toInt(),null)
+                }
+
+            }
+        }
 
 
-              *//*              if(HomeActivity.home != null){
 
-                                if(coin_status!!){
-                                    coin_status = false
-                                    HomeActivity.home.callapi(purchasetoken,"", getToken(),
-                                        getCurrentUser()!!.userId.toString(),pacakagenameinapp)
-                                }
 
-                            }*//*
-                           // break
 
-//                            val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
-//                                .setPurchaseToken(purchase.purchaseToken)
-////                                .setDeveloperPayload(purchase.developerPayload)
-//                                .build()
-//                            mBillingClient!!.acknowledgePurchase(acknowledgePurchaseParams, AcknowledgePurchaseResponseListener { billingResult ->
-//                                if (billingResult.responseCode === BillingClient.BillingResponseCode.OK) {
-//                                    Toast.makeText(getHomeActivity(), "Purchase Acknowledged", Toast.LENGTH_SHORT).show()
-//                                }
-                            //                  })
+    }
+
+    private fun buyBundle(bundleId: String, receipt:String, source:String, videoLimit:Int?, postLimit:Int?)
+    {
+
+       // mView.pb_bundle.visibility = View.VISIBLE
+
+        val apiClient = ApiClient.RetrofitInstance.getApiService(requireContext())
+
+        GlobalScope.launch(Dispatchers.IO)
+        {
+
+
+            apiClient.buyBundle(bundleId, receipt,source,videoLimit, postLimit).enqueue(object: retrofit2.Callback<BuyBundleResponse> {
+                override fun onResponse(
+                    call: Call<BuyBundleResponse>,
+                    response: Response<BuyBundleResponse>
+                ) {
+
+                    try {
+
+                        activity?.runOnUiThread(java.lang.Runnable {
+
+                         //   mView.pb_bundle.visibility = View.GONE
+
+                        })
+
+                        val response: BuyBundleResponse? =response.body()
+                        val statuscode= response?.status
+                        if (statuscode==1) {
+
+                            Log.d("response", response.message)
+
+                            Toast.makeText(requireContext(), " "+response?.message, Toast.LENGTH_SHORT).show()
+
+
+                        } else {
+
+
+                            activity?.runOnUiThread(java.lang.Runnable {
+                                Toast.makeText(requireContext(), "msg: "+response?.message, Toast.LENGTH_SHORT).show()
+                                response?.message?.let { Log.d("response", it) }
+
+                            })
                         }
+                    } catch (e:Exception) {
 
+                        Log.d("response", "msg "+ e.localizedMessage)
+                        activity?.runOnUiThread(java.lang.Runnable {
+                            Toast.makeText(requireContext(), "msg "+ e.localizedMessage, Toast.LENGTH_SHORT).show()
+                        })
                     }
-
-
-
-
-
-
-                    //When every a new purchase is made
-                } else if (p0.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
-                    // Handle an error caused by a user cancelling the purchase flow.
-                } else {
-                    // Handle any other error codes.
                 }
 
-            }
-        }) .enablePendingPurchases().build()
+                override fun onFailure(call: Call<BuyBundleResponse>, t: Throwable) {
+
+                    activity?.runOnUiThread(java.lang.Runnable {
+                        Toast.makeText(requireContext(), "msg "+  t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Log.d("response", "msg "+  t.localizedMessage)
 
 
+                  //      mView.pb_bundle.visibility = View.GONE
 
-        billingClient?.startConnection(object : BillingClientStateListener {
-            override fun onBillingSetupFinished(p0: BillingResult) {
-                Log.d("TAG", "onBillingSetupFinished: ")
-                if (p0.responseCode == BillingClient.BillingResponseCode.OK) {
-                    Log.d("TAG", "onBillingSetupFinished: ")
-                   // loadproduct()
-//                    if (mainActivity!!.preferenceManager!!.getfaulttype() == "user") {
-//                        loadsubscription()
-//                    } else {
-//                        loadproduct()
-//                    }
-                    // The billing client is ready. You can query purchases here.
+                    })
                 }
+            })
 
-            }
 
-            override fun onBillingServiceDisconnected() {
-                Log.d("TAG", "onBillingSetupFinished: ")
+        }
 
-                // Try to restart the connection on the next request to
-                // Google Play by calling the startConnection() method.
-            }
-        })
-    }*/
 
+    }
 
 
     companion object {
@@ -567,9 +422,22 @@ class BundlesFragment : BaseFragment() , OnItemClickListener {
             }
     }
 
-    override fun onItemClick(position: Int, view: View, value: String) {
 
-       // unblockUser(blockedList[position].blocked_user_id,position)
+
+
+
+
+
+
+         //none-consumeable
+   /*      if (purchase.purchaseState === Purchase.PurchaseState.PURCHASED) {
+             if (!purchase.isAcknowledged) {
+                 val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
+                     .setPurchaseToken(purchase.purchaseToken)
+                 val ackPurchaseResult =  GlobalScope.launch (Dispatchers.IO) {
+                     billingClient?.acknowledgePurchase(acknowledgePurchaseParams.build())
+                 }
+             }
+         }*/
 
     }
-}

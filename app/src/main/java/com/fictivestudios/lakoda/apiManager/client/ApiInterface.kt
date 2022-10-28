@@ -183,7 +183,7 @@ interface ApiInterface {
 
 
     @POST(BUY_BUNDLE_URL)
-    fun buyBundle(@Query("bundle_id") bundle_id:Int, @Query("receipt") receipt:String,
-                  @Query("source") source:String, @Query("home_id") home_id: Int?, @Query("post_id") post_id: Int?
+    fun buyBundle(@Query("bundle_type") bundle_id:String, @Query("receipt") receipt:String,
+                  @Query("source") source:String, @Query("home_limit") home_limit: Int?, @Query("post_limit") post_limit: Int?
     ): retrofit2.Call<BuyBundleResponse>
 }
