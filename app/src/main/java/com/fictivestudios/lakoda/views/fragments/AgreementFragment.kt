@@ -52,8 +52,10 @@ class AgreementFragment : DialogFragment() {
 
 
         mView.btn_accept.setOnClickListener {
+            RegisterationActivity?.getRegActivity
+                ?.navControllerReg?.navigate(R.id.loginFragment)
 
-            if (!mView.tv_terms.isChecked )
+  /*          if (!mView.tv_terms.isChecked )
             {
                 Toast.makeText(requireContext(), getString(R.string.please_accept_terms), Toast.LENGTH_SHORT).show()
 
@@ -64,12 +66,12 @@ class AgreementFragment : DialogFragment() {
                 Toast.makeText(requireContext(), getString(R.string.please_accept_terms), Toast.LENGTH_SHORT).show()
 
                 return@setOnClickListener
-            }
-            else
+            }*/
+       /*     else
             {
                 RegisterationActivity?.getRegActivity
                     ?.navControllerReg?.navigate(R.id.loginFragment)
-            }
+            }*/
 
 
         }
@@ -78,19 +80,21 @@ class AgreementFragment : DialogFragment() {
             RegisterationActivity?.getRegActivity?.onBackPressed()
         }
 
-
+/*
         mView.text_term.setOnClickListener {
-/*            RegisterationActivity?.getRegActivity
-                ?.navControllerReg?.navigate(R.id.termsAndConditionFragment)*/
+*//*            RegisterationActivity?.getRegActivity
+                ?.navControllerReg?.navigate(R.id.termsAndConditionFragment)*//*
             findNavController().navigate(R.id.termsAndConditionFragment)
         }
 
         mView.text_privacy.setOnClickListener {
-            RegisterationActivity?.getRegActivity
-                ?.navControllerReg?.navigate(R.id.privacyAndPolicyFragment)
-        }
 
+        }*/
+
+        RegisterationActivity?.getRegActivity
+            ?.navControllerReg?.navigate(R.id.privacyAndPolicyFragment)
         return mView
+
     }
 
     companion object {

@@ -294,7 +294,7 @@ class LoginFragment : BaseFragment() {
                            loginBinding.pb_login.visibility=View.GONE
                           loginBinding.btn_login.isEnabled=true
                           loginBinding.btn_login.text="LOGIN"
-                            Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
                         })
                     }
                 })

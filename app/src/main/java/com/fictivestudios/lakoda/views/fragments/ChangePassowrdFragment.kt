@@ -192,8 +192,8 @@ class ChangePassowrdFragment : BaseFragment() {
                         mView?.pb_change_pass?.visibility=View.GONE
                         mView.btn_update.isEnabled=true
                         mView.btn_update.text="Update password"
-                        Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
-                        Log.d("response", t.localizedMessage)
+                        Toast.makeText(requireContext(), ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Log.d("response", ""+t.localizedMessage)
                     })
                 }
             })

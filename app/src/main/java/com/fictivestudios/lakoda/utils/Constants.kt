@@ -59,6 +59,7 @@ class Constants {
         const val UPDATE_PROFILE_URL = "update-profile"
         const val GET_CONTENT_URL = "content"
         const val LOGOUT_URL = "logout"
+        const val DELETE_ACCOUNT_URL = "user-delete"
         const val ID_VERIFICATION_URL = "ID-verification"
         const val BERBIX_CLIENT_TOKEN_URL = "client-token"
 

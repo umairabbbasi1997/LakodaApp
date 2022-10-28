@@ -386,7 +386,7 @@ class CreateStoryFragment : BaseFragment() {
 
                     try {
 
-                        Log.d("response", response.body()?.message ?: "null")
+                        Log.d("response", ""+response.body()?.message ?: "null")
 
                         val response: CommonResponse? =response.body()
                         val statuscode= response!!.status
@@ -429,8 +429,8 @@ class CreateStoryFragment : BaseFragment() {
                         mView.btn_add_to_story.isEnabled = true
                         mView.btn_add_to_story.text = "Add To Story"
 
-                        Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
-                        Log.d("response", t.localizedMessage)
+                        Toast.makeText(requireContext(), ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Log.d("response", ""+t.localizedMessage)
                     })
 
                 }

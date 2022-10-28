@@ -47,39 +47,17 @@
             android:layout_height="1dp"
             android:background="@color/grey"
             app:layout_constraintTop_toBottomOf="@id/sw_push"
-            ></View>
-        <TextView
-            android:id="@+id/tv_terms"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingVertical="15dp"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:text="@string/terms_and_con"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/v_push"
             >
 
-        </TextView>
-        <ImageView
-            android:id="@+id/iv_arrow_right"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/arrow_right_icon"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/v_push"
-            >
+        </View>
 
-
-        </ImageView>
 
         <View
             android:id="@+id/v_privacy"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/grey"
-            app:layout_constraintTop_toBottomOf="@id/tv_terms"
+            app:layout_constraintTop_toBottomOf="@id/v_push"
             ></View>
         <TextView
             android:id="@+id/tv_privacy"
@@ -175,6 +153,39 @@
 
         </ImageView>
 
+        <View
+            android:id="@+id/v_del"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey"
+            app:layout_constraintTop_toBottomOf="@id/tv_bundles"
+            ></View>
+
+        <TextView
+            android:id="@+id/tv_del_acc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="15dp"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:text="@string/delete_account"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/v_del"
+            >
+
+        </TextView>
+        <ImageView
+            android:id="@+id/iv_arrow_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/arrow_right_icon"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/v_del"
+            >
+
+
+        </ImageView>
         <ProgressBar
             android:id="@+id/pb_logout"
             android:layout_width="wrap_content"

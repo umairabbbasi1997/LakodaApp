@@ -190,7 +190,7 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
 
                 override fun onFailure(call: Call<HomePostResponse>, t: Throwable)
                 {
-                    Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
                     activity?.runOnUiThread(java.lang.Runnable {
                         //mView.pb_pofile.visibility=View.GONE
                         mView.shimmer_view_container.stopShimmer()
@@ -260,7 +260,7 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
                             else
                             {
                                 activity?.runOnUiThread(java.lang.Runnable {
-                                    Toast.makeText(requireContext(), response.body()?.message, Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
                                     mView.rv_stories.adapter= StoriesAdapter(requireContext(),null,this@FeedsFragment)
                                 })
                             }
@@ -285,7 +285,7 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
 
                 override fun onFailure(call: Call<GetStoryResponse>, t: Throwable)
                 {
-                    Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
                     activity?.runOnUiThread(java.lang.Runnable {
                         //mView.pb_pofile.visibility=View.GONE
 /*
@@ -340,7 +340,7 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
 
                     try {
 
-                        Log.d("response", response.body()?.message ?: "null")
+                        Log.d("response", ""+response.body()?.message ?: "null")
 
                         val response: CommonResponse? =response.body()
                         val statuscode= response!!.status
@@ -378,8 +378,8 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
                     activity?.runOnUiThread(java.lang.Runnable {
                         // mView.pb_createPos.visibility=View.GONE
 
-                        Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
-                        Log.d("response", t.localizedMessage)
+                        Toast.makeText(requireContext(), ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Log.d("response", ""+t.localizedMessage)
                     })
 
                 }
@@ -412,7 +412,7 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
 
                     try {
 
-                        Log.d("response", response.body()?.message ?: "null")
+                        Log.d("response", ""+response.body()?.message ?: "null")
 
                         val response: CommentResponse? =response.body()
                         val statuscode= response!!.status
@@ -450,8 +450,8 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
                     activity?.runOnUiThread(java.lang.Runnable {
                         // mView.pb_createPos.visibility=View.GONE
 
-                        Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
-                        Log.d("response", t.localizedMessage)
+                        Toast.makeText(requireContext(), ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Log.d("response", ""+t.localizedMessage)
                     })
 
                 }

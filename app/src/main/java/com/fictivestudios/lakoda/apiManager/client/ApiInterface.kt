@@ -12,6 +12,7 @@ import com.fictivestudios.ravebae.utils.Constants.Companion.CREATE_COMMENT_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.CREATE_FOLLOW_REQ_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.CREATE_POST_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.CREATE_STORY_URL
+import com.fictivestudios.ravebae.utils.Constants.Companion.DELETE_ACCOUNT_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.FORGET_PASSWORD_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.GET_CHAT_LIST_URL
 import com.fictivestudios.ravebae.utils.Constants.Companion.GET_COMMENT_URL
@@ -78,6 +79,9 @@ interface ApiInterface {
 
     @GET(LOGOUT_URL)
     fun logout(): retrofit2.Call<CommonResponse>
+
+    @DELETE(DELETE_ACCOUNT_URL)
+    fun deleteAccount(): retrofit2.Call<CommonResponse>
 
     @POST(ID_VERIFICATION_URL)
     fun idVerification(@Query("id") type:String): retrofit2.Call<IdVerifyResponse>

@@ -37,6 +37,8 @@
     <string name="terms_and_con">Terms &amp; Conditions</string>
     <string name="privacy_policy">Privacy Policy</string>
 
+    <string name="delete_account">Delete Account</string>
+
     <string name="terms_and_con_">TERMS &amp; CONDITIONS</string>
     <string name="privacy_policy_">PRIVACY POLICY</string>
 
@@ -44,6 +46,10 @@
     <string name="please_accept_terms">Please accept both Terms &amp; Conditions &amp; Privacy Policy first</string>
     <string name="accept">Accept</string>
     <string name="decline">Decline</string>
+
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
     <string name="followers">Followers</string>
     <string name="following">Following</string>
     <string name="follow">follow</string>
@@ -73,6 +79,11 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="i_have_read..">I have read and agree with</string>
+
+    <string name="are_you_sure_want_to_delete_acc..">Are you sure want to delete account</string>
+
+    <string name="are_you_sure_want_to_logout">Are you sure want to logout</string>
+
     <string name="agreement">AGREEMENT</string>
     <string name="are_you_over_18">Are you over 18?</string>
     <string name="age_verification">AGE VERIFICATION</string>

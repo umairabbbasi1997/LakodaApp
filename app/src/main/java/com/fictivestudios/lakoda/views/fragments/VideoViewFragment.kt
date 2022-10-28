@@ -160,7 +160,7 @@ class VideoViewFragment : BaseFragment() ,OnItemClickListener{
 
                 override fun onFailure(call: Call<HomePostResponse>, t: Throwable)
                 {
-                    Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
                     activity?.runOnUiThread(java.lang.Runnable {
                         mView.pb_home.visibility=View.GONE
                      /*   mView.shimmer_view_container.stopShimmer()
@@ -254,7 +254,7 @@ class VideoViewFragment : BaseFragment() ,OnItemClickListener{
 
                     try {
 
-                        Log.d("response", response.body()?.message ?: "null")
+                        Log.d("response", ""+response.body()?.message ?: "null")
 
                         val response: CommonResponse? =response.body()
                         val statuscode= response!!.status
@@ -292,8 +292,8 @@ class VideoViewFragment : BaseFragment() ,OnItemClickListener{
                     activity?.runOnUiThread(java.lang.Runnable {
                         // mView.pb_createPos.visibility=View.GONE
 
-                        Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
-                        Log.d("response", t.localizedMessage)
+                        Toast.makeText(requireContext(), ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Log.d("response", ""+t.localizedMessage)
                     })
 
                 }
@@ -418,7 +418,7 @@ class VideoViewFragment : BaseFragment() ,OnItemClickListener{
 
                     try {
 
-                        Log.d("response", response.body()?.message ?: "null")
+                        Log.d("response", ""+response.body()?.message ?: "null")
 
                         val response: CommentResponse? =response.body()
                         val statuscode= response!!.status
@@ -455,8 +455,8 @@ class VideoViewFragment : BaseFragment() ,OnItemClickListener{
                     activity?.runOnUiThread(java.lang.Runnable {
                         // mView.pb_createPos.visibility=View.GONE
 
-                        Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
-                        Log.d("response", t.localizedMessage)
+                        Toast.makeText(requireContext(), ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Log.d("response", ""+t.localizedMessage)
                     })
 
                 }

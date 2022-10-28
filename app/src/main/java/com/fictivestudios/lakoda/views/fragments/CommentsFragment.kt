@@ -278,7 +278,7 @@ class CommentsFragment : BaseFragment() ,OnItemClickListener{
 
                     try {
 
-                        Log.d("response", response.body()?.message ?: "null")
+                        Log.d("response", ""+response.body()?.message ?: "null")
 
                         val response: CommonResponse? =response.body()
                         val statuscode= response!!.status
@@ -318,8 +318,8 @@ class CommentsFragment : BaseFragment() ,OnItemClickListener{
                     activity?.runOnUiThread(java.lang.Runnable {
                        // mView.pb_createPos.visibility=View.GONE
                         mView.tv_send.isEnabled = true
-                        Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
-                        Log.d("response", t.localizedMessage)
+                        Toast.makeText(requireContext(), ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Log.d("response", ""+t.localizedMessage)
                     })
 
                 }

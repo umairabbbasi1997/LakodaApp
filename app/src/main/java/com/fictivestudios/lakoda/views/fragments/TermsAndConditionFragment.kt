@@ -101,12 +101,12 @@ class TermsAndConditionFragment : BaseFragment() {
                             }
                             else
                             {
-                                Toast.makeText(requireContext(), response.body()?.message, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
                             }
 
                         }
                         else {
-                            Toast.makeText(requireContext(), response.body()?.message, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
                         }
                     }
                     catch (e:Exception)

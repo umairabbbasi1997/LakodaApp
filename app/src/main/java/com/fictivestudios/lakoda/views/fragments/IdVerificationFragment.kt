@@ -217,12 +217,12 @@ class IdVerificationFragment : BaseFragment() {
                                     mView.btn_verify.text = "RE-VERIFY"
                                     mView.tv_status.text = "NOT VERIFIED"
                                     mView.iv_verify.setBackgroundResource(R.drawable.not_verified)
-                                    Toast.makeText(requireContext(), response.body()?.message, Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
                                 }
 
                             }
                             else {
-                                Toast.makeText(requireContext(), response.body()?.message, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
                             }
                         }
                         catch (e:Exception)
@@ -241,7 +241,7 @@ class IdVerificationFragment : BaseFragment() {
 
                 override fun onFailure(call: Call<IdVerifyResponse>, t: Throwable)
                 {
-                    Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
                     activity?.runOnUiThread(java.lang.Runnable {
                         mView.pb_verify.visibility=View.GONE
                         mView.btn_verify.text = "RE-VERIFY"
@@ -306,12 +306,12 @@ class IdVerificationFragment : BaseFragment() {
                                     mView.btn_verify.text = buttonText.toString()
                                     mView.tv_status.text = "NOT VERIFIED"
                                     mView.iv_verify.setBackgroundResource(R.drawable.not_verified)
-                                    Toast.makeText(requireContext(), response.body()?.message, Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
                                 }
 
                             }
                             else {
-                                Toast.makeText(requireContext(), response.body()?.message, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
                             }
                         }
                         catch (e:Exception)
@@ -329,7 +329,7 @@ class IdVerificationFragment : BaseFragment() {
 
                 override fun onFailure(call: Call<BerbixTokenResponse>, t: Throwable)
                 {
-                    Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
                     activity?.runOnUiThread(java.lang.Runnable {
                         mView.pb_verify.visibility=View.GONE
                         mView.btn_verify.text = buttonText.toString()

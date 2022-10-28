@@ -184,8 +184,8 @@ class OtpFragment : BaseFragment() {
                         mView?.pb_otp?.visibility=View.GONE
                       mView.btn_verify.isEnabled=true
                       mView.btn_verify.text="VERIFY"
-                        Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
-                        Log.d("response", t.localizedMessage)
+                        Toast.makeText(requireContext(), ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Log.d("response", ""+t.localizedMessage)
                     })
                 }
             })

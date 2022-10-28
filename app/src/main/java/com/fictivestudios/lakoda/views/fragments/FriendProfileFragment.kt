@@ -494,7 +494,7 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
 
                     activity?.runOnUiThread(java.lang.Runnable {
                         //mView.pb_pofile.visibility=View.GONE
-                        Toast.makeText(requireActivity(), t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireActivity(), ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
                         mView.shimmer_friend_profile.stopShimmer()
                         mView.shimmer_friend_profile.visibility = View.GONE
                         mView.main_scroll_ll.visibility =View.VISIBLE
@@ -787,7 +787,7 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
 
                     try {
 
-                        Log.d("response", response.body()?.message ?: "null")
+                        Log.d("response", ""+response.body()?.message ?: "null")
 
                         val response: CommonResponse? =response.body()
                         val statuscode= response!!.status
@@ -825,8 +825,8 @@ class FriendProfileFragment : BaseFragment(),OnItemClickListener {
                     activity?.runOnUiThread(java.lang.Runnable {
                         // mView.pb_createPos.visibility=View.GONE
 
-                        Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
-                        Log.d("response", t.localizedMessage)
+                        Toast.makeText(requireContext(), ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Log.d("response", ""+t.localizedMessage)
                     })
 
                 }

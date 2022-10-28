@@ -86,10 +86,19 @@ class PreLoginFragment : BaseFragment() {
 
         initFaceBook()
 
+        preLoginBinding.btn_privacy.setOnClickListener {
+
+            RegisterationActivity?.getRegActivity
+                ?.navControllerReg?.navigate(R.id.privacyAndPolicyFragment)
+        }
+
         preLoginBinding.btn_email.setOnClickListener {
 
 
-            showAgreementDialog()
+          //  showAgreementDialog()
+            //dialog?.dismiss()
+            RegisterationActivity?.getRegActivity
+                ?.navControllerReg?.navigate(R.id.loginFragment)
         }
 
 
@@ -117,6 +126,7 @@ class PreLoginFragment : BaseFragment() {
     }
 
 
+/*
     private fun showAgreementDialog() {
 
         var dialog = Dialog(context as Activity)
@@ -201,6 +211,7 @@ class PreLoginFragment : BaseFragment() {
         dialog.window?.setGravity(Gravity.BOTTOM)
         dialog.window?.setBackgroundDrawableResource(R.color.transparent)
     }
+*/
 
 
 
@@ -274,7 +285,7 @@ class PreLoginFragment : BaseFragment() {
                         else {
 
 
-                                Toast.makeText(requireContext(), response?.body()?.message.toString(), Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(),""+ response?.body()?.message.toString(), Toast.LENGTH_SHORT).show()
 
                         }
                     }
@@ -294,7 +305,7 @@ class PreLoginFragment : BaseFragment() {
                     activity?.runOnUiThread(java.lang.Runnable {
                         preLoginBinding.pb_login.visibility=View.GONE
 
-                        Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
                     })
                 }
             })

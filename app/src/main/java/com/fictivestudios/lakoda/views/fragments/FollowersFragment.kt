@@ -144,14 +144,14 @@ class FollowersFragment : BaseFragment() ,OnItemClickListener{
                             else
                             {
                                 activity?.runOnUiThread(java.lang.Runnable {
-                                    Toast.makeText(requireContext(), response.body()?.message, Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
                                 })
                             }
 
                         }
                         else {
                             activity?.runOnUiThread(java.lang.Runnable {
-                                Toast.makeText(requireContext(), response.body()?.message, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), ""+response.body()?.message, Toast.LENGTH_SHORT).show()
                             })
 
                         }
@@ -178,7 +178,7 @@ class FollowersFragment : BaseFragment() ,OnItemClickListener{
                         mView.shimmer_followers.stopShimmer()
                         mView.shimmer_followers.visibility = View.GONE
 
-                        Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
                     })
                 }
             })

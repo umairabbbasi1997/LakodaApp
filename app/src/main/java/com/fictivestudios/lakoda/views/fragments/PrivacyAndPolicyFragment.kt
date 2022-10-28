@@ -1,24 +1,19 @@
 package com.fictivestudios.lakoda.views.fragments
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.Toast
-import com.fictivestudios.docsvisor.apiManager.client.ApiClient
+import androidx.fragment.app.Fragment
 import com.fictivestudios.imdfitness.activities.fragments.BaseFragment
 import com.fictivestudios.lakoda.R
-import com.fictivestudios.lakoda.apiManager.response.ContentResponse
 import com.fictivestudios.lakoda.utils.Titlebar
 import kotlinx.android.synthetic.main.fragment_privacy_and_policy.view.*
 import kotlinx.android.synthetic.main.fragment_terms_and_condition.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Response
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -57,10 +52,53 @@ class PrivacyAndPolicyFragment : BaseFragment() {
 
         mView = inflater.inflate(R.layout.fragment_privacy_and_policy, container, false)
 
-        getPrivacy()
+        loadWebview()
+       // getPrivacy()
         return mView
     }
 
+    private fun loadWebview() {
+
+       // mView.webView.webViewClient = WebViewClient()
+        mView.pb_privacy.visibility = View.VISIBLE
+
+        mView.webView.setWebViewClient(object : WebViewClient() {
+
+            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+                view.loadUrl(url)
+                return true
+            }
+
+            override fun onPageFinished(view: WebView, url: String) {
+
+                mView.pb_privacy.visibility = View.GONE
+
+
+            }
+
+            override fun onReceivedError(
+                view: WebView,
+                errorCode: Int,
+                description: String,
+                failingUrl: String
+            ) {
+                Toast.makeText(requireContext(), "Error:$description", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        })
+
+        // this will load the url of the website
+        mView.webView.loadUrl("https://lakoda06.com/webservices/live/privacy-policy")
+
+
+        // this will enable the javascript settings, it can also allow xss vulnerabilities
+        mView.webView.settings.javaScriptEnabled = true
+
+        // if you want to enable zoom feature
+        mView.webView.settings.setSupportZoom(true)
+    }
+
+/*
     private fun getPrivacy()
     {
 
@@ -135,6 +173,7 @@ class PrivacyAndPolicyFragment : BaseFragment() {
 
 
     }
+*/
 
     companion object {
         /**

@@ -263,7 +263,7 @@ class SignupFragment : BaseFragment() {
 
                     try {
 
-                        Log.d("response", response.body()?.message ?: "null")
+                        Log.d("response", ""+response.body()?.message ?: "null")
 
                         val response: SignupResponse? =response.body()
                         val statuscode= response!!.status
