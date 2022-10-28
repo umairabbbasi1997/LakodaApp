@@ -192,7 +192,7 @@ class BundlesFragment : BaseFragment()   {
                 currentItem = position
 
                 Log.d("billing_id",bundleList?.get(currentItem!!)?.sku.toString())
-                Toast.makeText(requireContext(), bundleList?.get(currentItem!!)?.sku.toString(), Toast.LENGTH_SHORT).show()
+              //  Toast.makeText(requireContext(), bundleList?.get(currentItem!!)?.sku.toString(), Toast.LENGTH_SHORT).show()
 
             }
 
