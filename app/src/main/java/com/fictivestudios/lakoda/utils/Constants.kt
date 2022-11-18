@@ -1,6 +1,5 @@
 package com.fictivestudios.ravebae.utils
 
-import android.app.Dialog
 import android.content.Context
 import android.graphics.Bitmap
 
@@ -8,11 +7,14 @@ import android.media.MediaMetadataRetriever
 import android.media.MediaMetadataRetriever.METADATA_KEY_DURATION
 import android.media.ThumbnailUtils
 import android.net.Uri
+import android.os.Build
 import android.os.Parcelable
 import android.provider.MediaStore
 import android.provider.OpenableColumns
-import android.util.DisplayMetrics
 import android.util.Log
+import android.util.Size
+import androidx.annotation.RequiresApi
+import androidx.core.net.toUri
 import com.fictivestudios.lakoda.model.User
 import com.fictivestudios.lakoda.utils.PreferenceUtils
 import com.fictivestudios.lakoda.utils.getMimeType
@@ -258,8 +260,15 @@ class Constants {
             return MultipartBody.Part.createFormData(partName, file.name, requestFile)
         }
 
-        fun createVideoThumbNail(path: String?): Bitmap? {
-            return ThumbnailUtils. createVideoThumbnail(path!!, MediaStore.Video.Thumbnails.FULL_SCREEN_KIND)
+        @RequiresApi(Build.VERSION_CODES.Q)
+        fun createVideoThumbNail(path: String, context:Context): Bitmap? {
+
+          /*  val thumbnail: Bitmap = context.contentResolver.loadThumbnail(
+                    path, Size(640, 480), null)*/
+
+
+           // return thumbnail
+         return ThumbnailUtils. createVideoThumbnail(path!!, MediaStore.Video.Thumbnails.FULL_SCREEN_KIND)
         }
 
     }
