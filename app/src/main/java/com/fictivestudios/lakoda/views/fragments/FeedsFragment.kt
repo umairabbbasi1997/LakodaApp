@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.lifecycle.lifecycleScope
 import com.fictivestudios.docsvisor.apiManager.client.ApiClient
 import com.fictivestudios.imdfitness.activities.fragments.BaseFragment
 import com.fictivestudios.lakoda.Interface.OnItemClickListener
@@ -50,6 +51,7 @@ import kotlinx.android.synthetic.main.friend_profile_fragment.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Response
 
@@ -112,7 +114,6 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
 
 
         val apiClient = ApiClient.RetrofitInstance.getApiService(requireContext())
-
 
         GlobalScope.launch(Dispatchers.IO)
         {
@@ -191,14 +192,14 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
                 override fun onFailure(call: Call<HomePostResponse>, t: Throwable)
                 {
                     Toast.makeText(requireContext(), ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
-                    activity?.runOnUiThread(java.lang.Runnable {
+                    activity?.runOnUiThread {
                         //mView.pb_pofile.visibility=View.GONE
                         mView.shimmer_view_container.stopShimmer()
                         mView.shimmer_view_container.visibility = View.GONE
 
                         mView.feed_post_layout.visibility = View.VISIBLE
-                        Toast.makeText(requireContext(),""+ t.message, Toast.LENGTH_SHORT).show()
-                    })
+                        Toast.makeText(requireContext(), "" + t.message, Toast.LENGTH_SHORT).show()
+                    }
                 }
             })
 
@@ -409,27 +410,26 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
                         //  mView.pb_createPos.visibility=View.GONE
                         Toast.makeText(requireContext(),"Sharing post...", Toast.LENGTH_SHORT).show()
 
-
                     try {
 
-                        Log.d("response", ""+response.body()?.message ?: "null")
+                        Log.d("response", ("" + response.body()?.message))
 
-                        val response: CommentResponse? =response.body()
-                        val statuscode= response!!.status
+                        val apiResponse: CommentResponse? =response.body()
+                        val statuscode= apiResponse!!.status
                         if (statuscode==1) {
 
-                            Log.d("response",response.message)
+                            Log.d("apiResponse",apiResponse.message)
 
 
                             //    MainActivity.getMainActivity?.onBackPressed()
 
-                                Toast.makeText(requireContext(),response.message, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(),apiResponse.message, Toast.LENGTH_SHORT).show()
 
 
                         }
                         else {
 
-                                Toast.makeText(requireContext(),response.message, Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(),apiResponse.message, Toast.LENGTH_SHORT).show()
 
                         }
                     }
@@ -438,8 +438,8 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
 
 
                             Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
-                            Log.d("response", e.localizedMessage)
-                            Log.d("response", e.message.toString())
+                            Log.d("apiResponse", e.localizedMessage)
+                            Log.d("apiResponse", e.message.toString())
 
                     }
                     })   }
@@ -451,7 +451,7 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
                         // mView.pb_createPos.visibility=View.GONE
 
                         Toast.makeText(requireContext(), ""+t.localizedMessage, Toast.LENGTH_SHORT).show()
-                        Log.d("response", ""+t.localizedMessage)
+                        Log.d("apiResponse", ""+t.localizedMessage)
                     })
 
                 }

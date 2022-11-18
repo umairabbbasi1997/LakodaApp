@@ -2,20 +2,18 @@ package com.fictivestudios.lakoda.views.fragments
 
 import android.app.Activity
 import android.app.Dialog
-import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.os.Environment.getExternalStoragePublicDirectory
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
+import androidx.annotation.RequiresApi
+import androidx.core.net.toUri
 import com.fictivestudios.docsvisor.apiManager.client.ApiClient
 import com.fictivestudios.imdfitness.activities.fragments.BaseFragment
 import com.fictivestudios.lakoda.R
@@ -29,7 +27,6 @@ import com.fictivestudios.ravebae.utils.Constants.Companion.getMediaDuration
 import com.fictivestudios.ravebae.utils.Constants.Companion.getMediaFilePathFor
 import com.fictivestudios.ravebae.utils.Constants.Companion.prepareFilePart
 import com.github.dhaval2404.imagepicker.ImagePicker
-import com.iceteck.silicompressorr.SiliCompressor
 import kotlinx.android.synthetic.main.create_post_fragment.view.*
 import kotlinx.coroutines.*
 import okhttp3.MultipartBody
@@ -37,7 +34,6 @@ import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Response
 import java.io.File
-import java.net.URISyntaxException
 
 
 class CreatePostFragment : BaseFragment() {
@@ -110,8 +106,7 @@ class CreatePostFragment : BaseFragment() {
         if (isVideo && fileTemporaryVideo != null)
         {
 
-         filePart =  prepareFilePart("video_image",
-             fileTemporaryVideo!!/*File(fileTemporaryUri?.let { getMediaFilePathFor(it,requireContext()) })*/)
+         filePart =  prepareFilePart("video_image", fileTemporaryVideo!!/*File(fileTemporaryUri?.let { getMediaFilePathFor(it,requireContext()) })*/)
 
         }
         else if (isImage && fileTemporaryFile != null)
@@ -205,6 +200,7 @@ class CreatePostFragment : BaseFragment() {
 
 
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
@@ -224,7 +220,7 @@ class CreatePostFragment : BaseFragment() {
                         isVideo = true
                         isImage = false
 
-                        var bitmap = createVideoThumbNail(fileTemporaryVideo!!.path.toString())
+                        var bitmap = createVideoThumbNail(/*fileTemporaryVideo!!.toUri()*/ /*Uri.fromFile(fileTemporaryVideo)*/ fileTemporaryVideo!!.path.toString(),requireContext())
                         Log.d("bitmap",bitmap.toString())
                         mView.iv_Post_media.setImageBitmap(bitmap)
                         mView.iv_Post_media.visibility = View.VISIBLE

@@ -2,16 +2,23 @@ package com.fictivestudios.lakoda.views.fragments
 
 //import com.sarthakdoshi.textonimage.TextOnImage
 
-import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.Manifest.permission.*
 import android.app.Activity
+import android.content.ContentResolver
+import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Environment
+import android.provider.MediaStore
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -24,11 +31,12 @@ import android.widget.FrameLayout
 import android.widget.NumberPicker
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.net.toFile
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.drawToBitmap
-import androidx.lifecycle.ViewModelProvider
 import com.fictivestudios.docsvisor.apiManager.client.ApiClient
 import com.fictivestudios.imdfitness.activities.fragments.BaseFragment
 import com.fictivestudios.lakoda.R
@@ -37,7 +45,7 @@ import com.fictivestudios.lakoda.utils.Titlebar
 import com.fictivestudios.lakoda.utils.getPartMap
 import com.fictivestudios.lakoda.views.activities.MainActivity
 import com.github.dhaval2404.imagepicker.ImagePicker
-import com.permissionx.guolindev.PermissionX
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.create_story_fragment.*
 import kotlinx.android.synthetic.main.create_story_fragment.view.*
 import kotlinx.coroutines.Dispatchers
@@ -48,6 +56,9 @@ import retrofit2.Call
 import retrofit2.Response
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStream
+import java.util.*
 
 
 class CreateStoryFragment : BaseFragment() {
@@ -59,6 +70,8 @@ class CreateStoryFragment : BaseFragment() {
     private lateinit var mView: View
 
     private var timer = 3
+
+    private val PERMISSION_REQUEST_CODE = 515
 
     companion object {
         fun newInstance() = CreateStoryFragment()
@@ -87,23 +100,30 @@ class CreateStoryFragment : BaseFragment() {
            // MainActivity.getMainActivity?.onBackPressed()
 
             number_picker.visibility = View.GONE
-            PermissionX.init(activity)
+            createStory(saveImageWithMediaStore(requireContext()))
+        /*    PermissionX.init(activity)
                 .permissions(WRITE_EXTERNAL_STORAGE)
                 .request { allGranted, grantedList, deniedList ->
-                    if (allGranted) {
-                        if (fileTemporaryFile != null)
-                        {
 
-                            createStory(saveTextOnImage())
-                        }
+                }*/
 
 
 
-                    } else {
-                        Toast.makeText(requireContext(), "These permissions are denied: $deniedList", Toast.LENGTH_LONG).show()
-                    }
+
+
+          /*  if (checkPermission()) {
+                if (fileTemporaryFile != null)
+                {
+
+                    createStory(saveImageToGallery())
                 }
 
+
+
+            } else {
+                requestPermission()
+               // Toast.makeText(requireContext(), "These permissions are denied: $deniedList", Toast.LENGTH_LONG).show()
+            }*/
 
         }
 
@@ -281,6 +301,16 @@ class CreateStoryFragment : BaseFragment() {
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
+     /*   if (requestCode == 2296) {
+            if (SDK_INT >= Build.VERSION_CODES.R) {
+                if (Environment.isExternalStorageManager()) {
+                    // perform action when allow permission success
+                } else {
+                    Toast.makeText(this, "Allow permission for storage access!", Toast.LENGTH_SHORT).show();
+                }
+            }*/
+
         if (resultCode == Activity.RESULT_OK) {
             //Image Uri will not be null for RESULT_OK
          //   imageURI = data?.data!!
@@ -392,10 +422,9 @@ class CreateStoryFragment : BaseFragment() {
                         val statuscode= response!!.status
                         if (statuscode==1) {
 
-                            if (storyFile!!.exists())
-                            {
-                                storyFile!!.delete()
-                            }
+
+                            deleteFileFromMediaStore(requireContext(),storyFile?.path)
+
 
                             Log.d("response",response.message)
                             MainActivity.getMainActivity?.onBackPressed()
@@ -473,6 +502,9 @@ class CreateStoryFragment : BaseFragment() {
             ostream.flush()
             ostream.close();
 
+
+
+
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
         }
@@ -480,37 +512,6 @@ class CreateStoryFragment : BaseFragment() {
 
 
 
-        //   var file:File? = null
-     //   var f:File? = null
-
-
-
-
-        //  content.setDrawingCacheEnabled(true);
-
-     //   var bitmap = content.getDrawingCache();
-
-
-/*
-        if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
-        {
-            file = File(android.os.Environment.getExternalStorageDirectory(),"TTImages_cache");
-            if(!file.exists())
-            {
-                file.mkdirs();
-
-            }
-            f =  File(file.getAbsolutePath()+file.invariantSeparatorsPath+ "filename"+".png");
-
-        }*/
-        /*    val root = Environment.getExternalStorageDirectory().toString()
-            val myDir = File("$root/saved_images")
-            myDir.mkdirs()
-           val fname: String = "temp_story.png"
-           val file = File(myDir, fname)
-            if (file.exists())
-                file.delete()
-            file.createNewFile()*/
 
 
 
@@ -518,11 +519,114 @@ class CreateStoryFragment : BaseFragment() {
 
 }
 
+
+
+
+
+
+    @Throws(IOException::class)
+    private fun saveImageWithMediaStore(
+        context: Context
+    ): File? {
+
+
+        var content = mView.story_layout
+        val bitmap =  content.drawToBitmap()
+        var folderName = "TempStory"
+        var fileName="Image_story"
+
+        var fos: OutputStream? = null
+        var imageFile: File? = null
+        var imageUri: Uri? = null
+        try {
+            if (SDK_INT >= Build.VERSION_CODES.Q) {
+                val resolver = context.contentResolver
+                val contentValues = ContentValues()
+                contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+                contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/png")
+                contentValues.put(
+                    MediaStore.MediaColumns.RELATIVE_PATH,
+                    Environment.DIRECTORY_PICTURES + File.separator + folderName
+                )
+                imageUri =
+                    resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+                if (imageUri == null) throw IOException("Failed to create new MediaStore record.")
+                fos = resolver.openOutputStream(imageUri)
+            } else {
+                val imagesDir = File(
+                    Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_PICTURES
+                    ).toString() + File.separator + folderName
+                )
+                if (!imagesDir.exists()) imagesDir.mkdir()
+                imageFile = File(imagesDir, "$fileName.png")
+                fos = FileOutputStream(imageFile)
+            }
+            if (!bitmap.compress(
+                    Bitmap.CompressFormat.PNG,
+                    100,
+                    fos
+                )
+            ) throw IOException("Failed to save bitmap.")
+            fos!!.flush()
+        } finally {
+            fos?.close()
+        }
+        if (imageFile != null) { //pre Q
+            MediaScannerConnection.scanFile(context, arrayOf(imageFile.toString()), null, null)
+            imageUri = Uri.fromFile(imageFile)
+        }
+        Log.d("file",imageFile.toString())
+
+        var savedFile =  File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES )
+                .toString() + "/" + folderName+File.separator+"$fileName.png"
+        )
+
+        return savedFile
+    }
+
+    fun deleteFileFromMediaStore(
+        context: Context, fileFullPath: String?
+    ): Boolean {
+        val file = File(fileFullPath)
+        val absolutePath: String?
+        val canonicalPath: String?
+        absolutePath = try {
+            file.absolutePath
+        } catch (ex: java.lang.Exception) {
+            null
+        }
+        canonicalPath = try {
+            file.canonicalPath
+        } catch (ex: java.lang.Exception) {
+            null
+        }
+        val paths: ArrayList<String> = ArrayList()
+        if (absolutePath != null) paths.add(absolutePath)
+        if (canonicalPath != null && !canonicalPath.equals(
+                absolutePath,
+                ignoreCase = true
+            )
+        ) paths.add(canonicalPath)
+        if (paths.size === 0) return false
+        val resolver: ContentResolver = context.getContentResolver()
+        val uri = MediaStore.Files.getContentUri("external")
+        var deleted = false
+        for (path in paths) {
+            val result = resolver.delete(
+                uri,
+                MediaStore.Files.FileColumns.DATA + "=?", arrayOf(path)
+            )
+            if (result != 0) deleted = true
+        }
+        return deleted
+    }
     fun commonDocumentDirPath(FolderName: String): File? {
         var dir: File? = null
         dir = if (SDK_INT >= Build.VERSION_CODES.R) {
             File(
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
                     .toString() + "/" + FolderName
             )
         } else {
@@ -570,5 +674,105 @@ class CreateStoryFragment : BaseFragment() {
         view.layout(0, 0, view.measuredWidth, view.measuredHeight)
         view.draw(canvas)
         return bitmap
+    }
+
+    private fun checkPermission(): Boolean {
+        if ( ContextCompat.checkSelfPermission(requireContext(), WRITE_EXTERNAL_STORAGE)
+             == PackageManager.PERMISSION_GRANTED){
+
+            Log.v("TAG","Permission is granted");
+            //File write logic here
+            return true;
+        }
+        else{
+            requestPermission()
+        }
+        return false
+    }
+
+    private fun requestPermission() {
+        ActivityCompat.requestPermissions(
+            requireActivity(),
+            arrayOf(WRITE_EXTERNAL_STORAGE),
+            PERMISSION_REQUEST_CODE
+        )
+    }
+/*    private fun checkPermission(): Boolean {
+        return if (SDK_INT >= Build.VERSION_CODES.R) {
+            Environment.isExternalStorageManager()
+        } else {
+            val result =
+                ContextCompat.checkSelfPermission(requireContext(), READ_EXTERNAL_STORAGE)
+            val result1 =
+                ContextCompat.checkSelfPermission(requireContext(), WRITE_EXTERNAL_STORAGE)
+            result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED
+        }
+    }
+
+    private fun requestPermission() {
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            try {
+                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                intent.addCategory("android.intent.category.DEFAULT")
+                intent.data =
+                    Uri.parse(
+                        String.format(
+                            "package:%s",
+                            ApplicationProvider.getApplicationContext<Context>().getPackageName()
+                        )
+                    )
+                startActivityForResult(intent, 2296)
+            } catch (e: java.lang.Exception) {
+                val intent = Intent()
+                intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
+                startActivityForResult(intent, 2296)
+            }
+        } else {
+            //below android 11
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(WRITE_EXTERNAL_STORAGE),
+                PERMISSION_REQUEST_CODE
+            )
+        }
+    }*/
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String?>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            PERMISSION_REQUEST_CODE -> if (grantResults.size > 0) {
+                val READ_EXTERNAL_STORAGE = grantResults[0] == PackageManager.PERMISSION_GRANTED
+                val WRITE_EXTERNAL_STORAGE = grantResults[1] == PackageManager.PERMISSION_GRANTED
+                if (READ_EXTERNAL_STORAGE && WRITE_EXTERNAL_STORAGE) {
+                    // perform action when allow permission success
+                    if (fileTemporaryFile != null)
+                    {
+
+                        createStory(saveTextOnImage())
+                    }
+
+                } else {
+                    Toast.makeText(requireContext(), "Allow permission for storage access!", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        }
+    }
+
+    fun showSnackBar(message: String?, activity: Activity?) {
+        if (null != activity && null != message) {
+            Snackbar.make(
+                activity.findViewById(android.R.id.content),
+                message, Snackbar.LENGTH_SHORT
+            ).setAction(message, View.OnClickListener {
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri: Uri = Uri.fromParts("package", activity.getPackageName(), null)
+                intent.data = uri
+                startActivity(intent)
+            }).show()
+        }
     }
 }
