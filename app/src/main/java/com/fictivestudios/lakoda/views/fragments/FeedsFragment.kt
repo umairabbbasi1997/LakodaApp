@@ -60,6 +60,7 @@ class FeedsFragment : BaseFragment(),OnItemClickListener {
     private var arrayPostList= ArrayList<HomePostData>()
     private var arrayStoryList= ArrayList<GetStoryData>()
     private lateinit var mView: View
+    //Test Remote changes
 
     companion object {
         fun newInstance() = FeedsFragment()
